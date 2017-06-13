@@ -24,8 +24,8 @@ print()
 #   2 atoms (na)
 #   2 orbitals (no), one per atom
 #   1 specie (C), both atoms are the same atomic specie
-#   orbital range of 1.4342 AA (dR)
-#   3x3 supercell (nsc), this is determined from dR
+#   orbital range of 1.4342 AA (R)
+#   3x3 supercell (nsc), this is determined from R
 
 # Now as we have the graphene unit-cell, we can create the 
 # Hamiltonian for the system.
@@ -54,12 +54,12 @@ for ia, io in H:
     # Hamiltonian (H.geom)
     # and use a function called `close` which returns ALL 
     # atoms within certain ranges of a given point or atom
-    idx = H.geom.close(ia, dR = (0.1, 1.43))
-    # the argument dR has two entries:
+    idx = H.geom.close(ia, R = [0.1, 1.43])
+    # the argument R has two entries:
     #   0.1 and 1.43
     # Each value represents a radii of a sphere.
     # The `close` function will then return
-    # a list of equal length of the dR argument (i.e. a list with
+    # a list of equal length of the R argument (i.e. a list with
     # two values).
     # Then idx[0] is the first element and this contains a list
     # of all atoms within a sphere of 0.1 AA of atom `ia`.
@@ -98,14 +98,34 @@ print()
 print("Eigenvalues at Gamma:")
 print(H.eigh())
 print("Eigenvalues at K:")
-print(H.eigh(k=[1./3,2./3,0]))
+print(H.eigh(k=[2./3,1./3,0]))
 print()
 
 # Additionally we may calculate the band-structure of graphene
 # We want to plot the band-structure of graphene
 
-from graphene_band_structure import bandstructure
+from matplotlib import pyplot as plt
 
-# Now lets plot the band-structure (requires matplotlib)
-bandstructure(301, H)
+# Setup the bandstructure
+band = sisl.PathBZ(graphene, [[0., 0.], [2./3, 1./3],
+                              [1./2, 1./2], [0., 0.]], 301)
+
+# Calculate all eigenvalues in the bandstructure
+eigs = H.eigh(band)
+
+# Retrieve the tick-marks and the linear k points
+xtick, xtick_label = band.linearticks()
+lk = band.lineark()
+
+plt.figure()
+for i in range(eigs.shape[1]):
+    plt.plot(eigs[:, i])
+
+plt.gca().xaxis.set_ticks(xtick)
+plt.gca().set_xticklabels(xtick_label)
+ymin, ymax = plt.gca().get_ylim()
+# Also plot x-major lines at the ticks
+for tick in xtick:
+    plt.plot([tick,tick], [ymin,ymax], 'k')
+plt.savefig('bs.png')
 

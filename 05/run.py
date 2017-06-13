@@ -28,10 +28,7 @@ graphene = sisl.geom.graphene()
 # Hamiltonian for the system.
 H = sisl.Hamiltonian(graphene)
 
-# Instead of using the for-loop provided in 01, we
-# may use a simpler function that *ONLY* works
-# for 1-orbital per atom models.
-H.construct([0.1, 1.43], [0., -2.7])
+H.construct(([0.1, 1.43], [0., -2.7]))
     
 # At this point we have created all Hamiltonian elements for all orbitals
 # in the graphene geometry.
@@ -57,17 +54,17 @@ H.write('ELEC.nc')
 # (Python is 0-based indexing)
 device = graphene.repeat(25, axis=0).tile(15, axis=1)
 # Remove a hole in the flake
-device = device.remove(device.close(device.center(which='cell'), dR=10.))
+device = device.remove(device.close(device.center(which='cell'), R=10.))
 
 # We will also (for physical reasons) remove all dangling bonds:
 dangling = []
-for ia in device.close(device.center(which='cell'), dR=14.):
-    if len(device.close(ia, dR=1.43)) < 3:
+for ia in device.close(device.center(which='cell'), R=14.):
+    if len(device.close(ia, R=1.43)) < 3:
         dangling.append(ia)
 device = device.remove(dangling)
 edge = []
-for ia in device.close(device.center(which='cell'), dR=14.):
-    if len(device.close(ia, dR=1.43)) < 4:
+for ia in device.close(device.center(which='cell'), R=14.):
+    if len(device.close(ia, R=1.43)) < 4:
         edge.append(ia)
 # Now we have all the edge atoms.
 # Print the FORTRAN indices for sdata
@@ -89,7 +86,7 @@ print('')
 print('51-100')
 
 Hdev = sisl.Hamiltonian(device)
-Hdev.construct([0.1, 1.43], [0, -2.7])
+Hdev.construct(([0.1, 1.43], [0, -2.7]))
 # We will create both a xyz file (for plotting in molden, etc.)
 # and we will create the Hamilton file format for reading in tbtrans
 Hdev.geom.write('device.xyz')

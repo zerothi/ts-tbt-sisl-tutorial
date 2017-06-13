@@ -10,7 +10,7 @@ import sisl
 graphene = sisl.geom.graphene(orthogonal=True)
 
 # These are the tight-binding parameters
-dR  = [0.1, 1.43]
+R  = [0.1, 1.43]
 hop = [0. , -2.7]
 
 # Create the electrode for the graphene ribbons.
@@ -27,10 +27,10 @@ elec_x.write('elec_x.xyz')
 
 # Now create the Hamiltonian and store it
 H_y = sisl.Hamiltonian(elec_y)
-H_y.construct(dR, hop)
+H_y.construct((R, hop))
 H_y.write('ELEC_Y.nc')    
 H_x = sisl.Hamiltonian(elec_x)
-H_x.construct(dR, hop)
+H_x.construct((R, hop))
 H_x.write('ELEC_X.nc')
 
 # Now create the full device by overlying 
@@ -58,7 +58,7 @@ device = device.remove(dublicates)
 # Try and convince your-self that the lattice vectors are
 # unimportant for tbtrans in this example.
 # HINT: Periodicity.
-device = device.append(sisl.SuperCell([100]), 0).append(sisl.SuperCell([100]), 1)
+device = device.add_vacuum(100, 0).add_vacuum(100, 1)
 device = device.translate(device.center(which='cell'))
 
 # Print the electrode positions of
@@ -70,7 +70,7 @@ print('elec-X-1, semi-inf -A1: {}'.format(len(dev_y)+1))
 print('elec-X-2, semi-inf +A1: end {}'.format(-1))
 
 Hdev = sisl.Hamiltonian(device)
-Hdev.construct([0.1, 1.43], [0, -2.7])
+Hdev.construct((R, hop))
 # We will create both a xyz file (for plotting in molden, etc.)
 # and we will create the Hamilton file format for reading in tbtrans
 Hdev.geom.write('device.xyz')

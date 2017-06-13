@@ -15,7 +15,7 @@ H = si.Atom(1, R=1.1)
 
 # These are the tight-binding quantities
 # Create tight-binding H
-dR = [0.1, 1.1]
+R = [0.1, 1.1]
 on, nn = 4, -1
 
 # Read and create the electrode
@@ -25,7 +25,7 @@ elec.atom[:] = H
 # The electrode is a nano-ribbon
 elec.sc.set_nsc([3,1,1])
 H_el = si.Hamiltonian(elec)
-H_el.construct(dR, [on, nn])
+H_el.construct((R, [on, nn]))
 H_el.write('ELEC.nc')
 
 # First we read the device from the xyz file
@@ -35,7 +35,7 @@ device.atom[:] = H
 # The device has no supercell connections
 device.sc.set_nsc([1,1,1])
 H_dev = si.Hamiltonian(device)
-H_dev.construct(dR, [on, nn])
+H_dev.construct((R, [on, nn]))
 H_dev.write('DEVICE.nc')
 
 # Now we may easily create the B-field
@@ -54,7 +54,7 @@ for ias, idxs in device.iter_block(17):
 
         # Retrive BOTH the index of the overlaps *and* the
         # coordinates of the atoms that are connecting
-        idx, xyz = device.close(ia, dR=dR, idx=idxs, ret_coord=True)
+        idx, xyz = device.close(ia, R, idx=idxs, ret_xyz=True)
         
         # In the magnetic field Peierls substitution
         # we only want to change the nearest-neighbour elements

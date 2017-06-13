@@ -7,7 +7,7 @@ import sisl
 chain = sisl.Geometry([[0,0,0]], atom=sisl.Atom[6], sc=[1.4])
 
 # Add some vacuum along the Z-direction
-chain = chain.append(sisl.SuperCell([15-1.4]), axis=2)
+chain = chain.add_vacuum(15-1.4, axis=2)
 
 # Create the electrodes
 elec_x = chain.tile(4, axis=0)
@@ -29,13 +29,13 @@ sc.cell[2,2] = 2.1
 sc.cell[1,1] = chain_y.cell[1,1]
 device = chain_x.copy()
 device.set_supercell(sc)
-device = device.append(chain_y, 2).append(sisl.SuperCell([15-2.1]), 2)
+device = device.append(chain_y, 2).add_vacuum(15-2.1, 2)
 device = device.translate(device.center(which='cell')).translate([.7]*3)
 
 # Create the fdf files for all the geometries
-elec_x = elec_x.append(sisl.SuperCell([15-1.4]), 1)
+elec_x = elec_x.add_vacuum(15-1.4, 1)
 elec_x.write('ELEC_X.fdf')
-elec_y = elec_y.append(sisl.SuperCell([15-1.4]), 0)
+elec_y = elec_y.add_vacuum(15-1.4, 0)
 elec_y.write('ELEC_Y.fdf')
 device.write('DEVICE.fdf')
 device.write('DEVICE.xyz')

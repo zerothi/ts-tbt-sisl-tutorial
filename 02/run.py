@@ -14,9 +14,10 @@ graphene = sisl.geom.graphene(orthogonal=True)
 H = sisl.Hamiltonian(graphene)
 
 # Instead of using the for-loop provided in 01, we
-# may use a simpler function that *ONLY* works
-# for 1-orbital per atom models.
-H.construct([0.1, 1.43], [0., -2.7])
+# may use a simpler function that basically works for 1-orbital per
+# atom models. For more orbitals per atom one has to create a function
+# accordingly (see func_construct)
+H.construct(([0.1, 1.43], [0., -2.7]))
     
 # At this point we have created all Hamiltonian elements for all orbitals
 # in the graphene geometry.
@@ -42,7 +43,7 @@ H.write('ELEC.nc')
 # (Python is 0-based indexing)
 device = graphene.tile(3, axis=1)
 Hdev = sisl.Hamiltonian(device)
-Hdev.construct([0.1, 1.43], [0, -2.7])
+Hdev.construct(([0.1, 1.43], [0, -2.7]))
 # We will create both a xyz file (for plotting in molden, etc.)
 # and we will create the Hamilton file format for reading in tbtrans
 Hdev.geom.write('device.xyz')
