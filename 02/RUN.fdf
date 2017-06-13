@@ -1,0 +1,46 @@
+# Define the device Hamiltonian
+TBT.HS DEVICE.nc
+
+# Graphene requires a high k-point sampling
+# Try and play with this number to find
+# a value which gives a smooth
+# integration.
+# Please note which unit-cell direction
+# that the below array defines
+TBT.k [50 1 1]
+
+# These are the definitions of the electrodes
+# They may seem very verbose, but this
+# gives the user a very high degree of
+# flexibility. This will be apparent
+# in later tutorials
+%block TBT.Elec.Left
+  # Define the electronic structure
+  # of the electrode
+  HS ELEC.nc
+
+  # The semi-infinite direction was
+  # along the second lattice vector (A2)
+  # The negative sign is to specify 
+  # the direction of the semi-infinite
+  # bulk part
+  semi-inf-direction -A2
+
+  # Denote the first atom of the electrode.
+  # This index corresponds to the atomic
+  # index in the TBT.HS file
+  electrode-position 1
+%endblock TBT.Elec.Left
+
+# Also define the equivalent quantities 
+# for the right electrode
+%block TBT.Elec.Right
+  HS ELEC.nc
+  # The system is <- Left | device | Right ->
+  # hence the semi-infinite direction of the Right
+  # electrode has +
+  semi-inf-direction +A2
+  # Note the use of "end" which 
+  # refers to the last atom of the electrode
+  electrode-position end -1
+%endblock TBT.Elec.Right

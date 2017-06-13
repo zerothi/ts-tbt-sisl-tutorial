@@ -1,0 +1,138 @@
+SolutionMethod transiesta
+
+# This helps the block-tri-diagonal partitioning.
+TS.BTD.Pivot elec-x-1+elec-y-1
+
+TS.Voltage 0 eV
+# Although we have 4 electrodes we will only
+# use two different chemical potentials
+# One for each chain.
+%block TS.ChemPots
+  x
+  y
+%endblock TS.ChemPots
+
+%block TS.ChemPot.x
+  mu V/2
+  contour.eq
+    begin
+      C-x
+      T-x
+    end
+%endblock TS.ChemPot.x
+%block TS.ChemPot.y
+  mu - V/2
+  contour.eq
+    begin
+      C-y
+      T-y
+    end
+%endblock
+
+
+TS.Contours.Eq.Pole 2.5 eV
+%block TS.Contour.C-x
+  part circle
+   from -40. eV + V/2 to -10 kT + V/2
+     points 25
+      method g-legendre
+%endblock
+%block TS.Contour.T-x
+  part tail
+   from prev to inf
+     points 10
+      method g-fermi
+%endblock
+
+%block TS.Contour.C-y
+  part circle
+   from -40. eV - V/2 to -10 kT - V/2
+     points 25
+      method g-legendre
+%endblock 
+%block TS.Contour.T-y
+  part tail
+   from prev to inf
+     points 10
+      method g-fermi
+%endblock
+
+%block TS.Contours.nEq
+  neq
+%endblock TS.Contours.nEq
+%block TS.Contour.nEq.neq
+  part line
+   from - |V|/2 - 5 kT to |V|/2 + 5 kT
+     delta 0.01 eV
+      method mid-rule
+%endblock TS.Contour.nEq.neq
+
+%block TS.Elecs
+  elec-x-1
+  elec-x-2
+  elec-y-1
+  elec-y-2
+%endblock TS.Elecs
+
+%block TS.Elec.elec-x-1
+  HS ELEC_X.TSHS
+  chemical-potential x
+  semi-inf-direction -a1
+  electrode-position 1
+%endblock TS.Elec.elec-x-1
+%block TS.Elec.elec-x-2
+  HS ELEC_X.TSHS
+  chemical-potential x
+  semi-inf-direction +a1
+  electrode-position end 16
+%endblock TS.Elec.elec-x-2
+%block TS.Elec.elec-y-1
+  HS ELEC_Y.TSHS
+  chemical-potential y
+  semi-inf-direction -a2
+  electrode-position 17
+%endblock TS.Elec.elec-y-1
+%block TS.Elec.elec-y-2
+  HS ELEC_Y.TSHS
+  chemical-potential y
+  semi-inf-direction +a2
+  electrode-position end -1
+%endblock TS.Elec.elec-y-2
+
+
+# For TBtrans we would like
+# the spectral density of states
+# as well as the orbital current.
+TBT.DOS.A true
+TBT.Current.Orb true
+%block TBT.Contour.line
+  from -2 eV to 2 eV
+   delta 0.01 eV
+    method mid-rule
+%endblock
+
+
+# This is the remaining default SIESTA options
+PAO.BasisSize         SZP
+
+XC.functional     GGA
+XC.authors        PBE
+MeshCutoff        150.000000 Ry
+FilterCutoff      110.000000 Ry
+
+ElectronicTemperature   300 K
+
+MinSCFIterations       3
+SCF.DM.Tolerance       0.0001
+# Mixing parameters:
+SCF.Mixer.Weight       0.10
+SCF.Mixer.History      12
+SCF.Mix.First          true
+DM.UseSaveDM           true
+
+MD.NumCGSteps 0
+
+SaveHS                          T
+
+%include DEVICE.fdf
+

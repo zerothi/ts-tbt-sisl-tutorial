@@ -1,0 +1,174 @@
+SolutionMethod transiesta
+
+# We will use 3 k-points in the 
+# graphene plane along the transport
+# direction, and 8 k-points in the transverse
+# graphene direction.
+%block kgrid.MonkhorstPack
+ 3 0 0 0.
+ 0 8 0 0.
+ 0 0 1 0.
+%endblock
+
+# The transiesta calculation
+# should NOT have any k-points
+# along the graphene transport
+# direction. Hence for N-electrodes
+# we HAVE to manually specify the
+# transiesta k-points as transiesta
+# cannot decide for us!
+# This is an EXTREMELY important point!
+%block TS.kgrid.MonkhorstPack
+ 1 0 0 0.
+ 0 8 0 0.
+ 0 0 1 0.
+%endblock
+
+TS.Voltage 0 eV
+
+# Although we have 3 electrodes we will only
+# use two different chemical potentials
+# One for the graphene plane and one
+# for the chain.
+%block TS.ChemPots
+  graphene
+  chain
+%endblock TS.ChemPots
+
+%block TS.ChemPot.graphene
+  mu V/2
+  contour.eq
+    begin
+      C-graphene
+      T-graphene
+    end
+%endblock
+%block TS.ChemPot.chain
+  mu - V/2
+  contour.eq
+    begin
+      C-chain
+      T-chain
+    end
+%endblock
+
+
+TS.Contours.Eq.Pole 2.5 eV
+%block TS.Contour.C-graphene
+  part circle
+   from -40. eV + V/2 to -10 kT + V/2
+     points 25
+      method g-legendre
+%endblock
+%block TS.Contour.T-graphene
+  part tail
+   from prev to inf
+     points 10
+      method g-fermi
+%endblock
+
+%block TS.Contour.C-chain
+  part circle
+   from -40. eV - V/2 to -10 kT - V/2
+     points 25
+      method g-legendre
+%endblock 
+
+%block TS.Contours.nEq
+  neq
+%endblock TS.Contours.nEq
+%block TS.Contour.nEq.neq
+  part line
+   from - |V|/2 - 5 kT to |V|/2 + 5 kT
+     delta 0.01 eV
+      method mid-rule
+%endblock TS.Contour.nEq.neq
+
+# Now we define the 3 electrodes
+# Two in the graphene plane and 
+# one that acts as the STM tip (chain)
+%block TS.Elecs
+  graphene-2
+  graphene-1
+  chain
+%endblock TS.Elecs
+
+# This block is new
+# It tells transiesta to disregard
+# the specified atoms from the calculation.
+# I.e. they will not contribute to the physics
+# in the NEGF calculation.
+# This is important to terminate electrodes
+# that "end" in vacuum.
+# Note that a vacuum terminated bulk part will
+# not have an electronic structure close to the 
+# bulk
+%block TS.Atoms.Buffer
+  atom -2 -1
+%endblock
+
+%block TS.Elec.graphene-1
+  HS ELEC_GRAPHENE.TSHS
+  chemical-potential graphene
+  semi-inf-direction -a1
+  electrode-position 1
+  bloch-A2 5
+%endblock
+%block TS.Elec.graphene-2
+  HS ELEC_GRAPHENE.TSHS
+  chemical-potential graphene
+  semi-inf-direction +a1
+  electrode-position end 80
+  bloch-A2 5
+%endblock 
+%block TS.Elec.chain
+  HS ELEC_CHAIN.TSHS
+  chemical-potential chain
+  semi-inf-direction +a3
+  electrode-position end -3
+  check-kgrid False
+%endblock 
+
+
+# For TBtrans we would like
+# the spectral density of states
+# for all electrodes.
+TBT.BTD.Pivot GPS
+TBT.DOS.Gf true
+TBT.DOS.A true
+TBT.DOS.A.All true
+
+# Specify the k-grid for the transport
+# calculation
+TBT.k [1 16 1]
+%block TBT.Contour.line
+  from -2 eV to 2 eV
+   delta 0.01 eV
+    method mid-rule
+%endblock
+
+
+# This is the remaining default SIESTA options
+PAO.BasisSize         SZ
+
+XC.functional     GGA
+XC.authors        PBE
+MeshCutoff        150.000000 Ry
+FilterCutoff      110.000000 Ry
+
+ElectronicTemperature   300 K
+
+MinSCFIterations       3
+SCF.DM.Tolerance       0.0001
+# Mixing parameters:
+SCF.Mixer.Weight       0.05
+SCF.Mixer.History      12
+SCF.Mix.First          true
+DM.UseSaveDM           true
+
+MD.NumCGSteps 0
+
+SaveHS                          T
+
+%include DEVICE.fdf
+

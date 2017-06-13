@@ -1,0 +1,42 @@
+TBT.HS DEVICE.nc
+
+TBT.DOS.A true
+TBT.DOS.A.All true
+TBT.T.All true
+TBT.Current.Orb true
+
+# For N-electrodes the input is
+# a bit more complicated. 
+# You need to specify the electrode
+# names as well as each of their individual
+# settings.
+
+%block TBT.Elecs
+  elec-Y-1
+  elec-Y-2
+  elec-X-1
+  elec-X-2
+%endblock TBT.Elecs
+
+%block TBT.Elec.elec-Y-1
+  HS ELEC_Y.nc
+  semi-inf-direction -a2
+  electrode-position 1
+%endblock
+%block TBT.Elec.elec-Y-2
+  HS ELEC_Y.nc
+  semi-inf-direction +a2
+  electrode-position end 360
+%endblock
+
+%block TBT.Elec.elec-X-1
+  HS ELEC_X.nc
+  semi-inf-direction -a1
+  electrode-position 361
+%endblock
+%block TBT.Elec.elec-X-2
+  HS ELEC_X.nc
+  semi-inf-direction +a1
+  electrode-position end -1
+%endblock
+

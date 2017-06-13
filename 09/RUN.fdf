@@ -1,0 +1,178 @@
+SolutionMethod transiesta
+
+%block kgrid.MonkhorstPack
+    3  0  0 0.
+    0 10  0 0.
+    0  0  1 0.
+%endblock kgrid.MonkhorstPack
+
+
+# This below input options for transiesta
+# are automatically generated using the
+# tselecs.sh script which enables easy
+# creation of input options for N-electrodes
+# (up to 9).
+# 
+
+TS.Voltage 0 eV
+
+# To perform bias calculations one is FORCED
+# to define the required *different* chemical
+# potentials.
+# Note that there will NEVER be more chemical
+# potentials than electrodes.
+# In this example we call the chemical potentials
+# by the names of the electrodes.
+# However, you may call them as you wish.
+%block TS.ChemPots
+  Left
+  Right
+%endblock TS.ChemPots
+
+%block TS.ChemPot.Left
+  # The left chemical potential is lifted
+  # half the applied bias.
+  mu V/2
+  # this block defines the contours
+  # used for integrating the equilibrium part
+  # of the density.
+  contour.eq
+    begin
+      C-Left
+      T-Left
+    end
+%endblock TS.ChemPot.Left
+%block TS.ChemPot.Right
+  # The right chemical potential is downshifted
+  # half the applied bias.
+  mu -V/2
+  contour.eq
+    begin
+      C-Right
+      T-Right
+    end
+%endblock TS.ChemPot.Right
+
+# From this energy the number of poles will be calculated
+# from the energy and the temperature.
+TS.Contours.Eq.Pole 2.5 eV
+
+# The following two blocks are the LEFT equilibrium
+# contour
+%block TS.Contour.C-Left
+  part circle
+   from -40. eV + V/2 to -10 kT + V/2
+     points 25
+      method g-legendre
+%endblock TS.Contour.C-Left
+%block TS.Contour.T-Left
+  part tail
+   from prev to inf
+     points 10
+      method g-fermi
+%endblock TS.Contour.T-Left
+
+# The following two blocks are the RIGHT equilibrium
+# contour
+%block TS.Contour.C-Right
+  part circle
+   from -40. eV -V/2 to -10 kT -V/2
+     points 25
+      method g-legendre
+%endblock TS.Contour.C-Right
+%block TS.Contour.T-Right
+  part tail
+   from prev to inf
+     points 10
+      method g-fermi
+%endblock TS.Contour.T-Right
+
+
+# In addition to defining the equilibrium contours
+# one also has to define the non-equilibrium
+# contours to denote the integration in the bias-window.
+# NOTE that one may define as many integration partitions
+# as one wishes, but generally only one is needed.
+# If you are used to the older transiesta version you will
+# be happily surprised that the new transiesta need not
+# change options for different applied bias'
+%block TS.Contours.nEq
+  neq
+%endblock TS.Contours.nEq
+%block TS.Contour.nEq.neq
+  part line
+   from -|V|/2 - 5 kT to |V|/2 + 5 kT
+     delta 0.01 eV
+      method mid-rule
+%endblock TS.Contour.nEq.neq
+
+
+# Here comes the electrode definitions
+%block TS.Elecs
+  Left
+  Right
+%endblock TS.Elecs
+
+%block TS.Elec.Left
+  HS ../ELEC.TSHS
+  chemical-potential Left
+  semi-inf-direction -a1
+  electrode-position 1
+%endblock
+%block TS.Elec.Right
+  HS ../ELEC.TSHS
+  chemical-potential Right
+  semi-inf-direction +a1
+  electrode-position end -1
+%endblock
+
+
+# Interpolation for the bias Hamiltonians
+# The default is a spline interpolation
+# so we only need to specify the
+# Hamiltonian files and their respective
+# applied bias
+%block TBT.HS.Files
+   ../V0/siesta.TSHS   0.  eV
+   ../V0.5/siesta.TSHS 0.5 eV
+   ../V1.0/siesta.TSHS 1.  eV
+%endblock
+
+# If one is only interested in the IV curves
+# one may easily reduce the integration to the
+# energy window defined by the chemical potentials.
+# This will greatly increase throughput although the
+# transmission will be calculated in a very reduced
+# energy range dependent on the bias.
+%block TBT.Contours
+  IV
+%endblock
+%block TBT.Contour.IV
+   from -|V|/2 - 5 kT to |V|/2 + 5 kT
+     delta 0.01 eV
+      method mid-rule
+%endblock
+
+# This is the remaining default SIESTA options
+PAO.BasisSize         SZP
+
+XC.functional     GGA
+XC.authors        PBE
+MeshCutoff        250.000000 Ry
+FilterCutoff      150.000000 Ry
+
+ElectronicTemperature   300 K
+
+MinSCFIterations       3
+SCF.DM.Tolerance       0.0001
+# Mixing parameters:
+SCF.Mixer.Weight       0.10
+SCF.Mixer.History      12
+SCF.Mix.First          true
+DM.UseSaveDM           true
+
+MD.NumCGSteps 0
+
+SaveHS                          T
+
+%include ../STRUCT_DEVICE.fdf
