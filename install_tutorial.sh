@@ -1,6 +1,6 @@
 #!/bin/bash
 
-url=www.student.dtu.dk/~nicpa/sisl/workshop/16
+url=www.student.dtu.dk/~nicpa/sisl/workshop/17
 
 function _help {
     echo "This script may be used to install the dependencies for"
