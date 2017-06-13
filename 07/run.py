@@ -62,8 +62,8 @@ for ias, idxs in device.iter_block(17):
 
         # This is a B-field in the z-direction
         # So the phases are due to x-y coordinates
-        phase = (device[ia,0] - xyz[:,0]) * \
-                (device[ia,1] + xyz[:,1])
+        phase = (device.xyz[ia, 0] - xyz[:, 0]) * \
+                (device.xyz[ia, 1] + xyz[:, 1])
 
         phases[ia, idx] = phase
 phases.finalize()
