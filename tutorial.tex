@@ -1,0 +1,844 @@
+\documentclass[10pt]{article}
+
+\usepackage[textwidth=14cm,textheight=19cm]{geometry}
+\usepackage{hyperref}
+
+\usepackage{amsmath}
+\usepackage{amssymb}
+
+\usepackage{kpfonts}
+
+\newcommand\sisl{\textsc{sisl}}
+\newcommand\tbt{\textsc{TBtrans}}
+\newcommand\ts{\textsc{TranSIESTA}}
+\newcommand\kwant{\textsc{kwant}}
+
+\newcommand\obj{\emph{Objective}: }
+\newcommand\script[1]{\texttt{#1}}
+
+\newcommand\objskip{\vskip 1ex}
+
+
+\title{Tutorial in \sisl, \tbt\ and \ts}
+\author{Nick R\"ubner Papior}
+\date{9--11 November, 2016}
+
+\newcounter{example}
+\newcommand\newexample{%
+    \stepcounter{example}%
+    \ifnum\value{example}<10%
+      \subsection{Example 0\theexample}%
+    \else%
+      \subsection{Example \theexample}%
+    \fi%
+}
+\newcommand\theprevexample[1][1]{%
+    \addtocounter{example}{-#1}%
+    \ifnum\value{example}<10\relax%
+      0\theexample%
+    \else%
+      \theexample%
+    \fi%
+    \addtocounter{example}{#1}%
+}
+    
+
+\begin{document}
+
+\maketitle
+
+\tableofcontents
+
+
+\section{Tutorial outline}
+
+This tutorial is made up in consecutive examples such that one is first, introduced to the
+transport methodology using \tbt. So called ``tight-binding'' Hamiltonians are excellent
+examples to understand the methodology. They are extremely simple and may be used to shed
+light on more complicated issues.
+
+Subsequent to the understanding of \sisl\ and \tbt, the tutorial will present examples of
+self-consistent bias calculations using \ts. These are merely extensions of the same
+simplistic modelling and we try and retrieve the same results as using \sisl\ and \tbt.
+
+If your interest lie \emph{only} with \ts, do not be tempted to skip the tight-binding
+exercises. By understanding the underlying methodology in simplistic transport problems it
+is much easier to extrapolate to more complex/larger systems.
+
+
+
+\section{Installation of \sisl, \tbt\ and \ts}
+
+The following lists the required software for running the scripts in this tutorial.
+
+If you are unsure whether you have the required software you may run the installation
+script \script{install\_tutorial.sh} which downloads and installs the prerequisite
+packages. 
+
+If, however, you want to \emph{stay in control} you should download and install
+the following packages.
+
+The required Python packages are:
+\begin{itemize}
+  \itemsep=0pt
+  \parskip=0pt
+  \item \script{six}
+  \item \script{numpy}
+  \item \script{scipy}
+  \item \script{matplotlib} (strictly not needed)
+  \item \script{netCDF4}
+  \item \script{sisl}
+\end{itemize}
+which may all be obtained using \script{pip}. Be aware that some of the modules requires
+certain dependencies in your UNIX installation, see \script{install\_tutorial.sh} for the
+details.
+
+If you have a geometry plotter (\script{molden}, \script{Jmol}, \script{XCrySDen}) you may
+also view the calculated geometries from the \script{.xyz} files.
+
+Additionally the examples generates tabular data which may be plotted using your favourite
+plotting tool (\script{gnuplot}, \script{xmgrace}, etc.). Further, some examples generates
+atomic vector plots that may be plotted using \script{XCrySDen}, however, this is not a
+requirement.
+
+
+
+\section{Examples}
+
+Although each example is laid out in step-by-step actions you are \emph{encouraged} to
+read the full example before doing anything. 
+
+If you find any errors, misprints, etc. in the examples and/or scripts, please let me
+know: \href{mailto:nickpapior@gmail.com}{nickpapior@gmail.com}.
+
+
+
+% Create your first Hamiltonian using sisl
+\newexample
+
+\obj To understand how \sisl\ may be used to create Hamiltonians. 
+
+\objskip
+
+This example first creates the geometry of the graphene lattice. Then the Hamiltonian
+elements are assigned to the associated object and lastly the bandstructure of graphene is
+plotted (if you have \script{matplotlib}). 
+
+\objskip 
+
+Carefully go through \script{run.py} where each step is documented. Please do not be
+discouraged by the code, there are only $7$ lines of actual code. 
+
+Execute \script{run.py} using this command:
+\begin{verbatim}
+   python run.py
+\end{verbatim}
+
+
+% First tbtrans calculation using orthogonal graphene example
+\newexample
+
+\obj To understand how \sisl\ may be used to create transport Hamiltonians and interface
+with \tbt. In this example you will also experience the dependency on proper $k$-point
+sampling of the physical quantities.
+
+\objskip
+
+This example creates the geometry of the graphene lattice in the basic orthogonal
+unit-cell (4 atoms). Then the Hamiltonian is created for an \emph{electrode} and also the
+Hamiltonian for the \emph{device} region is created. Both are saved to the \script{\*.nc}
+files which are the input files for \tbt. 
+
+
+\objskip
+
+Carefully go through \script{run.py} and note where the Hamiltonians are created and
+written to disk. Once you know how the Hamiltonians are created you should be able to
+return to example \theprevexample\ and reduce the $7$ lines of code to $4$ (you are
+encouraged to do this after you have completed this example).
+
+\objskip
+
+After having executed \script{run.py} read the \script{RUN.fdf} which contains the minimal
+input for \tbt. This is the most basic input for \tbt\ and you are encouraged to
+understand all flags/keys, they are all required input for both \tbt\ and \ts.
+
+Then execute \tbt\ using this command:
+\begin{verbatim}
+   tbtrans RUN.fdf
+\end{verbatim}
+This will run \tbt\ and will take less than a minute. Subsequently you will find numerous
+files:
+\begin{itemize}
+  \itemsep=0pt
+  \parskip=0pt
+  \item \script{siesta.TBT.nc}
+  
+  This file contains every computed quantity from \tbt. 
+
+  \item \script{siesta.TBT.CC}
+
+  This file contains the energy points used for calculating the physical quantities, it
+  also contains the weights of the points in case it is a bias calculation (used for
+  integrating the current).
+
+  \item \script{siesta.TBT.KP}
+
+  This file contains the $\mathbf k$-points and weights used for integrating the Brillouin
+  zone.
+
+  \item \script{siesta.TBT.TRANS\_Left-Right}
+
+  This file contains the $\mathbf k$ resolved transmissions. 
+
+  May be plotted with 
+  \begin{center}
+    \script{gnuplot -p -e 'plot "siesta.TBT.TRANS\_Left-Right" w l'}
+  \end{center}
+
+  \item \script{siesta.TBT.AVTRANS\_Left-Right}
+
+  This file contains the Brillouin zone integrated transmission. This may easily be
+  re-created by summing all different $\mathbf k$-point transmissions with their
+  associated weights (\script{siesta.TBT.TRANS\_Left-Right} file).
+
+  May be plotted with
+  \begin{center}
+    \script{gnuplot -p -e 'plot "siesta.TBT.AVTRANS\_Left-Right" w l'}
+  \end{center}
+
+\end{itemize}
+
+You may alter the number of $\mathbf k$-points to converge the transmission (always do
+this!). It should be apparent that \emph{many} $\mathbf k$-points are required for
+converged results. In order to re-run \tbt, the output file of \tbt\ is required to be
+deleted (i.e. you should delete file \script{siesta.TBT.nc}), else you will possible
+overwrite data which do did not intend to be overwritten.
+
+How many $\mathbf k$-points are needed for a smooth transmission?
+% around 200-300
+
+
+
+
+
+% Second tbtrans calculation using skewed graphene example
+\newexample
+
+\obj Learn that \tbt\ allows complex geometries and are not limited to orthogonal
+unit-cells (\ts\ also allows these complex geometries).
+
+\objskip
+
+This example is equivalent to example \theprevexample, but instead of an orthogonal
+unit-cell we use the standard 2 atomic unit-cell of graphene. I.e. the transport
+calculation is based on a skewed unit-cell\footnote{For those with experience in the older
+    \ts\ input, it may be surprising that one can perform transport on skewed
+    unit-cells. However, the NEGF formalism does not constrain the semi-infinite
+    directions to be orthogonal to the other lattice vectors.}.
+
+Carefully go through \script{run.py} and note that there is only one small change from
+example \theprevexample. Then execute \script{run.py} and \tbt\ to obtain the transmission
+spectrum.
+
+\objskip
+
+Carefully compare to example \theprevexample\ and figure out if the converged $\mathbf k$-point sampling
+are different or the same.
+I.e. calculate the transmission for example \theprevexample\ and calculate the
+transmission for this example using the converged number of $\mathbf k$-points. Then plot
+the resulting two transmissions in the same plot. 
+%
+Are they equivalent? If not, why not?
+% the width of the unit-cells are not the same
+
+
+
+% sdata example
+\newexample
+
+\obj Learn how to use the data extraction tool in \sisl. The command \script{sdata} is
+extremely powerful and enables extraction of multiple quantities simultaneously. 
+
+\objskip
+
+This example creates a big graphene lattice with a hole in it (it also removes dangling
+bonds in the hole). Execute \script{run.py} to create the electronic structure.
+
+\objskip
+
+Go through \script{RUN.fdf} to familiarise yourself with the flags that enable the
+calculation of \emph{many} physical quantities. Each of the new flags creates a new file
+in the output directory. Run \tbt\ and subsequently run \script{run.sh} which extracts
+certain information into 4 files.
+%
+Notice that \tbt\ creates many more files than the previous examples. By now you should
+have figured out that the content of each file is described in the header of each
+file. Please go through the files and figure out which files corresponds to what physical
+quantity. 
+
+\emph{HINT}: The prefix \script{AV} has a special meaning for all physical quantities.
+
+\objskip
+
+The \script{sdata} command has a help menu which \emph{depends} on the input. It is
+extremely powerful and interfaces with many different files. This means that the help menu
+will only be present if there is an initial file to process. If you do \script{sdata
+    siesta.TBT.nc -h} you will find one help menu. If you do \script{sdata device.xyz -h}
+you will find another help menu.
+
+If you have a geometry viewer in your installation you may view the geometry and try and
+extract the DOS and spectral-DOS from specific, or several, atoms. 
+
+
+
+% Learn about Bloch's theorem in self-energies...
+\newexample
+
+\obj Use periodicity when it may be applied. This example is equivalent to the previous
+example. There is one change which increases the throughput (decreases calculation time)
+by taking advantage of the self-energy calculations. This is related to Bloch's theorem,
+which is encouraged to be used whenever possible.
+
+\objskip
+
+In this tutorial you should read the manual for \tbt\ and figure out how to enable Bloch's
+theorem in the calculation of the electrode self-energies.
+
+\emph{HINT}: You only need to change \script{RUN.fdf} with an appropriate Bloch
+keyword. The Python script need not be changed.
+
+Once you have calculated the physical quantities in this example you should compare the
+execution time to example \theprevexample. Also, you should assert that the physical
+quantities indeed are equivalent.
+
+
+
+
+% N-electrode tight-binding calculation
+\newexample
+
+\obj Create an $N$-electrode tight-binding calculation using \sisl\ and \tbt\ and try to
+understand the symmetries involved in simple $N$-electrode setup.
+
+\objskip
+
+This example has some rather complex Python scripting to create the geometry of the
+4-electrode system. When going through \script{run.py} please pay attention to the
+semi-infinite directions and how they are enforced. I.e. for $N$-electrodes there will in
+most cases be, at least, 2 different semi-infinite directions. Here there are two
+electrodes with the semi-infinite directions along the first lattice vector (this is an
+orthogonal example where the first lattice vector is equivalent to the $x$-direction), and
+two electrodes with semi-infinite directions along the second lattice vector (the
+$y$-direction).
+
+\objskip
+
+After running the script you should find $3$ \script{\*.nc} files, which contains the
+electronic structure of the two electrodes (\script{ELEC\_X/Y.nc}) and the device
+(\script{DEVICE.nc}) which are then used for \tbt\ subsequently.
+
+\objskip 
+
+After running \tbt, all $12$\footnote{Due to time-reversal symmetry you only need to
+    calculate $6$ of them.} transmission curves have been calculated. By plotting them you
+will recognise that one of the nano-ribbons have 2 symmetric transmission curves, while
+the other nano-ribbon have no symmetric transmissions. 
+
+Why is this? Try and view the device geometry to answer the question.
+% one of the sides of the armchair nano-ribbon is not
+% symmetric
+
+
+
+% Magnetic example
+\newexample
+
+\obj Learn how to include arbitrary effects not intrinsically enabled in \tbt\ (in this
+example we apply a magnetic field); how to import external geometries in \sisl. Finally
+this example also teaches you how to speed up calculations by reusing the self-energies.
+You should recognise that the $\delta\mathbf H$ method used here may also be applied on
+any \ts\ system.
+
+\objskip 
+ 
+We will consider a rather large square lattice with one electrode on each side and a
+constriction in the device region. This system is considered in one of the main examples
+reported in the documentation for \kwant\ (\url{https://kwant-project.org}), a well-known
+toolkit to compute transmission coefficients in presence of a magnetic field.
+
+\objskip 
+ 
+Instead of creating the geometry objects from scratch, this time we will import them in
+\sisl\ by reading from two external files, one for the electrodes
+(\script{electrode-square.xyz}) and one for the device region
+(\script{device.xyz}). Go through \script{run.py} and find the line where this is
+done. NB: \sisl\ employ a variety of IO interfaces for managing geometries. Many of the
+most popular file formats are already hard-coded, otherwise you can easily implement your
+own format.
+ 
+\objskip 
+
+Continue reading \script{run.py}, you can check that there is no mention of magnetic
+fields in the first part of the script: the Hamiltonian $\mathbf H$ for electrodes and
+device region are created and written as usual. Generically \tbt\ does not implement a
+generalised scheme for applying magnetic fields, instead \tbt\ accounts for arbitrary
+effects by incorporating to the ``unperturbed'' Hamiltonian a simple additive term:
+$\mathbf H \leftarrow \mathbf H+ \delta\mathbf H$ (check out Section 4.1.1 in the manual
+for a more general description). I.e. nearly \emph{any} electronic structure change can be
+emulated using the $\delta\mathbf H$ method. Based on the Peierls substitution, the
+elements of the additive $\delta\mathbf H$ will contain the magnetic field in the form of
+a phase factor. Now go through the rest of the script to get confident on how these
+additive terms can be setup using \sisl\ in an efficient way. Then run \script{run.py} to
+create the input \script{*.nc} files for \tbt. You should notice that one
+\script{M\_*.dH.nc} file has been generated for each magnetic field (by now you
+should have figured out that in our case the magnetic field have been given in the
+form of reciprocal magnetic flux $1/\phi$).
+ 
+\objskip 
+
+Now we have all ingredients to perform the transport calculations with an applied magnetic
+field. Go through \script{RUN.fdf} file. Note that there are no flags which mentions the
+\script{M\_*.dH.nc} files. Instead of defining the \script{TBT.dH} flag\footnote{As you
+    should have found in Section 4.1.1 of the \tbt\ manual.} in the file one can set the
+flag on the command-line. You may find an example in \script{run.sh} on how the
+command-line options are given to \tbt.
+
+\objskip 
+
+Before performing the \tbt\ calculations you should realise that the calculation will
+calculate the same self-energies for \emph{all} the different magnetic field calculations
+(we do not have any magnetic fields in the electrodes). This redundancy is extremely heavy
+and in this example the main computation time is spent on calculating the
+self-energies. Search in the manual on how to reuse the self-energies by storing them
+on-disk. 
+%
+\emph{HINT}: this is an electrode setting.
+
+
+\objskip
+
+Run the transmission calculations by running \script{run.sh}.
+%
+After all calculations are finished, you should have one directory per magnetic entry,
+each one containing all the results of the respective calculation. If you plot all the
+transmissions for increasing magnetic field you will find a transition from a smooth curvy
+transmission curve with onset at $0\,\mathrm{eV}$ (zero magnetic field) to fully quantised
+transmissions (steps) for higher magnetic fields.
+
+The output files contain the timings, check how much time you have saved by reusing the
+self-energies from the electrodes by checking the timings in \script{TBT.out} and
+\script{TBT\_M\_5.out}. If you perform $N$ calculations with the same system, how much
+time will you save by reusing the self-energies?
+% I save around 60 secs per calculation
+
+
+% You can now run ‘python
+% plot.py’ to plot the transmission coefficient as a function of 1/phi in comparison with
+% that obtained by using KWANT for exactly the same system. If you are not yet fully
+% convinced that the two curves are actually the same, try repeating the same calculation
+% for 200 values of 1/phi instead of 25 (you can check that this is actually the number of
+% points used to compute ‘T_kwant.txt’) HINT: edit the reciprocal_phis list in
+% ‘run.py’. Such increase in resolution would indeed capture the sharp transmission steps
+% resulting from KWANT.  NB: the KWANT code used to produce ‘T_kwant.txt’ can be found in
+% the documentation for KWANT (https://downloads.kwant-project.org/doc/kwant-paper.pdf). The
+% only difference in this example is that we do not account for disorder effects.
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%
+% Transiesta examples %
+%%%%%%%%%%%%%%%%%%%%%%%
+\newexample
+
+\obj Learn to run your first \ts\ calculation. This example also teaches, arguably, the
+\emph{most important} principle of the NEGF scheme, i.e. the requirement that the
+electrode only should couple to its nearest neighbour unit-cell. 
+
+\objskip
+
+This example is, yet again, the basic orthogonal graphene unit-cell. First create the
+geometries by running \script{run.py}.
+
+Now comes the self-consistent NEGF calculation of the system.
+%
+Most importantly \ts\ is a two-step calculation in addition to the final \tbt\
+calculation:
+\begin{enumerate}
+
+  \item%
+  Calculate the electronic structures of the bulk electrodes with periodicity along their
+  respective semi-infinite direction. Generally you are advised to use a high number of
+  $\mathbf k$-points in the transport direction ($>50$) to assert that the electronic
+  structure is captured adequately along this direction.
+
+  Run \ts\ on the \script{RUN\_ELEC.fdf} input:
+  \begin{center}
+    \script{transiesta RUN\_ELEC.fdf > RUN\_ELEC.out}
+  \end{center}
+  Running \ts\ on the electrodes creates the electrode \script{*.TSHS} files which contain
+  the required information for the subsequent device calculation.
+  In this example the file \script{ELEC.TSHS} is created.
+
+  \item%
+  Run the NEGF calculation of the device region. This requires the electrodes electronic
+  structures found in their \script{*.TSHS} files. In this case both electrodes use the
+  same electronic structure.
+  \begin{center}
+    \script{transiesta RUN.fdf > RUN.out}
+  \end{center}
+  Running \ts\ is ``easy'', but, ensuring that the setup and calculation is successful
+  requires checking the output (and TESTING!).
+  
+  Here is a short list which is a guidance for ensuring that the calculation has converged
+  (this list is far from complete\footnote{Even if the items are ensured, it does not mean
+      that the calculation is correct.})
+  \begin{itemize}
+    \item%
+    Ensure that the SCF has indeed converged, \ts\ should not stop because of the maximum
+    allowed iterations is too small. Optionally you may use this flag
+    \script{SCFMustConverge T} to make \ts\ die if it does not converge.
+
+    \item%
+    Ensure that the \script{dQ} column is close to $0$, below $0.01$ is preferable.
+    Further, it is advised that the previous couple of iterations also obey this
+    condition. 
+
+    \item%
+    Ensure that the change in Hamiltonian is below $0.005\,\mathrm{eV}$. The lower the
+    better. Also, this may be checked for the previous couple of iterations. 
+
+  \end{itemize}
+
+  Carefully go through the output after these lines:
+\begin{verbatim}
+                     ***************************
+                     *  WELCOME TO TRANSIESTA  *
+                     ***************************
+\end{verbatim}
+  and become familiar with how \ts\ output looks.
+
+  \item%
+  To calculate the transmission execute \tbt\ as this:
+  \begin{center}
+    \script{tbtrans RUN.fdf > TBT.out}
+  \end{center}
+  You will notice that there are \emph{no} \script{TBT.*} keys in \script{RUN.fdf}. This
+  is because \tbt\ defaults to read the equivalent data from the \script{TS.*} keys. As
+  such one typically need not specify separate electrodes for \tbt. Note that \tbt\ will
+  prefer the \script{TBT.*} keys if they exist, else \tbt\ will fall back to \script{TS.*}
+  keys.
+
+\end{enumerate}
+
+\objskip
+
+An important aspect of the electrodes is that there must only be Hamiltonian elements
+between nearest neighbour unit-cells along the transport direction. \ts\ has a built-in
+check for this requirement. If you follow this small sequence of commands you will obtain
+the error-message from \ts:
+\begin{enumerate}
+
+  \item%
+  Compare the electrode structures in \script{STRUCT\_ELEC.xyz} and
+  \script{STRUCT\_ELEC\_small.xyz}. Note that the latter is half the size of the former. 
+
+  \item%
+  Delete files \script{ELEC.*}.
+
+  \item%
+  Adapt \script{RUN\_ELEC.fdf} to read the electrode geometry from
+  \script{STRUCT\_ELEC\_small.fdf} (change \script{STRUCT\_ELEC.fdf} to
+  \script{STRUCT\_ELEC\_small.fdf})
+
+  \item%
+  Re-run the electrode
+  \begin{center}
+    \script{transiesta RUN\_ELEC.fdf > RUN\_ELEC\_small.out}
+  \end{center}
+
+  \item%
+  Execute \ts:
+  \begin{center}
+    \script{transiesta RUN.fdf > RUN\_small.out}
+  \end{center}
+  What is the output?
+
+\end{enumerate}
+
+Evidently \ts\ does \emph{not} allow too small electrodes as that will create an erroneous
+coupling to the semi-infinite directions. Luckily this may easily be inferred in the
+electrode output by looking for this keyword: \script{Internal auxiliary supercell}. The
+output of \ts\ will print 3 numbers \script{<A> x <B> x <C>} which corresponds to the number
+of neighbouring unit-cells the primary unit-cell connects to. The important number to
+look for is the number corresponding to the semi-infinite direction.
+What should this number be in order to preserve nearest-neighbour unit-cell interactions?
+Say, if the semi-infinite is along the \script{<A>} direction what should the number
+\script{<A>} be? 
+% answer 3
+
+
+% Run the first bias calculation with transiesta
+\newexample
+
+\obj Learn to run your first \ts\ bias calculation. This example is equivalent to example
+\theprevexample\ but with an applied bias\footnote{Applying a bias to a fully periodic
+    structure is not physical, this is only as an example.}. Use \tbt\ to calculate the
+transport/current for various applied bias' by interpolating the Hamiltonian.
+
+\objskip
+
+First run \script{run.py}, then \script{transiesta RUN\_ELEC.fdf}. Now we are ready to
+perform the \ts\ bias calculations. 
+
+\objskip 
+
+Bias calculations are very heavy as you need to perform self-consistent SCF calculations
+for each bias.
+%
+To perform bias calculations the input options becomes more complex as one should define
+the chemical potentials, the equilibrium contours for all different chemical potentials
+and the bias contour. However, once these have been setup one may use the same input file
+for \emph{all} bias calculations\footnote{In \ts\ versions prior to 4.1 the number of
+    points on the bias contour was fixed. Thus one needed to update this number for each
+    different bias. The number of bias contour points is now determined by an
+    energy-spacing.}.
+
+Please carefully go through \script{RUN.fdf} which now is more complex than example
+\theprevexample.
+
+\objskip
+
+Performing the bias calculations is a linear process, first the zero bias ($V=0$) is
+calculated, then the \ts\ density matrix is copied to the next bias ($V=0.5\,\mathrm{eV}$)
+and then calculated as a \emph{restart} of \ts. Lastly, the \ts\ density matrix for
+$V=0.5\,\mathrm{eV}$ is copied to the $V=1\,\mathrm{eV}$ folder and the last bias is
+calculated. This scheme should \emph{always} be followed and you are recommended to use
+bias-steps of $\delta V\le0.25\,\mathrm{eV}$. 
+%
+Hence the commands to be executed are:
+\begin{verbatim}
+  cd V0
+  transiesta ../RUN.fdf > RUN.out
+  # Check that it has converged...
+  cp siesta.TSDE ../V0.5/
+  cd ../V0.5
+  transiesta -V 0.5:eV ../RUN.fdf > RUN.out
+  # Check that it has converged...
+  cp siesta.TSDE ../V1.0/
+  cd ../V1.0
+  transiesta -V 1:eV ../RUN.fdf > RUN.out
+  # Check that it has converged...
+\end{verbatim}
+In this example there are only 3 bias' points which is hardly enough to create a detailed
+$IV$ curve. 
+
+\objskip
+
+One may either do manual interpolation of the $IV$ points which will typically not capture
+changes in the electronic structure. Certainly not with $\delta V$ being too high. In the
+remainder of this example you will perform \tbt\ calculations using interpolated
+Hamiltonians. This is more precise than interpolating the $IV$ curve because the
+electronic structure is interpolated, rather than the final values.
+
+First, find the block \script{TBT.HS.Files} in \script{RUN.fdf} which contains the
+relevant Hamiltonians and the bias' used for their self-consistent solution.
+%
+\tbt\ will now perform spline interpolation using the supplied Hamiltonians in the input
+file. Also notice the block \script{TBT.Contours} and \script{TBT.Contour.IV} which is the
+input for \tbt\ to \emph{only} calculate the transmission and other physical quantities in
+the bias window. If one is \emph{only} interested in the $IV$ characteristics this input
+is much preferred due to the higher throughput.
+
+So far the electronic structure is determined at 3 bias points. We will use interpolation
+to calculate sufficiently approximate intermediate bias points using the spline
+method. The following commands will calculate the interpolated transmission and current in
+steps of $0.1\,\mathrm{eV}$:
+\begin{verbatim}
+  for V in $(seq 0 0.1 1) ; do 
+    d=TBT_V${V//,/.}
+    mkdir $d 
+    cd $d
+    tbtrans -V "${V//,/.}:eV" ../RUN.fdf > TBT.out
+    cd ../
+  done
+\end{verbatim}
+An additional $10$
+directories with output from \tbt. In the corresponding \script{TBT\_V*/TBT.out} files you
+will find the calculated current for the applied (interpolated) bias.
+
+
+
+
+% Create your own geometry for transiesta
+% 1D chain.
+\newexample
+
+\obj Learn to create input for \ts\ and run your first self-created \ts\ calculation. In
+this example you should use your gathered knowledge from the previous examples (both \tbt\
+and \ts) to construct your own input for \ts.
+
+\objskip 
+
+Create a 1D chain input. It will be easier to use \sisl\ to generate the geometry input
+for \ts\ for both the electrode and the device (the beginning of a script may be found in
+\script{run.py}). The chain should consist of carbon atoms with an inter-atomic spacing of
+$1.5\,\text\AA$. Your first task is to figure out the extend of the electrode to
+ensure nearest-neighbour unit-cell interactions\footnote{Example 08 highlighted this
+    issue.}.
+
+\objskip 
+
+\emph{HINT}: You may use the shipped script \script{tselecs.sh}\footnote{This script is
+    also shipped with the \ts\ sources in the \script{Util/TS} folder.} to generate the
+basic input for \ts, or you may copy input from the previous example. In both cases you
+should edit the \script{fdf} options to conform to your system.
+
+Please help each other in this example!
+
+
+
+% N-electrode transiesta calculation
+\newexample
+
+\obj Perform $N$-electrode \ts\ calculations and their intricacies. 
+
+\objskip 
+
+This example consists of two overlying carbon nano-wires. The main difference in this
+example is the additional electrodes which requires to be defined. 
+
+Carefully go through \script{RUN.fdf} and pay attention to the additional electrodes. Take
+note of how the chemical potentials are defined and how an applied bias would affect the
+system. How many electrodes are there? And how many different chemical potentials are
+there? 
+% 4 electrodes, 2 chemical potentials.
+
+\objskip
+
+To successfully run this example you should first create the geometries (\script{run.py}),
+then run both electrodes (\script{transiesta RUN\_ELEC\_X/Y.fdf}) and finally the device
+system (\script{transiesta RUN.fdf}).
+
+\objskip
+
+After having runned the SCF of \ts\ you can run \tbt. By now you should have realised that
+the default energy range \tbt\ uses is $-2\,\mathrm{eV}$ to $2\,\mathrm{eV}$ with setting
+$E-E_F=0$ as the reference energy and a $\delta E=0.01\,\mathrm{eV}$.
+%
+By running \tbt\ and looking through the output you will find the interpreted energy
+contour (\script{TBT.Contours} and \script{TBT.Contour.line}). Try and edit the fdf file
+to calculate the transmission in the range $-16\,\mathrm{eV}$ to $20\,\mathrm{eV}$.
+
+\emph{HINT}: Copy paste the blocks from \tbt\ output and edit the energies.
+
+\objskip
+
+After having calculated the transmission for $V=0$ you should try and perform a SCF bias
+calculation at $V=0.5\,\mathrm{eV}$ and subsequent transport of the system as in example
+\theprevexample[2]. 
+
+
+
+% 3 electrode calculation with buffer atoms.
+\newexample
+
+\obj To learn how to perform $3$-electrode calculations which requires buffer
+atoms. Further this example highlights the importance of manually specifying
+$\mathbf k$-points for \ts\ with more than $2$ electrodes if periodicity is present.
+
+\objskip
+
+Buffer atoms in \ts\ are atoms that are \emph{not} taken into account in the SCF cycle of
+\ts. Their intended use is to terminate electrodes such that the actual electrode
+positions behave as bulk as possible. This helps \ts\ two-fold, 1) the initial Hamiltonian
+used for the SCF cycle when entering \ts\ is more consistent with the actual device, and
+2) the electrostatics are better screened in the device region. Both are \emph{very}
+important when performing SCF NEGF calculations.
+
+\objskip
+
+In this example we create an STM-like structure with all-carbon atoms. A graphene flake is
+suspended with a STM-chain floating above the plane. The graphene is terminated by two
+electrodes. The chain consists of an electrode terminated by 2 buffer atoms. Carefully go
+through \script{RUN.fdf} file and locate the block that defines the buffer
+atoms\footnote{You may also search for \emph{buffer} in the manual which makes it easy to
+    track down.}.
+
+\objskip
+
+Another thing to note in this example is the $\mathbf k$-point sampling which is a little
+more complex due to the intrinsic periodicity of the graphene (but not the
+STM-chain). Hence, \ts\ cannot easily reduce the $\mathbf k$-points as in a $2$-electrode
+system because there is no \emph{single} semi-infinite direction.
+
+\objskip
+
+This example is computationally demanding so do not spend time on converging the
+electronic structure or the transmission. 
+
+\objskip
+
+After having executed \ts\ and \tbt\ on the relevant input you should run \script{run.sh}
+which will create 3 \script{atomic-DOS-*} files, one for each electrode. They contain 5
+columns, the first is the energy, the second is the Green function DOS for all graphene
+atoms (normalised), the third is the spectral density of states from the electrode (from
+filename: \script{*} and normalised), the fourth and fifth are the Green function DOS and
+spectral DOS for the chain atoms, also normalised.
+%
+By plotting them you can determine the \emph{coupling} strength between the chain and the
+graphene plane by comparing the splitting of the DOS. Note that:
+\begin{equation}
+  \mathrm{DOS}_{\mathbf G} = \sum_{\mathfrak{e}} \mathrm{DOS}_{\mathbf{A}_\mathfrak{e}},
+\end{equation}
+where $\mathrm{DOS}_{\mathbf G}$ and $\mathrm{DOS}_{\mathbf{A}_\mathfrak{e}}$ is the Green
+function DOS and the spectral DOS from electrode $\mathfrak e$. 
+
+\objskip
+
+
+\section{Extra stuff to play with}
+
+If you have time on your hands, I highly suggest you to lookup the \sisl\ documentation at
+\url{https://zerothi.github.io/sisl/bizstyle/py-modindex.html} and familiarise yourself
+with the tight-binding capabilities of the module.
+
+In the following there is a list, randomly sorted, which suggests several ways to enhance
+your skills in using \sisl, \tbt\ and \ts.
+%
+First skip the \emph{HARD} exercises, unless you really want to do them, then once
+finished, return and make the \emph{HARD} exercises.
+\begin{itemize}
+  \item Create 3 new geometries with semi-infinite directions in any of the 3
+  lattice vectors directions
+
+  \emph{HARD}: Do this with \ts\ as well.
+
+  \item Create a device geometry with orthogonal lattice vectors but with two electrodes
+  at an angle of $30^\circ$ between them.
+
+  \emph{HARD}: Do this with \ts\ as well.
+
+  \item Create a device geometry with orthogonal lattice vectors but with three electrodes
+  at an angle of $30^\circ$ between two of them, the last you may decide where to place.
+
+  \emph{HARD}: Do this with \ts\ as well.
+
+  \item Create a Hall bar device with 4 and/or 6 terminals.
+
+  \emph{HARD}: Do this with \ts\ as well.
+
+  \item Create a Python script to extract DOS from specific atoms (hard-code the atoms as
+  though you were performing an analysis on your current research project)
+
+  \item Create a Python script to extract the bond-currents from a \script{siesta.TBT.nc}
+  file and reduce the bond-currents to only have values above a certain value.
+  You may try and extract the bond-currents for individual atoms for comparison.
+
+  \emph{HINT} you may download the \sisl\ code and look in the
+  \script{sisl/io/siesta/tbtrans.py} file for information.
+
+\end{itemize}
+
+
+\end{document}
