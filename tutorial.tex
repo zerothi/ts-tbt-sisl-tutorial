@@ -15,6 +15,7 @@
 
 \newcommand\obj{\emph{Objective}: }
 \newcommand\script[1]{\texttt{#1}}
+\newcommand\code[1]{\texttt{#1}}
 
 \newcommand\objskip{\vskip 1ex}
 
@@ -52,7 +53,7 @@
 
 \section{Tutorial outline}
 
-This tutorial is made up in consecutive examples such that one is first, introduced to the
+This tutorial is made up in consecutive examples such that you are first introduced to the
 transport methodology using \tbt. So called ``tight-binding'' Hamiltonians are excellent
 examples to understand the methodology. They are extremely simple and may be used to shed
 light on more complicated issues.
@@ -127,7 +128,7 @@ plotted (if you have \script{matplotlib}).
 \objskip 
 
 Carefully go through \script{run.py} where each step is documented. Please do not be
-discouraged by the code, there are only $7$ lines of actual code. 
+discouraged by the length of the code, there are only $7$ lines of actual code.
 
 Execute \script{run.py} using this command:
 \begin{verbatim}
@@ -155,7 +156,9 @@ files which are the input files for \tbt.
 Carefully go through \script{run.py} and note where the Hamiltonians are created and
 written to disk. Once you know how the Hamiltonians are created you should be able to
 return to example \theprevexample\ and reduce the $7$ lines of code to $4$ (you are
-encouraged to do this after you have completed this example).
+encouraged to do this after you have completed this example). Secondly, you should also
+reduce \script{run.py} from 2 \code{construct} calls to 1 \code{construct} call
+(see bottom of \script{run.py}).
 
 \objskip
 
@@ -174,7 +177,7 @@ files:
   \parskip=0pt
   \item \script{siesta.TBT.nc}
   
-  This file contains every computed quantity from \tbt. 
+  This file contains all computed quantities from \tbt. 
 
   \item \script{siesta.TBT.CC}
 
@@ -185,13 +188,14 @@ files:
   \item \script{siesta.TBT.KP}
 
   This file contains the $\mathbf k$-points and weights used for integrating the Brillouin
-  zone.
+  zone. Note that this will automatically be the time-reversal symmetry reduced $\mathbf
+  k$-points (unless time-reversal symmetry is disabled).
 
   \item \script{siesta.TBT.TRANS\_Left-Right}
 
   This file contains the $\mathbf k$ resolved transmissions. 
 
-  May be plotted with 
+  Can be plotted with 
   \begin{center}
     \script{gnuplot -p -e 'plot "siesta.TBT.TRANS\_Left-Right" w l'}
   \end{center}
@@ -202,7 +206,7 @@ files:
   re-created by summing all different $\mathbf k$-point transmissions with their
   associated weights (\script{siesta.TBT.TRANS\_Left-Right} file).
 
-  May be plotted with
+  Can be plotted with
   \begin{center}
     \script{gnuplot -p -e 'plot "siesta.TBT.AVTRANS\_Left-Right" w l'}
   \end{center}
@@ -213,7 +217,7 @@ You may alter the number of $\mathbf k$-points to converge the transmission (alw
 this!). It should be apparent that \emph{many} $\mathbf k$-points are required for
 converged results. In order to re-run \tbt, the output file of \tbt\ is required to be
 deleted (i.e. you should delete file \script{siesta.TBT.nc}), else you will possible
-overwrite data which do did not intend to be overwritten.
+overwrite data which you did not intend to overwrite.
 
 How many $\mathbf k$-points are needed for a smooth transmission?
 % around 200-300
@@ -235,11 +239,12 @@ unit-cell we use the standard 2 atomic unit-cell of graphene. I.e. the transport
 calculation is based on a skewed unit-cell\footnote{For those with experience in the older
     \ts\ input, it may be surprising that one can perform transport on skewed
     unit-cells. However, the NEGF formalism does not constrain the semi-infinite
-    directions to be orthogonal to the other lattice vectors.}.
+    directions to be orthogonal to the other lattice vectors. This is true for \emph{both}
+    \ts\ and \tbt.}.
 
 Carefully go through \script{run.py} and note that there is only one small change from
 example \theprevexample. Then execute \script{run.py} and \tbt\ to obtain the transmission
-spectrum.
+spectrum. Note that this example uses the Hamiltonian tiling.
 
 \objskip
 

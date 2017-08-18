@@ -7,6 +7,10 @@ TBT.HS DEVICE.nc
 # integration.
 TBT.k [50 1 1]
 
+# Also calculate the Gf DOS and spectral DOS
+TBT.DOS.Gf true
+TBT.DOS.A true
+
 # These are the definitions of the electrodes
 # They may seem very verbose, but this
 # gives the user a very high degree of

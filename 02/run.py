@@ -13,10 +13,10 @@ graphene = sisl.geom.graphene(orthogonal=True)
 # Hamiltonian for the system.
 H = sisl.Hamiltonian(graphene)
 
-# Instead of using the for-loop provided in 01, we
+# Instead of using the for-loop shown in 01, we
 # may use a simpler function that basically works for 1-orbital per
 # atom models. For more orbitals per atom one has to create a function
-# accordingly (see func_construct)
+# accordingly (see create_construct)
 H.construct(([0.1, 1.43], [0., -2.7]))
     
 # At this point we have created all Hamiltonian elements for all orbitals
@@ -43,9 +43,33 @@ H.write('ELEC.nc')
 # (Python is 0-based indexing)
 device = graphene.tile(3, axis=1)
 Hdev = sisl.Hamiltonian(device)
+
+# Again we have to construct the Hamiltonian using the construct
+# routine call.
 Hdev.construct(([0.1, 1.43], [0, -2.7]))
+
 # We will create both a xyz file (for plotting in molden, etc.)
-# and we will create the Hamilton file format for reading in tbtrans
+# and we will create the Hamiltonian file format for reading in tbtrans
 Hdev.geom.write('device.xyz')
 Hdev.write('DEVICE.nc')
+
+
+# The above code calls `construct` twice. However, for extremely
+# large systems (>500,000) the `construct` function will be rather
+# slow.
+# Instead we can use the periodicity of the initial graphene
+# electrode Hamiltonian (i.e. the smallest orthogonal
+# unit-cell Hamiltonian).
+#
+# Try and run the following two lines of code to get help:
+#
+#   >>> help(sisl.Geometry.tile)
+#   >>> help(sisl.Hamiltonian.tile)
+#
+# I.e. one can also tile (or repeat) a Hamiltonian object.
+# And this is *much* faster!
+#
+# You should make a copy of this code and adapt it to *only* have
+# one `construct` call, the resulting code should also be shorter (by 2 lines).
+
 
