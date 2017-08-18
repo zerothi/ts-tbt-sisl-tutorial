@@ -1,0 +1,50 @@
+\section{Setup sequence summary}
+
+\begin{frame}
+  \frametitle{Setup sequence summary}
+
+  \begin{enumerate}[<+->]
+
+    \item Create geometry
+    \begin{itemize}
+      % Geometry setup
+      \item Determine the electrode size in the semi-infinite direction
+
+      \item Determine required number of \emph{screening} layers between electrode and device
+      \item Finalise structure
+    \end{itemize}
+
+    \item Create input options, using either method:
+    \begin{itemize}
+      \item Create input yourself; chemical potential, electrodes and contours
+
+      \item Pre-4.1 users; use \texttt{ts2ts} (converts old input to new input)
+
+      \item \texttt{tselecs.sh}, capable of creating input for $N$ electrodes, requires
+      fine-tuning afterwards(!)
+
+    \end{itemize}
+    
+    \item Run TranSiesta on electrodes with \emph{high} $\mathbf k$-point sampling along
+    the semi-infinite direction ($\ge50$)
+    for accurate bulk description of the electronic structure
+
+    \item Analyse the pivoting methods using TranSiesta and \texttt{TS.Analyze}
+
+    \item Run TranSiesta on device at $V=0$
+
+    \item \textbf{ENSURE CONVERGENCE}
+
+    \item Step-by-step increase/decrease the bias and copy the \texttt{siesta.TSDE} from
+    the nearest lower bias to the folder for restart capability
+
+    \item Run TBtrans, and possibly use the interpolation scheme for precise $IV$ curves
+    
+  \end{enumerate}
+
+\end{frame}
+
+%%% Local Variables:
+%%% mode: latex
+%%% TeX-master: "talk"
+%%% End:

@@ -1,0 +1,319 @@
+
+\section{Density matrix}
+
+\begin{framenologo}
+  \frametitle{Density matrix}
+  \tableofcontents[currentsection]
+\end{framenologo}
+
+\subsection{Numerical integration}
+
+\begin{frame}[fragile]
+  \frametitle{Density matrix}
+  \framesubtitle{Numerical integration}
+
+  \footnotesize
+  \begin{block}{Density matrix using non-equilibrium Green functions}
+    \vskip -2ex
+    \begin{align*}
+      \only<2->{\color{gray}}
+      \DM &
+      \only<2->{\color{gray}}
+      =\frac1{2\pi}
+      \iint_\BZ\dEBZ\cd \kk \dd\E\, \sum_\idxE\Spec_{\idxE,\kk}(\E) n_{F,\idxE}(\E)
+      \eikr
+      \\
+      \only<2->{\color{gray}}
+      \DM^\idxE &
+      \only<2->{\color{gray}}
+      =
+      {\frac i{2\pi}\iint_\BZ\dEBZ\cd \kk\dd\E%
+      \left[\G_\kk  - \G^\dagger_\kk \right]\eikr n_{F,\idxE}(\E)}
+      +
+      {\frac1{2\pi}\sum_{\idxE'\neq\idxE}\iint_\BZ\dEBZ\cd \kk\dd\E\, %
+      \G_\kk \Scat_{\idxE',\kk}
+      \G^\dagger_\kk\eikr\big[n_{F,\idxE'}(\E)-n_{F,\idxE}(\E)\big]}
+      \\
+      \DM^\idxE &=
+      {\DE^\idxE}
+      +
+      {\sum_{\idxE'\neq\idxE}\ncor_{\idxE'}^\idxE}
+      \uncover<2->{=
+      \only<2->{\color{ok}}
+      % Essentially these
+      \langle\dots\rangle n_{F,\idxE}(\E)
+      +
+      \sum_{\idxE'\neq\idxE}\langle\dots\rangle [n_{F,\idxE'}(\E)-n_{F,\idxE}]}
+    \end{align*}
+  \end{block}
+
+  \pause
+  \pause
+
+  \begin{center}
+    \def\eta{0.1}%
+    \def\radius{3.25}%
+    \def\lineS{-1}%
+    \def\poles{4}%
+    \def\poleSep{.25}%
+    % Calculate alpha angle
+    \pgfmathparse{\poleSep*(\poles+.5)/\radius}%
+    \edef\betaA{\pgfmathresult}%
+    \pgfmathparse{atan(\betaA)}%
+    \edef\alphaA{\pgfmathresult}%
+    \pgfmathparse{asin(\betaA)}%
+    \edef\betaA{\pgfmathresult}%
+    \begin{tikzpicture}[scale=.75]
+      
+      % The axes
+      \begin{scope}[draw=gray!80!black,thick,->]
+        \draw (-2*\radius+\lineS-.5,0) -- (\radius+1.5,0) node[text=black,below] {$E$};
+        \draw (0,0) -- (0,\radius+.5) node[text=black,left] {$\Im$};
+      \end{scope}
+      \node[below] (mu-1) at (0,0) {$\mu_1$};
+      
+      % The specific coordinates on the path
+      \coordinate (EB) at (-2*\radius+\lineS,\eta);
+      \coordinate (C-mid) at ({-\radius+\lineS-sin(\alphaA)*\radius},{cos(\alphaA)*\radius});
+      \coordinate (C-end) at (\lineS,{\poleSep*(\poles+.5)});
+      \coordinate (L-end) at (\radius,{\poleSep*(\poles+.5)});
+      \coordinate (L-end-end) at (\radius+1,{\poleSep*(\poles+.5)});
+      \coordinate (real-L-end) at (\radius,\eta);
+      \coordinate (real-L-end-end) at (\radius+1,\eta);
+      
+      \begin{scope}[thick]
+        
+        % The path (we draw it backwards)
+        \draw[->-=.3,very thick] (L-end) -- node[above right] 
+        {$\mathcal L$} (C-end);
+        \draw[->-=.333,->-=.666,very thick] (C-end) to[out=90+\betaA,in=\alphaA] (C-mid)
+        node[above] 
+        {$\mathcal C$}
+        to[out=180+\alphaA,in=90] (EB);
+        \draw[->-=.25,->-=.75] (EB) -- (real-L-end) node[above left] {$\mathcal R$};
+
+        % draw the continued lines
+        \draw[densely dotted] (real-L-end) -- (real-L-end-end);
+        \draw[densely dotted] (L-end) -- (L-end-end);
+
+      \end{scope}
+      
+      % Draw the poles
+      \foreach \pole in {1,...,14} {
+          \ifnum\pole>\poles
+          \draw (0,\pole*\poleSep) circle (2pt);
+          \else
+          \fill (0,\pole*\poleSep) circle (2pt);        
+          \fi
+      }
+      \node[left,anchor=east] at (0,{\poleSep*(\poles/2+.5)}) {$z_\nu$};
+
+      % correct size
+      \path[use as bounding box] (-8,-.5) rectangle ++(13,4.5);
+
+      \draw[densely dotted] (real-L-end-end) to[out=0,in=0] (L-end-end);
+      \draw[densely dotted,thick] (EB) -- ++(-.5,0);
+
+      % Draw the 2nd poles
+      \def\muB{1}
+      \node[below] (mu-2) at (\muB,0) {$\mu_2$};
+      \foreach \pole in {1,...,14} {
+          \ifnum\pole>\poles
+          \draw[bad] (\muB,\pole*\poleSep) circle (2pt);
+          \else
+          \fill[bad] (\muB,\pole*\poleSep) circle (2pt);        
+          \fi
+      }
+      \draw[decorate,decoration=brace]
+      ($(mu-2.south east)+(0,0)$) --
+      node[below left=6pt] {$\ncor^2_1$} 
+      ($(mu-1.south west)+(0,0)$);
+
+      \def\muC{2}
+      \node[below] (mu-3) at (\muC,0) {$\mu_3$};
+      \foreach \pole in {1,...,14} {
+          \ifnum\pole>\poles
+          \draw[ok] (\muC,\pole*\poleSep) circle (2pt);
+          \else
+          \fill[ok] (\muC,\pole*\poleSep) circle (2pt);        
+          \fi
+      }
+      \draw[decorate,decoration=brace]
+      ($(mu-3.south east)+(0,-.4)$) --
+      node[below=6pt] {$\ncor^3_2$} 
+      ($(mu-2.south west)+(0,-.4)$);
+      \draw[decorate,decoration=brace]
+      ($(mu-3.south east)+(0,-1.2)$) --
+      node[below=6pt] {$\ncor^3_1$} 
+      ($(mu-1.south west)+(0,-1.2)$);
+
+    \end{tikzpicture}
+  \end{center}
+    
+\end{frame}
+
+
+\begin{frame}
+  \frametitle{Non-equilibrium Green function}
+  \framesubtitle{Numeric integration -- equilibrium}
+
+  \begin{block}{Example of numeric integration of equilibrium contour}
+    \begin{center}
+      \begin{tikzpicture}[scale=.8]
+        \begin{axis}[width=14cm,height=8cm,name=circ,only marks,
+          ymin=0,ymax=15.5,xmin=-31,xmax=1.5,
+          xtick={-28,-24,-20,-16,-12,-8,-4},
+          extra x ticks={0.25},extra x tick label={$\mu$},
+          xlabel={Real Energy [eV]},
+          ylabel={Imaginary Energy [eV]}]
+          \addplot table {data/EQ_circle.dat};
+          \addplot table {data/EQ_fermi.dat};
+          \addplot table {data/EQ_pole.dat};
+          \draw[densely dashed,green!50!black,very thick] (axis cs:-30,0.1) --
+          (axis cs:2,0.1);
+          \draw[->,>=latex] (axis cs:-.5,0) -- (axis cs:-8.75,2.2);
+          \draw[->,>=latex] (axis cs:-.5,1.25) -- (axis cs:-8.75,10.75);
+          \node[rotate=35] at (axis cs:-21.5,11.5) {Gauss-Legendre};
+        \end{axis}
+        \begin{axis}[width=6cm,height=5cm,only marks,
+          at={($(circ.south)+(0,1cm)$)},anchor=south,
+          xtick={-0.5,0,0.5},
+          extra x ticks={0.25},extra x tick label={$\mu$},
+          xmin=-.5,xmax=.75,ymin=0,ymax=1.3]
+          \addplot table {data/EQ_circle.dat};
+          \addplot table {data/EQ_fermi.dat};
+          \addplot table {data/EQ_pole.dat};
+          \draw[<->] (axis cs:.3,0.568494) -- node[sloped,anchor=south] {$2\pi k_BT$} (axis cs:.3,0.406067);
+          \draw[densely dashed,green!50!black,very thick] 
+          (axis cs:-1,0.03) -- (axis cs:1,0.03);
+          \node[anchor=south] at (axis cs:0.25,1) {Gauss-Fermi};
+          \node[rotate=90,anchor=south] at (axis cs:0.25,.5) {Poles};
+        \end{axis}
+      \end{tikzpicture}
+    \end{center}
+  \end{block}
+
+  \begin{block}<2->{Example of numeric integration of non-equilibrium contour, $\delta \E
+        \approx 0.01\,\mathrm{eV}$}
+    \begin{center}
+      \begin{tikzpicture}[scale=.8]
+        \begin{axis}[width=15cm,height=3cm,
+          ymin=0,ymax=1.5,xmin=-1,xmax=1,gen/.style={only marks,opacity=.7},
+          xlabel={Energy [eV]},
+          ylabel={Weight}]
+          \addplot[gen,bad,domain=-.55:.55,samples=30] {1./(exp((x-0.5)/0.01)
+              + 1)- 1./(exp((x+0.5)/0.01) + 1)};
+          \draw[<->,bad,very thick] (axis cs:-.5, .1) -- (axis cs:.5,.1) node[midway,above]
+          {$n_F(\E+0.5\,\mathrm{eV}) - n_F(\E-0.5\,\mathrm{eV})$};
+        \end{axis}
+      \end{tikzpicture}
+    \end{center}
+  \end{block}
+
+\end{frame}
+
+
+
+\subsection{Weighing the density matrix}
+
+\begin{frame}[fragile]
+  \frametitle{TranSiesta input options}
+  \framesubtitle{Numerical integration}
+
+  \footnotesize
+  \begin{block}{Density matrix using non-equilibrium Green functions}
+    \vskip -2ex
+    \begin{columns}
+      \column{.1\textwidth}
+
+      \column{.3\textwidth}
+      
+      Equivalent, but different!
+
+      \column{.6\textwidth}
+      \begin{align*}
+        \DM^\idxE &=
+        % {\DE^\idxE}
+        % +
+        % {\sum_{\idxE'\neq\idxE}\ncor_{\idxE'}^\idxE}
+        % =
+        % Essentially these
+        \langle\dots\rangle n_{F,\idxE}(\E)
+        +
+        \sum_{\idxE'\neq\idxE}\langle\dots\rangle [n_{F,\idxE'}(\E)-n_{F,\idxE}]
+        \\
+        \DM^\varsigma &=
+%        {\DE^\varsigma}
+%        +
+%        {\sum_{\idxE|\varsigma_\idxE\neq\varsigma}\ncor_{\idxE'}^\varsigma}
+%        =
+        \langle\dots\rangle n_{F,\varsigma}(\E)
+        +
+        \sum_{\idxE|\varsigma_\idxE\neq\varsigma} \langle\dots\rangle[n_{F,\varsigma_\idxE}(\E)-n_{F,\varsigma}]
+      \end{align*}
+    \end{columns}
+
+  \end{block}
+
+  \begin{block}<2->{Estimating $\DM$}
+
+    \begin{itemize}
+      \item<+->
+      TranSiesta calculates \emph{all} $\DM^\varsigma$ and estimates the true $\DM$ by an
+      average:
+      \begin{align*}
+        \shortintertext{for $2$ electrodes:}
+        w_i & = \frac{(\ncor_i)^2}{(\ncor_1)^2+(\ncor_2)^2}
+        & &w_1+w_2=1
+        \uncover<+->{
+        \\
+        \shortintertext{for $N$ electrodes:}
+        w_\varsigma &=
+        \prod_{\varsigma'\neq\varsigma}
+        \big(\smash{\sum_{\idxE|\varsigma_\idxE\neq\varsigma'}}(\ncor^{\varsigma'}_\idxE)^2\big)
+        \Big/
+        \Big\{
+        \sum_{\varsigma'}\prod_{\varsigma''\neq\varsigma'}
+        \big(\smash{\sum_{\idxE|\varsigma_\idxE\neq\varsigma''}}(\ncor^{\varsigma''}_\idxE)^2\big)
+        \Big\}
+        \\
+        \DM &=\sum_\varsigma \DM^\varsigma w_\varsigma
+    }
+      \end{align*}
+
+      \item<+->%
+      Estimation of the ``error''
+      \begin{align*}
+        \mathrm e_{\mathrm{max}} &= \max\big[
+        \DM^{\varsigma'}-\DM^\varsigma;
+        \DM^{\varsigma''}-\DM^{\varsigma};
+        \DM^{\varsigma''}-\DM^{\varsigma'};
+        \dots\big]
+        \\
+        \mathrm e_{w} &= \max\big[
+        \DM^{\varsigma}-\DM;
+        \DM^{\varsigma'}-\DM;
+        \dots\big].
+      \end{align*}
+      
+    \end{itemize}
+    
+  \end{block}
+
+  \uncover<4->{%
+      \begin{tikzpicture}[remember picture,overlay]
+        \node[rotate=30,inner sep=20cm,anchor=mid,
+        fill=white,opacity=.7,text width=20cm,align=center,
+        text opacity=1] at (current page.center) 
+        {\huge This is why we need \emph{both} a chemical \emph{and} an electrode block};
+      \end{tikzpicture}
+  }
+
+\end{frame}
+
+
+
+%%% Local Variables:
+%%% mode: latex
+%%% TeX-master: "talk"
+%%% End:

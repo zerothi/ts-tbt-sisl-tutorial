@@ -1,0 +1,155 @@
+\def\classopts{11pt}
+\input ../beamertemplate.tex
+
+\definecolor{good}{cmyk}{0.50, 0.00, 0.70, 0.20}
+\definecolor{bad}{cmyk}{0.00, 0.50, 1.00, 0.50}
+\definecolor{ok}{cmyk}{0.50, 0.10, 1.00, 0.50}
+\definecolor{check}{cmyk}{0.90, 0.20, 0.20, 0.40}
+
+\mode<handout>{%
+    \nofiles % do not overwrite 
+    \usetheme{workshopdtu}
+}
+\mode<presentation>
+{
+    \usetheme{workshopdtu}
+}
+
+\usepackage{listings}
+\usepackage{fancyvrb}
+
+% Change logo to cecam
+%\logo{\includegraphics[width=\logosize]{SIESTA_small}}
+
+\author{Nick R. Papior}
+
+\usetikzlibrary{%
+    fadings,calc,arrows,
+    positioning,
+    decorations,
+    decorations.markings
+}
+
+\usetikzlibrary{decorations,decorations.markings,calc,decorations.pathreplacing,decorations.text}
+\tikzset{
+    ->-/.style={postaction={decorate},decoration={%
+            markings,mark=at position #1 with {\arrow[line width=2pt]{stealth}}%
+        }%
+    },%
+    ->-/.default=.5,%
+}
+
+\usepackage{biblatex}
+\bibliography{refs}
+
+\def\tsiesta{\texttt{transiesta}}
+\def\siesta{\texttt{siesta}}
+\def\fdf#1{\texttt{#1}}
+\def\mcite#1{{\small \citeauthor{#1}, DOI: \citefield{#1}{doi}}}
+
+
+\makeatletter
+\newcommand\incg[2][align=c]{%
+    \bgroup%
+    \let\tmp@file\relax%
+    \incg@check{#2}{png}%
+    \ifx\tmp@file\relax%
+      \incg@check{#2}{pdf}%
+    \fi%
+    \ifx\tmp@file\relax%
+      \incg@check{#2}{jpg}%
+    \fi%
+    \ifx\tmp@file\relax%
+      \incg@check{#2}{jpeg}%
+    \fi%
+    \ifx\tmp@file\relax%
+      \rule{3cm}{4cm}%
+    \else%
+      \includegraphics[#1]{\tmp@file}%
+    \fi%
+    \let\tmp@file\relax%
+    \egroup%
+}
+\newcommand\incg@check[2]{%
+    \IfFileExists{#1.#2}{%
+        % It does
+        \edef\tmp@file{#1.#2}%
+    }{}%
+    \ifx\tmp@file\relax%
+      \IfFileExists{fig/#1.#2}{%
+          % It does
+          \edef\tmp@file{fig/#1.#2}%
+      }{}%
+    \fi%
+    \ifx\tmp@file\relax%
+      \IfFileExists{paper-fig/#1.#2}{%
+          % It does
+          \edef\tmp@file{paper-fig/#1.#2}%
+      }{}%
+    \fi%
+    \ifx\tmp@file\relax%
+      \IfFileExists{fig-external/#1.#2}{%
+          % It does
+          \edef\tmp@file{fig-external/#1.#2}%
+      }{}%
+    \fi%
+    \ifx\tmp@file\relax%
+      \IfFileExists{people/#1.#2}{%
+          % It does
+          \edef\tmp@file{people/#1.#2}%
+      }{}%
+    \fi%
+}
+\makeatother
+
+
+% Define all variables used in this paper
+\newcommand\G{\mathbf{G}}
+\newcommand\Spec{\mathcal{A}}
+\newcommand\Gr{\mathbf{G}^r}
+\newcommand\Ga{\mathbf{G}^a}
+\newcommand\HH{\mathbf{H}}
+\newcommand\VV{\mathbf{V}}
+\newcommand\DM{\boldsymbol{\rho}}
+\newcommand\DE{\DM_\Eq}
+\newcommand\DN{\DM_\Neq}
+\newcommand\ncor{\boldsymbol{\Delta}}
+\newcommand\SO{\mathbf{S}}
+\newcommand\SE{\boldsymbol{\Sigma}}
+\newcommand\Scat{\boldsymbol{\Gamma}}
+\newcommand\kk{\mathbf{k}}
+\newcommand\RR{\mathbf{R}}
+\newcommand\rr{\mathbf{r}}
+\newcommand\im{\mathfrak{i}}
+\newcommand\ID{\mathbf{I}}
+\newcommand\sumE{\sum^{\mathfrak{E}}}
+\newcommand\NE{\mathfrak{E}}
+\newcommand\idxE{\mathfrak{e}}
+\newcommand\sumU{\sum^{\NU}}
+\newcommand\NU{N_\mu}
+\newcommand\idxU{\mu}
+\newcommand\cd{\!\dd}
+\newcommand\Cd{\!\!\dd}
+\newcommand\dd{\mathrm{d}}
+\newcommand\E{\epsilon}
+\newcommand\BZ{\mathrm{BZ}}
+\newcommand\Eq{\mathrm{eq}}
+\newcommand\Neq{\mathrm{neq}}
+\newcommand\varneq{\boldsymbol{\beta}}
+\DeclareMathOperator\Var{Var}
+\DeclareMathOperator\Tr{Tr}
+\newcommand\dEBZ{\!\!\!\!\!\!\!\!}
+\newcommand\dE{\!\!\!\!}
+\newcommand\DOS{\mathrm{DOS}}
+\newcommand\T{\mathcal{T}}
+\newcommand\RE{\mathcal{R}}
+\def\mto{\rightarrow}
+\newcommand\mrc[2]{%
+    \bgroup%
+    \{#1,#2\}%
+    \egroup%
+}
+\newcommand\eikr{e^{-\im\kk\cdot\RR}}
+
+\def\etal{\emph{et.al.}}
+\newcommand\doi[1]{\href{https://dx.doi.org/#1}{#1}}

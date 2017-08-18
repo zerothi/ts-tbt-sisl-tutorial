@@ -1,0 +1,161 @@
+\section{Motivation}
+
+\begin{framenologo}
+  \frametitle{Motivation}
+  \tableofcontents[currentsection]
+\end{framenologo}
+
+
+\begin{framenologo}
+  \frametitle{Motivation}
+  \framesubtitle{Current era --- Silicon}
+
+  \begin{columns}
+    \begin{column}{.5\linewidth}
+      \begin{itemize}
+
+        \item Silicon a governing material in electronics
+
+        \item Transistors have scaled immensely in the last 4 decades
+
+        \item Everyday use in all areas of our lives
+
+        \vskip 1em
+        \item IBM latest technology at \SI{7}{nm}
+        
+        \item Countable number of atoms! $\le40$
+        \vskip 2em
+        \item<2-> Problems 
+
+        \begin{itemize}
+          \item Features reaching single atoms
+          \item Energy waste, heat
+          \item Stability for small devices
+        \end{itemize}
+
+        \vskip 2em
+
+        \item<3-> What is next?
+
+        \begin{itemize}
+          \item Further silicon development $+$ additional enhancers
+          \item Molecular electronics
+          \item Graphene electronics
+        \end{itemize}
+
+      \end{itemize}
+    \end{column}
+    \begin{column}{.5\linewidth}
+      \begin{tikzpicture}[n/.style={anchor=west}]
+
+        \node[n] (H) at (2,3)
+        {\incg[width=3cm]{defence/human-hair}};
+        \node[n] at (H.east) {\SIrange{50}{100}{\micro\metre}};
+        
+        \node[n] (B) at (2,1)
+        {\incg[width=3cm]{defence/red_blood_cell}};
+        \node[n] at (B.east) {\SI{7.5}{\micro\metre}};
+
+        \node[n] (B) at (2,-1)
+        {\incg[width=2cm,rotate=90]{defence/45nm_die_dualcore}};
+
+        \node[n] at (1,-4)
+        {\incg[width=7cm]{defence/transistors-were-people}};
+        
+      \end{tikzpicture}
+      
+    \end{column}
+  \end{columns}
+
+  \doicite{Intel Homepage}
+
+\end{framenologo}
+
+\subsection{Transport properties of atomistic systems}
+
+\begin{frame}[fragile]
+  \frametitle{Calculating transport properties of atomistic systems}
+  
+  \begin{center}
+    Steady-state transport properties?
+  \end{center}
+
+  \begin{columns}
+    \begin{column}{.5\linewidth}
+      \incg[clip,trim=0pt 0pt 0pt
+      20cm,width=.8\linewidth]{10-1126-science-1144657-1}
+    \end{column}
+    \begin{column}{.5\linewidth}
+      \incg[width=.8\linewidth]{10-1021-nl202065-4}
+    \end{column}
+  \end{columns}
+
+  \begin{center}
+    \uncover<2->{%
+        \incg[height=5cm]{tbt-nterminal}
+    }
+  \end{center}
+  
+  \uncover<3->{%
+      \begin{tikzpicture}[remember picture,overlay]
+        \node[rotate=30,inner sep=20cm,anchor=mid,
+        fill=white,opacity=.7,text width=20cm,align=center,
+        text opacity=1] at (current page.center) 
+        {\huge We need a scalable computational model!\\
+            And \dots how to model non-equilibrium?};
+      \end{tikzpicture}
+  }
+
+  \doicite{Williams \etal: \doi{10.1126/science.1144657}, Prins \etal: \doi{10.1021/nl202065x}}
+
+\end{frame}
+
+
+\begin{framenologo}
+  \frametitle{Calculating transport properties of atomistic systems}
+  
+  \begin{center}
+    Steady-state transport properties?
+  \end{center}
+  
+  \begin{columns}
+    \begin{column}{.5\linewidth}
+      \incg[clip,trim=0pt 0pt 0pt
+      20cm,width=.8\linewidth]{10-1126-science-1144657-1}
+    \end{column}
+    \begin{column}{.5\linewidth}
+      \incg[width=.8\linewidth]{10-1021-nl202065-4}
+    \end{column}
+  \end{columns}
+  
+  \begin{columns}
+    \begin{column}{.6\linewidth}
+      \begin{block}{Simulation tool requirements}
+        \begin{itemize}
+          \item Systems under non-equilibrium (applied bias)
+          \item Large system calculations (incorporate full device)
+          \item Multi-electrode devices
+        \end{itemize}
+      \end{block}
+
+      \begin{center}
+        Non-Equilibrium Green function (NEGF)
+      \end{center}
+
+    \end{column}
+    \begin{column}{.4\linewidth}
+      \begin{center}
+        \incg[height=5cm]{defence/wos_negf_cite}
+      \end{center}
+    \end{column}
+  \end{columns}
+
+  \doicite{{Williams \etal: \doi{10.1126/science.1144657}, Prins \etal: \doi{10.1021/nl202065x}},%
+      WebOfScience (NEGF)}
+  
+\end{framenologo}
+
+%%% Local Variables:
+%%% mode: latex
+%%% TeX-master: "talk"
+%%% End:

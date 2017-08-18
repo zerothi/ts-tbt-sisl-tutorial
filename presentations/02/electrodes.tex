@@ -1,0 +1,344 @@
+
+\section{Electrodes -- options}
+
+\begin{framenologo}
+  \frametitle{Electrodes -- options}
+  \tableofcontents[currentsection]
+\end{framenologo}
+
+
+\begin{frame}[label=electrode]
+  \frametitle{Electrode -- options}
+
+  \only<1>{Define names of electrodes}%
+  \only<2>{Define each electrode}%
+  \only<3>{Assert that the electrode settings reflect the input\footnote{\emph{HINT}: Do \emph{NOT} specify
+          \texttt{used-atoms} if you use \emph{ALL} atoms!}}%
+  \only<4>{When reducing the used atoms, it becomes slightly more difficult}%
+  \only<5>{Automatically detects semi-infinite lattice vectors}%
+  \only<6>{Buffer atoms removes atoms from TBtrans/TranSiesta SCF cycle}%
+
+  \begin{tikzpicture}[thick,left/.style={densely dotted,color=bad},
+    right/.style={color=ok}]
+
+    % Define the electrode and we are done
+    \begin{scope}
+      \matrix {
+          \node[fdf] {\%block TS.Elecs}; \\
+          \node[fdf,ind,lmark] (left) {Left}; \\
+          \node[fdf,ind,lmark] (right) {Right}; \\
+          \node[fdf,ind] {...}; \\
+          \node[fdf] {\%endblock}; \\
+      };
+    \end{scope}
+    
+    \uncover<2->{
+        \begin{scope}[xshift=4.5cm,yshift=1.5cm]
+          \matrix {
+              \node[fdf,rmark] (l) {\%block TS.Elec.Left}; \\
+              \node[fdf,ind] (l-HS) {HS <TSHS-file>/<nc-file>}; \\
+              \node[fdf,ind] {chem-pot <in TS.ChemPots>}; \\
+              \alt<3>{
+                  \node[fdf,ind,left] (l-pos) {elec-pos 1}; \\
+              }{
+                  \node[fdf,ind] (l-pos) {elec-pos 1}; \\
+              }
+              \alt<4-5>{
+                  \node[fdf,ind,left] (l-semi) {semi-inf-dir -a2}; \\
+              }{
+                  \node[fdf,ind] (l-semi) {semi-inf-dir -a2}; \\
+              }
+              \alt<4,6>{
+                  \node[fdf,ind,left] (l-used) {used-atoms 3}; \\
+              }{
+                  \node[fdf,ind] (l-used) {used-atoms 4}; \\
+              }
+              \node[fdf,ind] (l-bloch) {bloch 1 1 1}; \\
+              \node[fdf,ind] (l-eta) {eta <energy>}; \\
+              \node[fdf] {\%endblock};\\
+          };
+        \end{scope}
+        \draw[->] (left) -- ++(1.5,0) to[out=0,in=180] (l);
+
+        \begin{scope}[xshift=4.5cm,yshift=-3.5cm]
+          \matrix {
+              \node[fdf,rmark] (r) {\%block TS.Elec.Right}; \\
+              \node[fdf,ind] (r-HS) {HS <TSHS-file>/<nc-file>}; \\
+              \node[fdf,ind] {chem-pot <in TS.ChemPots>}; \\
+              \alt<3>{
+                  \node[fdf,ind,right] (r-pos) {elec-pos end -1}; \\
+              }{
+                  \node[fdf,ind] (r-pos) {elec-pos end -1}; \\
+              }
+              \alt<4-5>{
+                  \node[fdf,ind,right] (r-semi) {semi-inf-dir +a2}; \\
+              }{
+                  \node[fdf,ind] (r-semi) {semi-inf-dir +a2}; \\
+              }
+              \alt<4>{
+                  \node[fdf,ind,right] (r-used) {used-atoms 3}; \\
+              }{
+                  \node[fdf,ind] (r-used) {used-atoms 4}; \\
+              }
+              \node[fdf,ind] {...}; \\
+              \node[fdf] {\%endblock};\\
+          };
+        \end{scope}
+
+        \draw[->] (right) -- ++(1,0) to[out=0,in=180] (r);
+        
+    }
+
+    \uncover<3->{
+        \begin{scope}[xshift=12.75cm,yshift=3cm]
+          \begin{scope}[scale=0.7,
+            every node/.style={scale=0.7,
+                inner sep=.01ex,outer sep=.01ex,
+            }]
+            \matrix {
+                \node[fdf] {\%block Atomic...Species}; \\
+                \node[fdf,ind] (1) {\texttt{0. 0. 0.0  1}}; \\
+                \node[fdf,ind] (2) {\texttt{0. 0. 1.5  1}}; \\
+                \node[fdf,ind] (3) {\texttt{0. 0. 3.0  1}}; \\
+                \node[fdf,ind] (4) {\texttt{0. 0. 4.5  1}}; \\
+                \node[fdf] {\%endblock};\\
+                \node[fdf] {\%block LatticeVectors}; \\
+                \node[fdf,ind] {\texttt{ 0. 10.  0.}}; \\
+                \alt<5>{
+                    \node[fdf,ind,rmark] (e-A2) {\texttt{ 0.  0.  6.}}; \\
+                }{
+                    \node[fdf,ind] (e-A2) {\texttt{ 0.  0.  6.}}; \\
+                }
+                \node[fdf,ind] {\texttt{10.  0.  0.}}; \\
+                \node[fdf] {\%endblock};\\
+            };
+          \end{scope}
+
+
+          \begin{scope}[yshift=-5cm,scale=0.7,
+            every node/.style={scale=0.7,
+                inner sep=.01ex,outer sep=.01ex,
+            }]
+            \matrix {
+                \node[fdf] {\%block Atomic...Species}; \\
+                \alt<6>{
+                    \node[fdf,ind,gray] (L1) {\texttt{0. 0.  0.0  1}}; \\
+                }{
+                    \node[fdf,ind] (L1) {\texttt{0. 0.  0.0  1}}; \\
+                }
+                \node[fdf,ind] (L2) {\texttt{0. 0.  1.5  1}}; \\
+                \node[fdf,ind] (L3) {\texttt{0. 0.  3.0  1}}; \\
+                \node[fdf,ind] (L4) {\texttt{0. 0.  4.5  1}}; \\
+                \node[fdf,ind] {\texttt{0. 0.  6.0  1}}; \\
+                \node[fdf,ind] {\texttt{0. 0.  7.5  1}}; \\
+                \node[fdf,ind] {\texttt{0. 0.  9.0  1}}; \\
+                \node[fdf,ind] {\texttt{0. 0. 10.5  1}}; \\
+                \node[fdf,ind] {\texttt{0. 0. 12.0  1}}; \\
+                \node[fdf,ind] {\texttt{0. 0. 13.5  1}}; \\
+                \node[fdf,ind] (R4) {\texttt{0. 0. 15.0  1}}; \\
+                \node[fdf,ind] (R3) {\texttt{0. 0. 16.5  1}}; \\
+                \node[fdf,ind] (R2) {\texttt{0. 0. 18.0  1}}; \\
+                \node[fdf,ind] (R1) {\texttt{0. 0. 19.5  1}}; \\
+                \node[fdf] {\%endblock};\\
+                \node[fdf] {\%block LatticeVectors}; \\
+                \node[fdf,ind] (d-A1) {\texttt{ 0.  0. 21.}}; \\
+                \node[fdf,ind] {\texttt{ 0. 10.  0.}}; \\
+                \node[fdf,ind] {\texttt{10.  0.  0.}}; \\
+                \node[fdf] {\%endblock};\\
+            };
+          \end{scope}
+        \end{scope}
+  }
+
+
+  \only<3>{
+      \draw[decorate, decoration=brace]
+      ($(4.south west)+(-0.1,0)$) -- ($(1.north west)+(-0.1,0)$) coordinate[midway] (full elec);
+      \draw[->, s >] (l-used) to[out=0,in=180] (full elec);
+      \draw[->, s >] (r-used) to[out=0,in=180] (full elec);
+
+      \draw[->, s >,left] (l-pos) to[out=0,in=180] (L1);
+      \draw[->, s >,right] (r-pos) to[out=0,in=180] (R1);
+
+  }
+
+  \only<4>{
+      \draw[decorate, decoration=brace,left]
+      ($(4.south west)+(-0.1,0)$) -- ($(2.north west)+(-0.1,0)$) coordinate[midway] (left elec);
+      \draw[decorate, decoration=brace,right]
+      ($(3.south west)+(-0.6,0)$) -- ($(1.north west)+(-0.6,0)$) coordinate[midway] (right elec);
+
+      \draw[decorate, decoration=brace,left]
+      ($(L3.south west)+(-0.1,0)$) -- ($(L1.north west)+(-0.1,0)$) coordinate[midway] (left dev);
+      \draw[decorate, decoration=brace,right]
+      ($(R1.south west)+(-0.1,0)$) -- ($(R3.north west)+(-0.1,0)$) coordinate[midway] (right dev);
+
+      \draw[->,s >,left] (l-used) to[out=0,in=180] (left elec);
+      \draw[->,s >,right] (r-used) to[out=0,in=180] (right elec);
+
+      \draw[<->,s <>,left] (left elec) to[out=180,in=180] (left dev);
+      \draw[<->,s <>,right] (right elec) to[out=180,in=180] (right dev);
+
+  }
+
+  \only<5>{
+      \draw[->,left,s >] (l-semi) to[out=0,in=180] (e-A2);
+      \draw[->,right,s >] (r-semi.east) -- ++(0.5,0) to[out=0,in=180] (e-A2);
+
+      \draw[<->,s <>] (d-A1) to[out=180,in=180] (e-A2);
+
+  }
+
+  \only<6>{
+      \begin{scope}[xshift=9cm,yshift=-4.5cm]
+        \matrix {
+          \node[fdf] {\%block TS.Atoms.Buffer}; \\
+          \node[fdf,ind] (buf) {atom 1}; \\
+          \node[fdf] {\%endblock}; \\
+      };
+      \end{scope}
+
+      \draw[decorate, decoration=brace,left]
+      ($(4.south west)+(-0.1,0)$) -- ($(2.north west)+(-0.1,0)$) coordinate[midway] (left ELEC);
+      \draw[decorate, decoration=brace,right]
+      ($(4.south west)+(-0.6,0)$) -- ($(1.north west)+(-0.6,0)$) coordinate[midway] (right ELEC);
+
+      \draw[decorate, decoration=brace,left]
+      ($(L4.south west)+(-0.1,0)$) -- ($(L2.north west)+(-0.1,0)$) coordinate[midway] (left DEV);
+      \draw[decorate, decoration=brace,right]
+      ($(R1.south west)+(-0.1,0)$) -- ($(R4.north west)+(-0.1,0)$) coordinate[midway] (right DEV);
+
+      \draw[->,s >,left] (l-used) to[out=0,in=180] (left ELEC);
+      \draw[->,s >,right] (r-used) to[out=0,in=180] (right ELEC);
+
+      \draw[<->,s <>,left] (left ELEC) to[out=180,in=180] (left DEV);
+      \draw[<->,s <>,right] (right ELEC) to[out=180,in=180] (right DEV);
+      
+  }
+      
+  \end{tikzpicture}
+
+\end{frame}
+
+\begin{frame}
+  \frametitle{Electrode -- options}
+
+  \begin{center}
+    Let us go through that again!
+  \end{center}
+
+\end{frame}
+
+\againframe{electrode}
+
+
+% \begin{frame}
+%   \frametitle{All together}
+
+%   \begin{tikzpicture}
+
+%     % write chemical potentials
+%     \def\chem{left}
+%     \def\bias{V/2}
+
+%     \begin{scope}[block]
+
+%       \uncover<1->{
+%       \begin{scope}[xshift=5cm,yshift=-.5cm]
+%         \matrix {
+%             \node[fdf] {\%block TS.ChemPots}; \\
+%             \node[fdf,ind,lmark] (chem) {\chem}; \\
+%             \node[fdf,ind] {...}; \\
+%             \node[fdf] {\%endblock TS.ChemPots}; \\
+%         };
+%       \end{scope}
+%   }
+
+%       \uncover<2->{
+%       % write chemical potential
+%       \begin{scope}[xshift=5.5cm,yshift=-4cm]
+%         \matrix {
+%             \node[fdf,rmark] (chem-b) {\%block TS.ChemPot.\chem}; \\
+%             \node[fdf,ind] {mu \bias}; \\
+%             \node[fdf,ind] {contour.eq}; \\
+%             \node[fdf,iind] {begin}; \\
+%             \node[fdf,iiind,lmark] (c-cont) {c-\chem}; \\
+%             \node[fdf,iiind,lmark] (t-cont) {t-\chem}; \\
+%             \node[fdf,iind] {end}; \\
+%             \node[fdf] {\%endblock TS.ChemPot.\chem}; \\
+%         };
+%       \end{scope}}
+
+
+%       \uncover<3->{
+%       % define contours
+%       \begin{scope}[xshift=.5cm,yshift=-4cm]
+%         \matrix {
+%             \node[fdf,rmark] (c-cont-b) {\%block TS.Contour.c-\chem}; \\
+%             \node[fdf,ind] {part circle}; \\
+%             \node[fdf,iind] {from <E-low> to <E-high>}; \\
+%             \node[fdf,iiind] {points 40}; \\
+%             \node[fdf,iiind] {method g-legendre}; \\
+%             \node[fdf] {\%endblock TS.Contour.c-\chem}; \\
+%         };
+%       \end{scope}
+%       \begin{scope}[xshift=10cm,yshift=-3.5cm]
+%         \matrix {
+%             \node[fdf,rmark] (t-cont-b) {\%block TS.Contour.t-\chem}; \\
+%             \node[fdf,ind] {part tail}; \\
+%             \node[fdf,iind] {from prev to inf}; \\
+%             \node[fdf,iiind] {points 10}; \\
+%             \node[fdf,iiind] {method g-fermi}; \\
+%             \node[fdf] {\%endblock TS.Contour.t-\chem}; \\
+%         };
+%       \end{scope}}
+
+%       \uncover<1->{
+%       % Define the electrode and we are done
+%       \def\elec{Left}
+%       \begin{scope}
+%         \matrix {
+%             \node[fdf] {\%block TS.Elecs}; \\
+%             \node[fdf,ind,lmark] (elec) {\elec}; \\
+%             \node[fdf,ind] {...}; \\
+%             \node[fdf] {\%endblock TS.Elecs}; \\
+%         };
+%       \end{scope}}
+
+%       \uncover<2->{
+%       \begin{scope}[xshift=10cm,yshift=-.25cm]
+%         \matrix {
+%             \node[fdf,rmark] (elec-b) {\%block TS.Elec.\elec}; \\
+%             \node[fdf,ind] {HS <TSHS-file>}; \\
+%             \node[fdf,ind,lmark] (elec-chem) {chem-pot \chem}; \\
+%             \node[fdf,ind] {semi-inf-dir -a3}; \\
+%             \node[fdf,ind] {elec-pos 1}; \\
+%             \node[fdf] {\%endblock TS.Elec.\elec}; \\
+%         };
+%       \end{scope}
+%   }
+      
+%       \begin{scope}[connect]
+%         \uncover<2->{
+%             \draw (chem) -- (chem-b);
+%             \draw (elec) -- (elec-b);
+%             \draw[<->] (chem) -- (elec-chem);
+%         }
+%         \uncover<3->{
+%             \draw (c-cont.175) -- (c-cont-b.-7);
+%             \draw (t-cont.15) -- (t-cont-b.-173);
+%         }
+%       \end{scope}
+
+%     \end{scope}
+
+%   \end{tikzpicture}
+
+% \end{frame}
+
+
+
+%%% Local Variables:
+%%% mode: latex
+%%% TeX-master: "talk"
+%%% End:

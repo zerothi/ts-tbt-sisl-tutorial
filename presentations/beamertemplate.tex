@@ -1,0 +1,67 @@
+\providecommand\classopts{}
+\expandafter\documentclass\expandafter[10pt,\classopts]{beamer}
+%\documentclass[10pt]{beamer}
+%\geometry{paperwidth=140mm,paperheight=105mm}
+\geometry{paperwidth=180mm,paperheight=135mm}
+%\geometry{paperwidth=240mm,paperheight=150mm}
+\usepackage{kpfonts}
+\usepackage{hyperref}
+%\usepackage{beamerthemedtu}
+\usepackage{../theme/beamerthemeworkshopdtu}
+\usepackage[protrusion=true,expansion,babel]{microtype}
+
+\usepackage{pgfplotstable}
+\usepackage{mathtools,bm,array,mathtools}
+\usepackage{siunitx}
+\usepackage[version=3]{mhchem}
+\usepackage{siunitx}
+\usepackage{animate}
+\usetikzlibrary{patterns,shapes}
+%\newcolumntype{M}{>{\centering\arraybackslash}m{\dimexpr.25\linewidth-2\tabcolsep}}
+\newcolumntype{M}{>{\centering\arraybackslash}m}
+
+\graphicspath{{fig/}}
+
+\usetikzlibrary{calc,fit}
+
+\newcommand{\cfbox}[2]{%
+    \colorlet{currentcolor}{.}%
+    {\color{#1}%
+    \fbox{\color{currentcolor}#2}}%
+}
+\def\SIESTA{SIESTA}
+\def\TranSIESTA{TranSIESTA}
+\def\TBtrans{TBtrans}
+\def\PHtrans{PHtrans}
+\def\Inelastica{Inelastica}
+
+\mode<handout>{%
+    \usepackage{pgfpages}
+    \nofiles % ensure that the auxillary file works
+    \usecolortheme{seagull}
+    \pgfpagesuselayout{2 on 1}[a4paper]
+}
+
+\newenvironment{framenologo}{\begingroup%
+\let\insertlogo\relax%
+\begin{frame}%
+}{%
+\end{frame}
+\endgroup}
+
+
+\newcommand\doicite[1]{%
+    \begin{tikzpicture}[remember picture,overlay,
+      n/.style={inner sep=0pt,outer sep=2pt,font=\scriptsize}]%
+      \foreach \Doi [count=\doii] in {#1} {%
+          \ifnum\doii=1%
+          \node[anchor=north west,n] (DOI-\doii) at ($(current page.south west)+(\framesep,\framesep)$)
+          {\Doi};%
+          \else%
+          \pgfmathtruncatemacro\prevdoii{round(\doii-1)}
+          \node[anchor=north west,n] (DOI-\doii) at (DOI-\prevdoii.south west)%
+          {\Doi};%
+          \fi%
+      }%
+    \end{tikzpicture}%
+}

@@ -1,0 +1,85 @@
+
+\input ../common.tex
+
+\graphicspath{{fig/}{fig-defence/}{paper-fig/}}
+\usepackage[export]{adjustbox}
+
+\institute[ICN2]{\begin{tikzpicture}
+      \node[shape=rectangle split,rectangle split parts=2,anchor=base] at (0,0)
+      {ICN2: TranSiesta, TBtrans and sisl workshop};
+    \end{tikzpicture}}
+
+\usetikzlibrary{calc}
+\tikzset{
+    ->-/.style={postaction={decorate},decoration={%
+            markings,mark=at position #1 with {\arrow[line width=2pt]{stealth}}%
+        }%
+    },%
+    ->-/.default=.5,%
+    -<-/.style={postaction={decorate},decoration={%
+            markings,mark=at position #1 with {\arrowreversed[line width=2pt]{stealth}}%
+        }%
+    },%
+    -<-/.default=.5,%
+}
+\usepgfplotslibrary{groupplots}
+
+\usepackage{algorithm}
+\usepackage{algpseudocode}
+
+\date{9. November 2016}
+\title{Non-equilibrium Green function theory: 1 \& 2}
+\author{Nick R. Papior}
+
+\usepackage{animate}
+
+\begin{document}
+
+\begin{frame}
+  \titlepage
+\end{frame}
+
+\begin{frame}
+  \frametitle{Outline}
+  \tableofcontents
+\end{frame}
+
+
+\def\matsize{.8cm}
+\def\Full{\begin{tikzpicture}
+      \fill (0,0) rectangle (\matsize,\matsize);
+    \end{tikzpicture}
+}
+\def\Left{\begin{tikzpicture}
+      \draw (0,0) rectangle (\matsize,\matsize);
+      \fill (0,\matsize) rectangle ++(.3*\matsize,-.3*\matsize);
+    \end{tikzpicture}
+}
+\def\FullLeft{\begin{tikzpicture}
+      \draw (0,0) rectangle (\matsize,\matsize);
+      \fill (0,0) rectangle (.3*\matsize,\matsize);
+    \end{tikzpicture}
+}
+
+\def\drawcube[#1]{%
+    \path[#1] (0,0,0) -- (0,0,1);
+    \path[#1] (0,0,0) -- (1,0,0);
+    \path[#1] (0,0,0) -- (0,1,0);
+    \path[#1] (1,0,0) -- (1,1,0);
+    \path[#1] (1,0,0) -- (1,0,1);
+    \path[#1] (0,1,0) -- (1,1,0);
+    \path[#1] (0,1,0) -- (0,1,1);
+    \path[#1] (0,0,1) -- (1,0,1);
+    \path[#1] (0,0,1) -- (0,1,1);
+    \path[#1] (1,1,0) -- (1,1,1);
+    \path[#1] (1,1,1) -- (0,1,1);
+    \path[#1] (1,1,1) -- (1,0,1);
+}
+
+\input introduction.tex
+\input green.tex
+\input se.tex
+\input negf.tex
+\input algorithms.tex
+
+\end{document}
