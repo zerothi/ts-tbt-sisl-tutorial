@@ -3,15 +3,21 @@ TBT.HS DEVICE.nc
 # Play with this number to get a converged result
 TBT.k [5 1 1]
 
-# Define what to save
-TBT.DOS.A true
+# Define which physical quantites to calculate.
+# Each of these flags will decide what to calculate
+# in the calculation.
+# If you look these flags up in the manual you will
+# find the physical quantities they correspond to.
 TBT.DOS.Gf true
 TBT.DOS.Elecs true
+TBT.DOS.A true
 TBT.DOS.A.All true
 TBT.T.All true
 TBT.T.Bulk true
 TBT.T.Eig 5
 TBT.Current.Orb true
+# This flag is necessary to obtain the "correct"
+# bond-currents
 TBT.Symmetry.TimeReversal false
 
 # Edit this file to enable Bloch's theorem
@@ -22,7 +28,6 @@ TBT.Symmetry.TimeReversal false
   semi-inf-direction -A2
   electrode-position 1
 %endblock TBT.Elec.Left
-
 %block TBT.Elec.Right
   HS ELEC.nc
   semi-inf-direction +A2
