@@ -27,9 +27,11 @@ TBT.Symmetry.TimeReversal false
   HS ELEC.nc
   semi-inf-direction -A2
   electrode-position 1
+bloch 25 1 1
 %endblock TBT.Elec.Left
 %block TBT.Elec.Right
   HS ELEC.nc
   semi-inf-direction +A2
   electrode-position end -1
+bloch 25 1 1
 %endblock TBT.Elec.Right
