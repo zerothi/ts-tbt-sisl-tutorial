@@ -49,28 +49,23 @@ H_dev.write('DEVICE.nc')
 # from the phases in one go.
 print('Initialization of the phases for B-field...')
 phases = si.Hamiltonian(device)
-for ias, idxs in device.iter_block(17):
-    for ia in ias:
+for ia in device:
+    # Retrieve all connecting atoms
+    idx = H_dev.edges(ia)
+    xyz = device.axyz(idx)
 
-        # Retrive BOTH the index of the overlaps *and* the
-        # coordinates of the atoms that are connecting
-        idx, xyz = device.close(ia, R, idx=idxs, ret_xyz=True)
-        
-        # In the magnetic field Peierls substitution
-        # we only want to change the nearest-neighbour elements
-        idx, xyz = idx[1], xyz[1]
-
-        # This is a B-field in the z-direction
-        # So the phases are due to x-y coordinates
-        phase = (device.xyz[ia, 0] - xyz[:, 0]) * \
-                (device.xyz[ia, 1] + xyz[:, 1])
-
-        phases[ia, idx] = phase
+    # This is a B-field in the z-direction
+    # So the phases are due to x-y coordinates
+    phase = (xyz[:, 0] - device.xyz[ia, 0]) * \
+            (xyz[:, 1] + device.xyz[ia, 1])
+    
+    phases[ia, idx] = phase
+# This just speeds up the remaining stuff.
 phases.finalize()
 
-# Now `phases` contain all hopping integral delta-r from which
-# we may calculate the Peierls phase:
-#   H = H * exp( i/2 * Phi * dx * dx )
+# Now `phases` contain all delta-r from which
+# we may calculate the Peierls phase exp( i/2 * Phi * dx * dy' )
+#   H = H * exp( i/2 * Phi * phases )
 # Loop over all Phi and store the magnetic correction
 # in the M_*.dH.nc files.s
 # Subsequently one may call:
@@ -81,12 +76,12 @@ for i, rec_phi in enumerate(reciprocal_phis):
     print("{:4d} - Creating dH for 1/phi = {}".format(i+1, rec_phi))
 
     # Convert reciprocal-phi to: i * phi /2
-    phi = -0.5j / rec_phi
+    phi = 0.5j / rec_phi
 
     # Calculate the phases
     # The dH is an additive term for the
     # Hamiltonian, hence we should subtract the
-    # hopping integral and set the new one
+    # initial hopping integral and set the new one
     # as the magnetic field is a phase-factor.
     dH = nn * math.e ** (phi * phases) - nn
 

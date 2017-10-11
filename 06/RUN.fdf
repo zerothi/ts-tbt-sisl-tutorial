@@ -1,5 +1,7 @@
 TBT.HS DEVICE.nc
 
+# Also calculate the bulk DOS for the electrodes
+TBT.DOS.Elecs true
 TBT.DOS.A true
 TBT.DOS.A.All true
 TBT.T.All true
