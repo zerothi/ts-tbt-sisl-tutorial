@@ -4,13 +4,8 @@
 # directly from command line
 TBT.HS DEVICE.nc
 
-# We are ONLY interested in the transmission
-# in this example.
-# Thus we may reduce the device region to the smallest
-# region which disconnects the left and the right
-# electrode from each other. Doing this will greatly
-# increase throughput
-TBT.Atoms.Device [4272 -- 4311]
+# Figure out how to save the self-energy function files
+# once, and then re-use them.
 
 %block TBT.Elec.Left
   HS ELEC.nc
