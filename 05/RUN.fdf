@@ -20,9 +20,6 @@ TBT.Current.Orb true
 # bond-currents
 TBT.Symmetry.TimeReversal false
 
-# Edit this file to enable Bloch's theorem
-# for each of the electrodes.
-
 %block TBT.Elec.Left
   HS ELEC.nc
   semi-inf-direction -A2
