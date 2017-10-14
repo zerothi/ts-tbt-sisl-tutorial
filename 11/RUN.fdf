@@ -1,7 +1,12 @@
 SolutionMethod transiesta
 
 # This helps the block-tri-diagonal partitioning.
-TS.BTD.Pivot elec-x-1+elec-y-1
+# Please try and run transiesta like this:
+#    transiesta -fdf TS.Analyze RUN.fdf > analyze.out
+# and look at the bottom of the output.
+# The above command will try (nearly) *all* different pivoting
+# schemes, and then you can select the best performing one.
+TS.BTD.Pivot PCG
 
 TS.Voltage 0 eV
 # Although we have 4 electrodes we will only

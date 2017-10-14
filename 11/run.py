@@ -19,8 +19,8 @@ chain_y = elec_y.tile(4, axis=1)
 
 # Move both chains to the center
 # This makes it easier to align the chains
-chain_x = chain_x.translate(-chain_x.center(which='cell'))
-chain_y = chain_y.translate(-chain_y.center(which='cell'))
+chain_x = chain_x.translate(-chain_x.center(what='cell'))
+chain_y = chain_y.translate(-chain_y.center(what='cell'))
 
 # Create the full device
 # This is required for correcting the supercell 
@@ -30,7 +30,7 @@ sc.cell[1,1] = chain_y.cell[1,1]
 device = chain_x.copy()
 device.set_supercell(sc)
 device = device.append(chain_y, 2).add_vacuum(15-2.1, 2)
-device = device.translate(device.center(which='cell')).translate([.7]*3)
+device = device.translate(device.center(what='cell')).translate([.7]*3)
 
 # Create the fdf files for all the geometries
 elec_x = elec_x.add_vacuum(15-1.4, 1)
