@@ -13,8 +13,8 @@ sdata siesta.TBT.nc --atom $a --dos \
       --bulk-dos Right --ados Right \
       --out edge_atoms.dat
 
-# Now only take the firs line of graphene atoms (pristine)
-a="51-100"
+# Now only take the first line of graphene atoms (pristine)
+a="101-150"
 sdata siesta.TBT.nc --atom $a --dos \
       --bulk-dos Left --ados Left \
       --bulk-dos Right --ados Right \
