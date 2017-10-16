@@ -7,15 +7,15 @@
 
 # First we take all atoms in the circle which only connects to
 # two carbon atoms (i.e. the edge atoms in the hole)
-a="190,214-215,237-238,259-260,299-300,338,356,375,394,431-432,452,473-474,496-498"
-sdata siesta.TBT.nc --atom $a --dos \
+a="438-439, 462-463, 535, 580, 603-604, 626, 734, 755, 799, 842, 865-866, 888, 979-980, 1003-1004, 1028"
+sdata siesta.TBT.nc --atom "$a" --dos \
       --bulk-dos Left --ados Left \
       --bulk-dos Right --ados Right \
       --out edge_atoms.dat
 
 # Now only take the first line of graphene atoms (pristine)
 a="101-150"
-sdata siesta.TBT.nc --atom $a --dos \
+sdata siesta.TBT.nc --atom "$a" --dos \
       --bulk-dos Left --ados Left \
       --bulk-dos Right --ados Right \
       --out pristine_atoms.dat
