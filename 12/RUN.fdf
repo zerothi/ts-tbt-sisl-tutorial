@@ -17,7 +17,9 @@ SolutionMethod transiesta
 # we HAVE to manually specify the
 # transiesta k-points as transiesta
 # cannot decide for us!
-# This is an EXTREMELY important point!
+# This is an EXTREMELY important point when performing
+# calculations with semi-infinite directions that are 
+# not aligned.
 %block TS.kgrid.MonkhorstPack
  1 0 0 0.
  0 8 0 0.
@@ -25,6 +27,12 @@ SolutionMethod transiesta
 %endblock
 
 TS.Voltage 0 eV
+
+
+# The pivoting scheme utilized will greatly
+# influence the throughput
+TS.BTD.Pivot PCG
+
 
 # Although we have 3 electrodes we will only
 # use two different chemical potentials
@@ -133,7 +141,8 @@ TS.Contours.Eq.Pole 2.5 eV
 # For TBtrans we would like
 # the spectral density of states
 # for all electrodes.
-TBT.BTD.Pivot GPS
+TBT.BTD.Pivot PCG
+
 TBT.DOS.Gf true
 TBT.DOS.A true
 TBT.DOS.A.All true

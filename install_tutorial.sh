@@ -258,6 +258,7 @@ case $os in
 esac
 
 # We will simply add it if it does not exist
+# We also assume the SHELL is BASH
 if ! `grep $indir ~/.bashrc` ; then
     echo "" >> ~/.bashrc
     echo "# Variable for the TBT-TS-sisl workshop" >> ~/.bashrc
