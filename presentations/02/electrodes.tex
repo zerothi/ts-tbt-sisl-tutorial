@@ -16,7 +16,7 @@
           \texttt{used-atoms} if you use \emph{ALL} atoms!}}%
   \only<4>{When reducing the used atoms, it becomes slightly more difficult}%
   \only<5>{Automatically detects semi-infinite lattice vectors}%
-  \only<6>{Buffer atoms removes atoms from TBtrans/TranSiesta SCF cycle}%
+  \only<6>{Buffer atoms removed from TBtrans/TranSiesta SCF cycle}%
 
   \begin{tikzpicture}[thick,left/.style={densely dotted,color=bad},
     right/.style={color=ok}]
@@ -122,7 +122,7 @@
             \matrix {
                 \node[fdf] {\%block Atomic...Species}; \\
                 \alt<6>{
-                    \node[fdf,ind,gray] (L1) {\texttt{0. 0.  0.0  1}}; \\
+                    \node[fdf,ind,gray,rmark] (L1) {\texttt{0. 0.  0.0  1}}; \\
                 }{
                     \node[fdf,ind] (L1) {\texttt{0. 0.  0.0  1}}; \\
                 }
@@ -141,7 +141,11 @@
                 \node[fdf,ind] (R1) {\texttt{0. 0. 19.5  1}}; \\
                 \node[fdf] {\%endblock};\\
                 \node[fdf] {\%block LatticeVectors}; \\
-                \node[fdf,ind] (d-A1) {\texttt{ 0.  0. 21.}}; \\
+                \alt<5>{
+                    \node[fdf,ind,rmark] (d-A1) {\texttt{ 0.  0. 21.}}; \\
+                }{
+                    \node[fdf,ind] (d-A1) {\texttt{ 0.  0. 21.}}; \\
+                }
                 \node[fdf,ind] {\texttt{ 0. 10.  0.}}; \\
                 \node[fdf,ind] {\texttt{10.  0.  0.}}; \\
                 \node[fdf] {\%endblock};\\
@@ -193,10 +197,11 @@
       \begin{scope}[xshift=9cm,yshift=-4.5cm]
         \matrix {
           \node[fdf] {\%block TS.Atoms.Buffer}; \\
-          \node[fdf,ind] (buf) {atom 1}; \\
+          \node[fdf,ind,lmark] (buf) {atom 1}; \\
           \node[fdf] {\%endblock}; \\
       };
       \end{scope}
+      \draw[->] (buf) to[out=0,in=180] (L1);
 
       \draw[decorate, decoration=brace,left]
       ($(4.south west)+(-0.1,0)$) -- ($(2.north west)+(-0.1,0)$) coordinate[midway] (left ELEC);
@@ -231,112 +236,289 @@
 
 \againframe{electrode}
 
+\begin{frame}
+  \frametitle{Electrode -- options}
+  \framesubtitle{Bloch's theorem}
 
-% \begin{frame}
-%   \frametitle{All together}
+  \begin{block}{Bloch's theorem}
 
-%   \begin{tikzpicture}
+    Extend a principle system into a bigger, but otherwise equivalent system?
 
-%     % write chemical potentials
-%     \def\chem{left}
-%     \def\bias{V/2}
+    \begin{center}
+      \def\mysize{6pt}
+      \begin{tikzpicture}[scale=.6]
 
-%     \begin{scope}[block]
+        \node[left] at (-1,0) {$\hdots$};
+        \draw[densely dashed] (-1,-.5) rectangle ++(1,1);
+        \draw (0,-.5) rectangle ++(1,1);
+        \node[below] at (.5,-.5) {$R_1$};
+        \draw[densely dashed] (1,-.5) rectangle ++(1,1);
+        \node[right] at (2,0) {$\hdots$};
+        \coordinate (small) at (3,0);
+        
+        \fill (.5,0) circle (\mysize);
+        \foreach \x in {-.5,1.5} {
+            \draw (\x,0) circle (\mysize);
+        }
 
-%       \uncover<1->{
-%       \begin{scope}[xshift=5cm,yshift=-.5cm]
-%         \matrix {
-%             \node[fdf] {\%block TS.ChemPots}; \\
-%             \node[fdf,ind,lmark] (chem) {\chem}; \\
-%             \node[fdf,ind] {...}; \\
-%             \node[fdf] {\%endblock TS.ChemPots}; \\
-%         };
-%       \end{scope}
-%   }
+        \begin{scope}[yshift=-2cm,xshift=-1cm]
+          \node[left] at (-3,0) {$\hdots$};
+          \draw[densely dashed] (0,-.5) rectangle ++(-3,1);
+          \draw (0,-.5) rectangle ++(3,1);
+          \node[below] at (1.5,-.5) {$R_3$};
+          \draw[densely dashed] (3,-.5) rectangle ++(3,1);
+          \node[right] at (6,0) {$\hdots$};
+          \coordinate (big) at (7,0);
 
-%       \uncover<2->{
-%       % write chemical potential
-%       \begin{scope}[xshift=5.5cm,yshift=-4cm]
-%         \matrix {
-%             \node[fdf,rmark] (chem-b) {\%block TS.ChemPot.\chem}; \\
-%             \node[fdf,ind] {mu \bias}; \\
-%             \node[fdf,ind] {contour.eq}; \\
-%             \node[fdf,iind] {begin}; \\
-%             \node[fdf,iiind,lmark] (c-cont) {c-\chem}; \\
-%             \node[fdf,iiind,lmark] (t-cont) {t-\chem}; \\
-%             \node[fdf,iind] {end}; \\
-%             \node[fdf] {\%endblock TS.ChemPot.\chem}; \\
-%         };
-%       \end{scope}}
+          \foreach \x in {.5,1.5,2.4} {
+              \fill (\x,0) circle (\mysize);
+          }
+          \foreach \x in {-2.5,-1.5,-.5,3.5,4.5,5.5} {
+              \draw (\x,0) circle (\mysize);
+          }
+          
+        \end{scope}
 
+        \draw[->] (small) -- ++(3,0) to[out=0,in=0] node[midway, right] {?} (big);
 
-%       \uncover<3->{
-%       % define contours
-%       \begin{scope}[xshift=.5cm,yshift=-4cm]
-%         \matrix {
-%             \node[fdf,rmark] (c-cont-b) {\%block TS.Contour.c-\chem}; \\
-%             \node[fdf,ind] {part circle}; \\
-%             \node[fdf,iind] {from <E-low> to <E-high>}; \\
-%             \node[fdf,iiind] {points 40}; \\
-%             \node[fdf,iiind] {method g-legendre}; \\
-%             \node[fdf] {\%endblock TS.Contour.c-\chem}; \\
-%         };
-%       \end{scope}
-%       \begin{scope}[xshift=10cm,yshift=-3.5cm]
-%         \matrix {
-%             \node[fdf,rmark] (t-cont-b) {\%block TS.Contour.t-\chem}; \\
-%             \node[fdf,ind] {part tail}; \\
-%             \node[fdf,iind] {from prev to inf}; \\
-%             \node[fdf,iiind] {points 10}; \\
-%             \node[fdf,iiind] {method g-fermi}; \\
-%             \node[fdf] {\%endblock TS.Contour.t-\chem}; \\
-%         };
-%       \end{scope}}
+      \end{tikzpicture}      
 
-%       \uncover<1->{
-%       % Define the electrode and we are done
-%       \def\elec{Left}
-%       \begin{scope}
-%         \matrix {
-%             \node[fdf] {\%block TS.Elecs}; \\
-%             \node[fdf,ind,lmark] (elec) {\elec}; \\
-%             \node[fdf,ind] {...}; \\
-%             \node[fdf] {\%endblock TS.Elecs}; \\
-%         };
-%       \end{scope}}
+    \end{center}
 
-%       \uncover<2->{
-%       \begin{scope}[xshift=10cm,yshift=-.25cm]
-%         \matrix {
-%             \node[fdf,rmark] (elec-b) {\%block TS.Elec.\elec}; \\
-%             \node[fdf,ind] {HS <TSHS-file>}; \\
-%             \node[fdf,ind,lmark] (elec-chem) {chem-pot \chem}; \\
-%             \node[fdf,ind] {semi-inf-dir -a3}; \\
-%             \node[fdf,ind] {elec-pos 1}; \\
-%             \node[fdf] {\%endblock TS.Elec.\elec}; \\
-%         };
-%       \end{scope}
-%   }
+    Given a Bloch state
+    \begin{align*}
+      \psi_\kk(\rr) &= e^{i\kk\cdot\rr} u(\rr)
+      \\
+      \shortintertext{we have}
+      \psi_\kk(\rr+\mathbf T) &= e^{i\kk\cdot(\rr+\mathbf T)} u(\rr+\mathbf T) =
+      e^{i\kk\mathbf T}\psi_\kk(\rr)
+      \\
+      \shortintertext{In matrix notation}
+      \HH_{k_n}^n &=\frac1n
+      \;
+      \sum_{
+          \mathclap{
+              \substack{j\\
+                  k_j=k_n+2\pi\frac{j-1}{nR}
+              }
+          }
+      }^n
+      \qquad
+      \begin{bmatrix}
+        1
+        &
+        e^{-i k_jR}
+        &
+        \cdots
+        &
+        e^{-i nk_jR}
+        \\
+        e^{i k_jR}
+        &
+        1
+        &
+        \cdots
+        &
+        e^{-i (n-1)k_jR}
+        \\
+        \vdots
+        &
+        \vdots
+        &
+        \ddots
+        &
+        \vdots
+        \\
+        e^{i nk_jR}
+        &
+        e^{i (n-1)k_jR}
+        &
+        \cdots
+        &1
+      \end{bmatrix}
+      \otimes
+      \HH_{k_j}^1
+    \end{align*}
+
+  \end{block}
+
+\end{frame}
+
+\begin{frame}
+  \frametitle{Electrode -- options}
+  \framesubtitle{Bloch's theorem}
+
+  \begin{itemize}
+    \item Atomic ordering is important, see sisl \texttt{Geometry.repeat} for details
+    \item $k$-point sampling is important, \emph{has} to sample equivalently
+  \end{itemize}
+  
+  \begin{center}
+    \def\mysize{6pt}
+    \begin{tikzpicture}[scale=.6]
       
-%       \begin{scope}[connect]
-%         \uncover<2->{
-%             \draw (chem) -- (chem-b);
-%             \draw (elec) -- (elec-b);
-%             \draw[<->] (chem) -- (elec-chem);
-%         }
-%         \uncover<3->{
-%             \draw (c-cont.175) -- (c-cont-b.-7);
-%             \draw (t-cont.15) -- (t-cont-b.-173);
-%         }
-%       \end{scope}
+      \draw[densely dashed] (-1,-.5) rectangle ++(1,2);
+      \draw (0,-.5) rectangle ++(1,2);
+      \node[below] at (.5,-.5) {$R_1$};
+      \draw[densely dashed] (1,-.5) rectangle ++(1,2);
+      
+      \fill (.5,0) circle (\mysize) node[above right] {1};
+      \fill (.5,1) circle (\mysize) node[above right] {2};
+      \foreach \x in {-.5,1.5} {
+          \draw (\x,0) circle (\mysize);
+          \draw (\x,1) circle (\mysize);
+      }
 
-%     \end{scope}
+      \uncover<2->{
+          \begin{scope}[yshift=-3cm]
+            \matrix {
+                \node[fdf] {\%block kgrid.MonkhorstPack}; \\
+                \node[fdf,ind] {9 \mbox{} \mbox{} 0 0}; \\
+                \node[fdf,ind] {0 100 0}; \\
+                \node[fdf,ind] {0 \mbox{} \mbox{} 0 1}; \\
+                \node[fdf] {\%endblock}; \\
+            };
+          \end{scope}
+      }
+      
+      \begin{scope}[xshift=8cm]
 
-%   \end{tikzpicture}
+        \draw[densely dashed] (0,-.5) rectangle ++(-3,2);
+        \draw (0,-.5) rectangle ++(3,2);
+        \node[below] at (1,-.5) {$R_3$};
+        \draw[densely dashed] (3,-.5) rectangle ++(3,2);
+        
+        \fill (.5,0) circle (\mysize) node[above right] {1};
+        \fill (1.5,0) circle (\mysize) node[above right] {2};
+        \fill (2.5,0) circle (\mysize) node[above right] {3};
+        \fill (.5,1) circle (\mysize) node[above right] {4};
+        \fill (1.5,1) circle (\mysize) node[above right] {5};
+        \fill (2.5,1) circle (\mysize) node[above right] {6};
+        \foreach \x in {-2.5,-1.5,-.5,3.5,4.5,5.5} {
+            \draw (\x,0) circle (\mysize);
+            \draw (\x,1) circle (\mysize);
+        }
 
-% \end{frame}
+        \uncover<2->{
+            \begin{scope}[yshift=-3cm]
+              \matrix {
+                  \node[fdf] {\%block kgrid.MonkhorstPack}; \\
+                  \node[fdf,ind] {3 \mbox{} \mbox{} 0 0}; \\
+                  \node[fdf,ind] {0 100 0}; \\
+                  \node[fdf,ind] {0 \mbox{} \mbox{} 0 1}; \\
+                  \node[fdf] {\%endblock}; \\
+              };
+            \end{scope}
+        }
 
+      \end{scope}
+      
+    \end{tikzpicture}
 
+    \vskip 1em
+
+    \uncover<3->{
+        \begin{tikzpicture}[ft/.style 2 args={
+              out=-90,in=90,out looseness=####1,
+              in distance=1.5cm,in looseness=####2,
+          },
+          ks/.style={font=\scriptsize},
+          my scale/.style={scale=1},
+          my scale,mt/.style={ft={.2}{.2}},hl/.style={line width=2.5pt}]
+
+          % k_3
+          \node[right=4pt] at (6,3) {$k_1$, $R_1$};
+          % Highlight sections
+          \draw[hl,blue!80!black] (0,3) -- ++(1,0);
+          \draw[hl,blue!80!black] (5,3) -- ++(1,0);
+          \draw[hl,red!70!black] (1,3) -- ++(1,0);
+          \draw[hl,red!70!black] (4,3) -- ++(1,0);
+          \draw[hl,green!70!black] (2cm,3) -- ++(2,0);
+          \foreach \x in {0,...,6}
+          \draw (\x,3cm-3pt) -- ++(0,6pt);
+
+          \node[above,ks] at (0,3) {$\Gamma$};
+          \node[above,ks] at (1,3) {$\frac16$};
+          \node[above,ks] at (2,3) {$\frac13$};
+          \node[above,ks] at (3,3) {$\frac12$};
+          \node[above,ks] at (4,3) {$\frac23$};
+          \node[above,ks] at (5,3) {$\frac56$};
+          \node[above,ks] at (6,3) {$\Gamma$};
+
+          \foreach \x in {0,2,...,4}
+          \draw[->] (\x,3cm-4pt) to[mt] (0,4pt);
+
+          % k_1
+          \draw (0,0) -- ++(2,0) node[right=4pt] {$k_3$, $R_3=3R_1$};
+          \foreach \x in {0,1,2}
+          \draw (\x,-2pt) -- ++(0,4pt);
+
+          \node[below,ks] at (0,0) {$\Gamma$};
+          \node[below,ks] at (1,0) {$\frac12$};
+          \node[below,ks] at (2,0) {$\Gamma$};
+
+          % dk -
+          \foreach \x in {0,2,...,4} {
+              \draw[->,densely dashed] (\x cm + 1.5cm,3cm-4pt) to[mt] (1.5,4pt);
+          }
+
+          % dk + 
+          \foreach \x in {0,2,...,4} {
+              \draw[->,densely dotted] (\x cm + .5cm,3cm-4pt) to[mt] (.5,4pt);
+          }
+
+          \draw[<->] (3,.7) to[out=0,in=180] node[sloped,above] {folding} (7.5,1.1);
+
+          % Draw shifted structure
+          \begin{scope}[xshift=8cm]
+
+            % k_3
+            % Highlight sections
+            \draw[hl,draw=blue!80!black] (0,3) -- ++(1,0);
+            \draw[hl,draw=blue!80!black] (1,1) -- ++(1,0);
+            \draw[hl,draw=red!70!black] (1,3) -- ++(1,0);
+            \draw[hl,draw=red!70!black] (0,1) -- ++(1,0);
+            \draw[hl,draw=green!70!black] (0,2) -- ++(2,0) node[right=8pt] {$k_1$, $R_1$};
+
+            \foreach \y in {3,2,1} {
+                \foreach \x in {0,...,2}
+                \draw (\x,\y cm-3pt) -- ++(0,6pt);
+            }
+
+            % Draw connecting lines
+            \foreach \y in {3,2} 
+            \draw[gray] (2,\y) to[out=-15,in=165] (0,\y cm - 1cm);
+
+            \node[above,ks] at (0,3) {$\Gamma$};
+            \node[above,ks] at (1,3) {$\frac16$};
+            \node[above,ks] at (2,3) {$\frac13$};
+            \node[above,ks] at (0,2) {$\frac13$};
+            \node[above,ks] at (1,2) {$\frac12$};
+            \node[above,ks] at (2,2) {$\frac23$};
+            \node[above,ks] at (0,1) {$\frac23$};
+            \node[above,ks] at (1,1) {$\frac56$};
+            \node[above,ks] at (2,1) {$\Gamma$};
+
+            % Draw everything again
+            % k_1
+            \draw (0,0) -- ++(2,0) node[right=4pt] {$k_3$, $R_3=3R_1$};
+            \foreach \x in {0,1,2}
+            \draw (\x,-3pt) -- ++(0,6pt);
+
+            \node[below,ks] at (0,0) {$\Gamma$};
+            \node[below,ks] at (1,0) {$\frac12$};
+            \node[below,ks] at (2,0) {$\Gamma$};
+
+            % draw band-crossings
+            \draw[->,densely dashed] (1.5cm,3cm-4pt) to[mt] (1.5,2pt);
+            \draw[->,densely dotted] (.5cm,3cm+-4pt) to[mt] (.5,2pt);
+            
+          \end{scope}
+        \end{tikzpicture}
+    }
+  \end{center}
+  
+\end{frame}
 
 %%% Local Variables:
 %%% mode: latex

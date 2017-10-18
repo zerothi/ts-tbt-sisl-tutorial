@@ -260,6 +260,8 @@
     
   \end{block}
 
+  \small
+
   \begin{tikzpicture}
     \begin{scope}
       \matrix {
@@ -283,6 +285,45 @@
     \draw[->] (lneq) -- ++(2.5,0) to[out=0,in=180] (rneq);
     }
   \end{tikzpicture}
+
+  \vskip 2em
+
+  \uncover<4->{
+      \begin{tikzpicture}
+        \begin{scope}
+          \matrix {
+              \node[fdf] {\%block TS.Contours.nEq}; \\
+              \node[fdf,ind,lmark] (lneq-1) {neq-1}; \\
+              \node[fdf,ind,lmark] (lneq-2) {neq-2}; \\
+              \node[fdf] {\%endblock}; \\
+          };
+        \end{scope}
+
+        \begin{scope}[xshift=6cm]
+          \matrix {
+              \node[fdf,rmark] (rneq-1) {\%block TS.Contour.nEq.neq-1}; \\
+              \node[fdf,ind] {part line}; \\
+              \node[fdf,iind] {from -5 kT -|V|/2 to 0 eV}; \\
+              \node[fdf,iind] {delta 0.02 eV}; \\
+              \node[fdf,iind] {method mid-rule}; \\
+              \node[fdf] {\%endblock}; \\
+          };
+        \end{scope}
+        \draw[->] (lneq-1) -- ++(2.5,0) to[out=0,in=180] (rneq-1);
+
+        \begin{scope}[xshift=6cm, yshift=-2.4cm]
+          \matrix {
+              \node[fdf,rmark] (rneq-2) {\%block TS.Contour.nEq.neq-2}; \\
+              \node[fdf,ind] {part line}; \\
+              \node[fdf,iind] {from prev to |V|/2 + 5 kT}; \\
+              \node[fdf,iind] {delta 0.005 eV}; \\
+              \node[fdf,iind] {method mid-rule}; \\
+              \node[fdf] {\%endblock}; \\
+          };
+        \end{scope}
+        \draw[->] (lneq-2) -- ++(2.5,0) to[out=0,in=180] (rneq-2);
+      \end{tikzpicture}
+  }
   
 \end{frame}
 

@@ -50,6 +50,11 @@
 \def\fdf#1{\texttt{#1}}
 \def\mcite#1{{\small \citeauthor{#1}, DOI: \citefield{#1}{doi}}}
 
+\newwrite\foundfile
+\immediate\openout\foundfile=\jobname.foundfiles
+\newwrite\nonfoundfile
+\immediate\openout\nonfoundfile=\jobname.nonfoundfiles
+
 
 \makeatletter
 \newcommand\incg[2][align=c]{%
@@ -66,8 +71,10 @@
       \incg@check{#2}{jpeg}%
     \fi%
     \ifx\tmp@file\relax%
+      \immediate\write\nonfoundfile{#2}%
       \rule{3cm}{4cm}%
     \else%
+      \immediate\write\foundfile{\tmp@file}%
       \includegraphics[#1]{\tmp@file}%
     \fi%
     \let\tmp@file\relax%
@@ -82,18 +89,6 @@
       \IfFileExists{fig/#1.#2}{%
           % It does
           \edef\tmp@file{fig/#1.#2}%
-      }{}%
-    \fi%
-    \ifx\tmp@file\relax%
-      \IfFileExists{paper-fig/#1.#2}{%
-          % It does
-          \edef\tmp@file{paper-fig/#1.#2}%
-      }{}%
-    \fi%
-    \ifx\tmp@file\relax%
-      \IfFileExists{fig-external/#1.#2}{%
-          % It does
-          \edef\tmp@file{fig-external/#1.#2}%
       }{}%
     \fi%
     \ifx\tmp@file\relax%
@@ -135,6 +130,7 @@
 \newcommand\Cd{\!\!\dd}
 \newcommand\dd{\mathrm{d}}
 \newcommand\E{\epsilon}
+\newcommand\JJ{\mathcal{J}}
 \newcommand\BZ{\mathrm{BZ}}
 \newcommand\Eq{\mathrm{eq}}
 \newcommand\Neq{\mathrm{neq}}

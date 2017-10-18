@@ -303,9 +303,9 @@
               \addplot[gen,good,domain=-.55:.55,samples=30] {1./(exp((x-0.5)/0.01)+1)-1./(exp((x+0.5)/0.01)+1)};
               \addplot[gen,bad,domain=-.55:.05,samples=25] {1./(exp((x)/0.01)+1)- 1./(exp((x+0.5)/0.01)+1)};
               \draw[<->,very thick,bad] (axis cs:-.5, 0.6) -- (axis cs:0,0.6) node[midway,above] 
-              {$n_F(\E+0.5\,\mathrm{eV}) - n_F(\E-0\,\mathrm{eV})$};
+              {$n_F(\E) - n_F(\E-0.5\,\mathrm{eV})$};
               \draw[<->,very thick,ok] (axis cs:0, 0.2) -- (axis cs:0.5,0.2) node[midway,above]
-              {$n_F(\E+0\,\mathrm{eV}) - n_F(\E-0.5\,\mathrm{eV})$};
+              {$n_F(\E+0.5\,\mathrm{eV}) - n_F(\E)$};
               \draw[<->,very thick,good] (axis cs:-.5, 1.3) -- (axis cs:.5,1.3) node[midway,above]
               {$n_F(\E+0.5\,\mathrm{eV}) - n_F(\E-0.5\,\mathrm{eV})$};
 
@@ -376,7 +376,7 @@
   \frametitle{Non-equilibrium Green function}
   \framesubtitle{Transmission}
 
-  \begin{block}{Transmission}
+  \begin{block}<+->{Transmission}
     \begin{itemize}
       \item Transmission between any two electrodes $\T_{\idxE\mto\idxE'}$ 
 
@@ -399,9 +399,91 @@
       -\Tr[\Scat_\idxE(\E) \G(\E)\Scat_\idxE(\E)\G^\dagger(\E)]
       \Big\}
     \end{align*}
+
+  \end{block}
+
+  \begin{block}<+->{Symmetries}
+    When time-reversal symmetry applies we have:
+    \begin{equation*}
+      \T_{\idxE\mto\idxE',\kk} = \T_{\idxE'\mto\idxE,\kk} = \T_{\idxE\mto\idxE',-\kk}
+    \end{equation*}
   \end{block}
   
 \end{frame}
+
+\begin{frame}
+  \frametitle{Non-equilibrium Green function}
+  \framesubtitle{Local currents/bond-currents}
+
+  \begin{block}<+->{Orbital/Bond currents}
+    Bond currents are \emph{local} currents flowing between two orbitals/bonds and are
+    associated with \emph{out-going} states from electrode $\idxE$
+    \begin{equation*}
+      \JJ_{\idxE,\nu\mu} = \frac e h \Im\big[
+      \Spec_{\idxE,\nu\mu}(\HH_{\mu\nu} - \E\SO_{\mu\nu})
+      -
+      \Spec_{\idxE,\mu\nu}(\HH_{\nu\mu} - \E\SO_{\nu\mu})\big]
+    \end{equation*}
+
+    The sum of bond-currents crossing \emph{any} device cross-section is equal to the
+    current between the leads. Without the prefactor $e/h$ this also applies for the
+    bond-transmissions\footnote{TBtrans calculates bond-\emph{transmissions}, although
+        they are named \emph{currents}.}.
+
+    The bond-currents obey Kirchoff's laws.
+    
+  \end{block}
+  
+  \begin{block}<+->{Symmetries}
+    \emph{NOTE}, even when time-reversal symmetry is present
+    \begin{align*}
+      \JJ_{\idxE,\kk,\nu\mu} &= - \JJ_{\idxE,\kk,\mu\nu}
+      \\
+      \JJ_{\idxE,\kk,\nu\mu} &\neq \JJ_{\idxE,-\kk,\nu\mu}
+    \end{align*}
+    hence when calculating bond-currents for periodic structures it is imperative to
+    average the \emph{entire} Brillouin zone. This may be understood from \emph{momentum}
+    considerations. 
+  \end{block}
+  
+\end{frame}
+
+
+\begin{frame}
+  \frametitle{Bond-current in periodic calculations}
+  \framesubtitle{Importance of Brillouin-zone averaging}
+
+  \vskip -6em
+  \begin{center}
+    \begin{itemize}
+      \item Square lattice
+      \item Periodicity along $x$ direction
+      \item Transport along $y$ direction
+      \item Bond-currents $k$-averaged
+    \end{itemize}
+  \end{center}
+
+  \begin{columns}
+    
+    \column{.5\linewidth}
+    \incg[width=.99\linewidth]{trs}
+    
+    \begin{itemize}
+      \item Sampled $k_x\in \big[0;\frac12\big]$
+    \end{itemize}
+
+    \column{.5\linewidth}
+    \incg[width=.99\linewidth]{no_trs}
+
+    \begin{itemize}
+      \item Sampled $k_x\in \big]-\frac12;\frac12\big]$
+    \end{itemize}
+
+  \end{columns}
+
+\end{frame}
+
+
 
 
 \begin{frame}
@@ -449,24 +531,37 @@
 
   \begin{block}{Transmission}
     \vskip-2ex
-    \begin{align*}
-      \T_{\idxE\mto\idxE'}(\E) &=
-      \Tr\big[\Scat_{\idxE'}(\E)\G(\E)\Scat_{\idxE}(\E)\G^\dagger(\E)\big]\quad\text{, for $\idxE\neq\idxE'$}
-      \\
-      \T_{\idxE}(\E) &\equiv\sum_{\idxE'\neq\idxE}\T_{\idxE\mto\idxE'} (\E)
-      \\
-      \RE_\idxE(\E) &=\mathbf 1 -\T_\idxE (\E)
-      = \mathbf 1 -\Big\{
-      \im \Tr\big[(\G(\E)-\G^\dagger(\E))\Scat_\idxE(\E)\big]
-      -\Tr[\Scat_\idxE(\E) \G(\E)\Scat_\idxE(\E)\G^\dagger(\E)]
-      \Big\}
-      \\
-      I_{\idxE\mto\idxE'} &= \frac{e^2}{h}\iint\cd\E\dd\kk\, \T_{\idxE\mto\idxE'}(\E)[n_{F,\idxE}(\E) - n_{F,\idxE'}(\E)].
-    \end{align*}
+    \begin{columns}
+      
+      \column{.45\linewidth}
+      \begin{align*}
+        \T_{\idxE\mto\idxE'}(\E) &=
+        \Tr\big[\Scat_{\idxE'}(\E)\G(\E)\Scat_{\idxE}(\E)\G^\dagger(\E)\big]\quad\text{, for $\idxE\neq\idxE'$}
+        \\
+        \T_{\idxE}(\E) &\equiv\sum_{\idxE'\neq\idxE}\T_{\idxE\mto\idxE'} (\E)
+        \\
+        \RE_\idxE(\E) & %=\mathbf 1 -\T_\idxE (\E)
+        = \mathbf 1 -\Big\{
+        \im \Tr\big[(\G(\E)-\G^\dagger(\E))\Scat_\idxE(\E)\big]
+        -\Tr[\Scat_\idxE(\E) \G(\E)\Scat_\idxE(\E)\G^\dagger(\E)]
+        \Big\}
+        \\
+        I_{\idxE\mto\idxE'} &= \frac{e^2}{h}\iint\cd\E\dd\kk\, \T_{\idxE\mto\idxE'}(\E)[n_{F,\idxE}(\E) - n_{F,\idxE'}(\E)].
+      \end{align*}
+
+      \column{.41\linewidth}
+      \vskip -2em
+      \begin{equation*}
+        \JJ_{\idxE,\nu\mu} = \frac e h \Im\big[
+        \Spec_{\idxE,\nu\mu}(\HH_{\mu\nu} - \E\SO_{\mu\nu})
+        -
+        \Spec_{\idxE,\mu\nu}(\HH_{\nu\mu} - \E\SO_{\nu\mu})\big]
+      \end{equation*}
+
+    \end{columns}
   \end{block}
   
 \end{frame}
-
 
 
 %%% Local Variables:
