@@ -251,7 +251,6 @@ case $os in
     macos)
 	echo Please retry this script later, the executables
 	echo are not present at the current moment.
-	echo Possibly they will not be anyway :(
 	#dwn_file bin/transiesta_mac bin/transiesta
 	#dwn_file bin/tbtrans_mac bin/tbtrans
 	;;
