@@ -47,6 +47,7 @@
 
 \def\tsiesta{\texttt{transiesta}}
 \def\siesta{\texttt{siesta}}
+\def\tbt{\texttt{tbtrans}}
 \def\fdf#1{\texttt{#1}}
 \def\mcite#1{{\small \citeauthor{#1}, DOI: \citefield{#1}{doi}}}
 
@@ -152,3 +153,87 @@
 
 \def\etal{\emph{et.al.}}
 \newcommand\doi[1]{\href{https://dx.doi.org/#1}{#1}}
+
+
+\colorlet{cm1}{green!80!black}
+\colorlet{cm2}{red!80!black}
+\tikzset{
+    s >/.style={shorten >=#1},
+    s >/.default=4pt,
+    s </.style={shorten <=#1},
+    s </.default=4pt,
+    s <>/.style={s >=#1,s <=#1},
+    s <>/.default=4pt,
+    >=latex,
+    font=\footnotesize,
+    block/.style={
+        local bounding box=localbb,
+        execute at end scope={
+            \node[rounded corners=5pt,
+            inner sep=5pt,
+            fit=(localbb),draw,#1] {};
+        },
+    },
+    fdf/.style={
+        font=\ttfamily\footnotesize,
+        anchor=west,
+    },
+    connect/.style={
+        >=latex,
+        ->,
+        shorten >=4pt,
+        shorten <=1pt,
+    },
+    my mark/.style={
+        rectangle,rounded corners=2pt,very thick,
+        inner sep=2pt,
+    },
+    lmark/.style={
+        my mark,draw=cm1,%green!80!black,
+    },
+    rmark/.style={
+        my mark,draw=red!80!black,densely dotted,
+    },
+    iiind/.style={xshift=6ex},
+    iind/.style={xshift=4ex},
+    ind/.style={xshift=2ex},
+    % Matrix opts
+    row sep=.4ex,
+    every node/.append style={
+        inner sep=.25ex,outer sep=.25ex,
+        text height=1.25ex,
+    },
+    ampersand replacement=\&,
+}
+
+
+\def\matsize{.8cm}
+\def\Full{\begin{tikzpicture}
+      \fill (0,0) rectangle (\matsize,\matsize);
+    \end{tikzpicture}
+}
+\def\Left{\begin{tikzpicture}
+      \draw (0,0) rectangle (\matsize,\matsize);
+      \fill (0,\matsize) rectangle ++(.3*\matsize,-.3*\matsize);
+    \end{tikzpicture}
+}
+\def\FullLeft{\begin{tikzpicture}
+      \draw (0,0) rectangle (\matsize,\matsize);
+      \fill (0,0) rectangle (.3*\matsize,\matsize);
+    \end{tikzpicture}
+}
+
+\def\drawcube[#1]{%
+    \path[#1] (0,0,0) -- (0,0,1);
+    \path[#1] (0,0,0) -- (1,0,0);
+    \path[#1] (0,0,0) -- (0,1,0);
+    \path[#1] (1,0,0) -- (1,1,0);
+    \path[#1] (1,0,0) -- (1,0,1);
+    \path[#1] (0,1,0) -- (1,1,0);
+    \path[#1] (0,1,0) -- (0,1,1);
+    \path[#1] (0,0,1) -- (1,0,1);
+    \path[#1] (0,0,1) -- (0,1,1);
+    \path[#1] (1,1,0) -- (1,1,1);
+    \path[#1] (1,1,1) -- (0,1,1);
+    \path[#1] (1,1,1) -- (1,0,1);
+}

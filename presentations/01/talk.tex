@@ -44,42 +44,11 @@
   \tableofcontents
 \end{frame}
 
-
-\def\matsize{.8cm}
-\def\Full{\begin{tikzpicture}
-      \fill (0,0) rectangle (\matsize,\matsize);
-    \end{tikzpicture}
-}
-\def\Left{\begin{tikzpicture}
-      \draw (0,0) rectangle (\matsize,\matsize);
-      \fill (0,\matsize) rectangle ++(.3*\matsize,-.3*\matsize);
-    \end{tikzpicture}
-}
-\def\FullLeft{\begin{tikzpicture}
-      \draw (0,0) rectangle (\matsize,\matsize);
-      \fill (0,0) rectangle (.3*\matsize,\matsize);
-    \end{tikzpicture}
-}
-
-\def\drawcube[#1]{%
-    \path[#1] (0,0,0) -- (0,0,1);
-    \path[#1] (0,0,0) -- (1,0,0);
-    \path[#1] (0,0,0) -- (0,1,0);
-    \path[#1] (1,0,0) -- (1,1,0);
-    \path[#1] (1,0,0) -- (1,0,1);
-    \path[#1] (0,1,0) -- (1,1,0);
-    \path[#1] (0,1,0) -- (0,1,1);
-    \path[#1] (0,0,1) -- (1,0,1);
-    \path[#1] (0,0,1) -- (0,1,1);
-    \path[#1] (1,1,0) -- (1,1,1);
-    \path[#1] (1,1,1) -- (0,1,1);
-    \path[#1] (1,1,1) -- (1,0,1);
-}
-
 \input introduction.tex
 \input green.tex
 \input se.tex
 \input negf.tex
-\input algorithms.tex
+\input options.tex
+\input electrodes.tex
 
 \end{document}

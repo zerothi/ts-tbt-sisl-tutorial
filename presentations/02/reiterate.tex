@@ -1,7 +1,7 @@
-\section{Reiterate important points}
+\subsection{Reiterate self-energy requirements}
 
 \begin{frame}
-  \frametitle{Reiterate important points}
+  \frametitle{Reiterate self-energy requirements}
   \tikzset{block/.style={
           shape=rectangle,draw,minimum size=.8cm},
       dd/.style={densely dotted},
@@ -82,45 +82,14 @@
     \end{itemize}
   \end{block}
 
-  \begin{block}<2->{Use symmetries whenever you can}
+  % \begin{block}<2->{Use symmetries whenever you can}
 
-    \begin{itemize}
-      \item If you have transverse periodic electrodes you should apply Bloch's theorem
-      using the flags \texttt{Bloch}
-    \end{itemize}
+  %   \begin{itemize}
+  %     \item If you have transverse periodic electrodes you should apply Bloch's theorem
+  %     using the flag \texttt{Bloch}
+  %   \end{itemize}
     
-  \end{block}
-
-\end{frame}
-
-\subsection{Transmission algorithm}
-
-\begin{frame}[fragile]
-  \frametitle{Calculating the Green function, slightly differently}
-  
-  \begin{itemize}
-    \item Reduce Green function calculation to region of interest ($D$)
-
-    \item Algorithms determined from user-requested quantities
-
-  \end{itemize}
-
-  \vskip 4em
-
-  \begin{itemize}
-    \item Algorithm:
-  \end{itemize}
-  \begin{center}
-    \incg[]{tbt-algorithm}
-  \end{center}
-
-  \begin{tikzpicture}[remember picture,overlay]
-    \node at ($(current page.center)+(2.5,1)$) {%
-            \incg[width=.7\linewidth]{inv-block3}%
-        };
-      \end{tikzpicture}
-
-  \doicite{Papior \etal: \doi{10.1016/j.cpc.2016.09.022}}
+  % \end{block}
 
 \end{frame}
 

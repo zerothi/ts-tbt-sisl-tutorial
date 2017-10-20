@@ -19,6 +19,9 @@ extra:
 handout.pdf:
 	pdflatex -shell-escape -jobname handout "\PassOptionsToClass{handout}{beamer}\input{talk}"
 
+clean:
+	-rm -f talk.{aux,out,vrb,bbl,bcf,blg,nav,run.xml,snm,toc}
+
 extra-handout:
 	bibtex handout
 	makeindex handout

@@ -113,6 +113,11 @@ function linux_install {
 	echo "pip failed to install the packages, will try to install"
 	echo "in your user directory, if this fails you will have to fix it"
 	pip install --user --upgrade six numpy scipy matplotlib netCDF4 jupyter sisl
+	if [ $? -ne 0 ]; then
+	    echo ""
+	    echo "pip failed to install the packages, in either the global or user domain."
+	    echo "Please try and get pip to work and re-run the installation proceduce."
+	fi
     fi
     
     # You probably need to add to the path, this is a simplistic way of
@@ -165,6 +170,8 @@ function macos_install {
 
     # Now try and install gcc (it should also include gfortran)
     my_brew install gcc
+    # Ensure wget is installed
+    my_brew install wget --with-libressl
 
     # Add the science tap
     my_brew tap homebrew/science
@@ -179,6 +186,11 @@ function macos_install {
 	echo "pip failed to install the packages, will try to install"
 	echo "in your user directory, if this fails you will have to fix it"
 	pip install --user --upgrade six numpy scipy matplotlib netCDF4 jupyter sisl
+	if [ $? -ne 0 ]; then
+	    echo ""
+	    echo "pip failed to install the packages, in either the global or user domain."
+	    echo "Please try and get pip to work and re-run the installation proceduce."
+	fi
     fi
     exit 0
 }
@@ -221,16 +233,17 @@ function download_warning {
 }
 
 function dwn_file {
+    local rname=$1
+    local outname=$1
+    if [ $# -eq 2 ]; then
+	outname=$2
+    fi
     if [ ! -e $1 ]; then
-	if [ $# -eq 2 ]; then
-	    wget -O $2 $url/$(basename $1)
-	else
-	    wget -O $1 $url/$(basename $1)
-	fi
+	wget -O $outname $url/$(basename $rname)
 	if [ $? -eq 0 ]; then
-	    chmod u+x $1
+	    chmod u+x $outname
 	else
-	    rm -f $1
+	    rm -f $outname
 	fi
     fi
 }
@@ -249,10 +262,8 @@ case $os in
 	dwn_file bin/tbtrans
 	;;
     macos)
-	echo Please retry this script later, the executables
-	echo are not present at the current moment.
-	#dwn_file bin/transiesta_mac bin/transiesta
-	#dwn_file bin/tbtrans_mac bin/tbtrans
+	dwn_file bin/transiesta_mac bin/transiesta
+	dwn_file bin/tbtrans_mac bin/tbtrans
 	;;
 esac
 

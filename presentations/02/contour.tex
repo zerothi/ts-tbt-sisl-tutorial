@@ -1,15 +1,15 @@
 
-\section{Density matrix}
+\section{The \emph{true} density matrix}
 
 \begin{framenologo}
-  \frametitle{Density matrix}
+  \frametitle{The \emph{true} density matrix}
   \tableofcontents[currentsection]
 \end{framenologo}
 
 \subsection{Numerical integration}
 
 \begin{frame}[fragile]
-  \frametitle{Density matrix}
+  \frametitle{The \emph{true} density matrix}
   \framesubtitle{Numerical integration}
 
   \footnotesize
@@ -24,26 +24,26 @@
       \eikr
       \\
       \only<2->{\color{gray}}
-      \DM^\idxE &
+      \DM^\varsigma &
       \only<2->{\color{gray}}
       =
       {\frac i{2\pi}\iint_\BZ\dEBZ\cd \kk\dd\E%
-      \left[\G_\kk  - \G^\dagger_\kk \right]\eikr n_{F,\idxE}(\E)}
+      \left[\G_\kk  - \G^\dagger_\kk \right]\eikr n_{F,\varsigma}(\E)}
       +
-      {\frac1{2\pi}\sum_{\idxE'\neq\idxE}\iint_\BZ\dEBZ\cd \kk\dd\E\, %
+      {\frac1{2\pi}\sum_{\idxE'\neq\varsigma}\iint_\BZ\dEBZ\cd \kk\dd\E\, %
       \G_\kk \Scat_{\idxE',\kk}
-      \G^\dagger_\kk\eikr\big[n_{F,\idxE'}(\E)-n_{F,\idxE}(\E)\big]}
+      \G^\dagger_\kk\eikr\big[n_{F,\idxE'}(\E)-n_{F,\varsigma}(\E)\big]}
       \\
-      \DM^\idxE &=
-      {\DE^\idxE}
+      \DM^\varsigma &=
+      {\DE^\varsigma}
       +
-      {\sum_{\idxE'\neq\idxE}\ncor_{\idxE'}^\idxE}
+      {\sum_{\idxE'\neq\varsigma}\ncor_{\idxE'}^\varsigma}
       \uncover<2->{=
       \only<2->{\color{ok}}
       % Essentially these
-      \langle\dots\rangle n_{F,\idxE}(\E)
+      \langle\dots\rangle n_{F,\varsigma}(\E)
       +
-      \sum_{\idxE'\neq\idxE}\langle\dots\rangle [n_{F,\idxE'}(\E)-n_{F,\idxE}]}
+      \sum_{\idxE'\neq\varsigma}\langle\dots\rangle [n_{F,\idxE'}(\E)-n_{F,\varsigma}]}
     \end{align*}
   \end{block}
 
@@ -154,7 +154,7 @@
 
 
 \begin{frame}
-  \frametitle{Non-equilibrium Green function}
+  \frametitle{The \emph{true} density matrix}
   \framesubtitle{Numeric integration -- equilibrium}
 
   \begin{block}{Example of numeric integration of equilibrium contour}
@@ -265,7 +265,7 @@
         \shortintertext{for $2$ electrodes:}
         w_i & = \frac{(\ncor_i)^2}{(\ncor_1)^2+(\ncor_2)^2}
         & &w_1+w_2=1
-        \uncover<+->{
+    \uncover<+->{
         \\
         \shortintertext{for $N$ electrodes:}
         w_\varsigma &=
@@ -276,6 +276,7 @@
         \sum_{\varsigma'}\prod_{\varsigma''\neq\varsigma'}
         \big(\smash{\sum_{\idxE|\varsigma_\idxE\neq\varsigma''}}(\ncor^{\varsigma''}_\idxE)^2\big)
         \Big\}
+        & &\sum_iw_i=1
         \\
         \DM &=\sum_\varsigma \DM^\varsigma w_\varsigma
     }

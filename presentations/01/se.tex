@@ -1,14 +1,46 @@
-\section{Self-energy concept}
+\section{Self-energy}
 
 \begin{framenologo}
-  \frametitle{Self-energy concept}
+  \frametitle{Self-energy}
   \tableofcontents[currentsection]
 \end{framenologo}
 
+\subsection{The concept}
 
 \begin{frame}
-  \frametitle{Self-energy concept}
-  \framesubtitle{Calculation of the self-energy}
+  \frametitle{Self-energy}
+  \framesubtitle{The concept}
+
+  \begin{block}{Self-energies -- perturb the Hamiltonian}
+    
+    \begin{itemize}[<+->]
+      \item A self-energy \emph{renormalises} of the Hamiltonian
+      \begin{equation*}
+        \HH' = \HH + \SE
+      \end{equation*}
+      \item A wide variety of physical properties
+      \begin{itemize}[<.->]
+        \item Semi-infinity
+        \item Local defects
+        \item Absorbing potentials
+        \item \dots
+      \end{itemize}
+      \item In TranSiesta the self-energies are \emph{only} semi-infinite leads
+    \end{itemize}
+
+    \uncover<.->{
+        Remember(!) that TBtrans allows custom (additional) self-energies, even for DFT calculations!
+    }
+
+  \end{block}
+
+\end{frame}
+
+\subsection{Semi-infinity}
+
+\begin{frame}
+  \frametitle{Self-energy}
+  \framesubtitle{Semi-infinity}
 
   \begin{itemize}
     \item%
@@ -39,8 +71,8 @@
 \subsection{Bulk self-energy requirements}
 
 \begin{frame}
-  \frametitle{Self-energy concept}
-  \framesubtitle{Which unit-cells may be used?}
+  \frametitle{Self-energy}
+  \framesubtitle{Semi-infinity -- which unit-cells?}
 
   \begin{center}
     \def\mysize{6pt}
@@ -110,8 +142,8 @@
 \end{frame}
 
 \begin{frame}
-  \frametitle{Self-energy concept}
-  \framesubtitle{Rules for using self-energies}
+  \frametitle{Self-energy}
+  \framesubtitle{Semi-infinity -- rules}
 
   \tikzset{block/.style={
           shape=rectangle,draw,minimum size=.8cm},
@@ -301,4 +333,3 @@
   \end{columns}
 
 \end{frame}
-

@@ -134,6 +134,7 @@ TS.Contours.Eq.Pole 2.5 eV
   chemical-potential chain
   semi-inf-direction +a3
   electrode-position end -3
+  bulk false
   check-kgrid False
 %endblock 
 

@@ -13,3 +13,5 @@ talk.pdf:
 extra:
 	bibtex talk ; \
 	makeindex talk ; \
+clean:
+	-rm -f talk.{aux,out,vrb,bbl,bcf,blg,nav,run.xml,snm,toc}
