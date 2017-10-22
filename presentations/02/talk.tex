@@ -10,29 +10,9 @@
       {DTU: sisl, TBtrans and TranSiesta workshop};
     \end{tikzpicture}}
 
-\usetikzlibrary{calc,matrix,intersections}
-\tikzset{
-    ->-/.style={postaction={decorate},decoration={%
-            markings,mark=at position #1 with {\arrow[line width=2pt]{stealth}}%
-        }%
-    },%
-    ->-/.default=.5,%
-    -<-/.style={postaction={decorate},decoration={%
-            markings,mark=at position #1 with {\arrowreversed[line width=2pt]{stealth}}%
-        }%
-    },%
-    -<-/.default=.5,%
-}
-\usepgfplotslibrary{groupplots}
-
-\usepackage{algorithm}
-\usepackage{algpseudocode}
-
 \date{26. October 2016}
 \title{TBtrans/TranSiesta for smarties}
 \author{Nick R. Papior}
-
-\usepackage{animate}
 
 \begin{document}
 
@@ -47,8 +27,6 @@
 
 \input negf.tex
 \input contour.tex
-
-% \input algorithms.tex
 
 \input steps.tex
 \input chemical.tex

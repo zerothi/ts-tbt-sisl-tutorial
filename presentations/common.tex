@@ -30,20 +30,34 @@
     fadings,calc,arrows,
     positioning,
     decorations,
-    decorations.markings
+    decorations.markings,
+    decorations.pathreplacing,
+    decorations.text,
+    matrix,
 }
 
-\usetikzlibrary{decorations,decorations.markings,calc,decorations.pathreplacing,decorations.text}
 \tikzset{
     ->-/.style={postaction={decorate},decoration={%
             markings,mark=at position #1 with {\arrow[line width=2pt]{stealth}}%
         }%
     },%
     ->-/.default=.5,%
+    -<-/.style={postaction={decorate},decoration={%
+            markings,mark=at position #1 with {\arrowreversed[line width=2pt]{stealth}}%
+        }%
+    },%
+    -<-/.default=.5,%
 }
+\usepgfplotslibrary{groupplots}
+
+\usepackage{algorithm}
+\usepackage{algpseudocode}
 
 \usepackage{biblatex}
 \bibliography{refs}
+
+\usepackage{animate}
+
 
 \def\tsiesta{\texttt{transiesta}}
 \def\siesta{\texttt{siesta}}
@@ -55,6 +69,7 @@
 \immediate\openout\foundfile=\jobname.foundfiles
 \newwrite\nonfoundfile
 \immediate\openout\nonfoundfile=\jobname.nonfoundfiles
+
 
 
 \makeatletter
@@ -237,3 +252,4 @@
     \path[#1] (1,1,1) -- (0,1,1);
     \path[#1] (1,1,1) -- (1,0,1);
 }
+
