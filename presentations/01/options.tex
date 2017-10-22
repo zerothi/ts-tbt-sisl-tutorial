@@ -1,0 +1,62 @@
+
+\section{Input options}
+
+\begin{framenologo}
+  \frametitle{Input options}
+  \tableofcontents[currentsection]
+\end{framenologo}
+
+
+\subsection{fdf input}
+
+\begin{frame}[fragile]
+  \frametitle{Input options}
+  \framesubtitle{fdf input}
+  
+  \begin{itemize}
+    \item Siesta\footnote{TranSiesta and TBtrans are based on Siesta.} implements an
+    \emph{easy} input file:
+\begin{verbatim}
+TBT.DOS.Gf true
+TBT.DOS.A false
+TBT.ElectronicTemperature 25. meV
+% block TBT.k
+...
+% endblock
+\end{verbatim}
+
+    \item First encountered option is used (below $25\,\mathrm{meV}$ will be used)
+\begin{verbatim}
+TBT.ElectronicTemperature 25. meV
+TBT.ElectronicTemperature 50. meV
+\end{verbatim}
+  \end{itemize}
+
+  \begin{block}<2->{Default options for TBtrans and TranSiesta}
+
+    Option default tree, \emph{only} these fdf-options has defaults
+
+    \vskip 1em
+    \begin{tabular}{lll}
+      TBtrans & TranSiesta & Siesta
+      \\
+      \hline\hline
+      \fdf{TBT.ElectronicTemperature} & \fdf{TS.ElectronicTemperature} & \fdf{ElectronicTemperature}
+      \\
+      \fdf{TBT.k} & \fdf{TS.kgrid.MonkhorstPack} & \fdf{kgrid.MonkhorstPack}
+      \\
+      \fdf{TBT.Voltage} & \fdf{TS.Voltage}
+      \\
+      \fdf{TBT.ChemPots} & \fdf{TS.ChemPots}
+      \\
+      \fdf{TBT.Elecs} & \fdf{TS.Elecs}
+      \\
+      \fdf{TBT.Elecs.*} & \fdf{TS.Elecs.*}
+      \\
+      \fdf{TBT.BTD.Pivot} & \fdf{TS.BTD.Pivot}
+    \end{tabular}
+    
+  \end{block}
+  
+\end{frame}
+

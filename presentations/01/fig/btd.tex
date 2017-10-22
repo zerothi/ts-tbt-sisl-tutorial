@@ -1,0 +1,141 @@
+\input ../../common.tex
+
+\usepackage[export]{adjustbox}
+
+\usetikzlibrary{external,backgrounds,calc,intersections}
+\usetikzlibrary{fadings}
+\usetikzlibrary{arrows,arrows.meta}
+\usetikzlibrary{shapes.arrows,shapes.misc,shapes.geometric}
+\usetikzlibrary{fadings}
+\usetikzlibrary{decorations,decorations.markings,decorations.pathreplacing}
+
+\tikzexternalize
+
+\begin{document}
+
+
+%\tikzexternaldisable
+
+\def\linfty{\overleftarrow{\boldsymbol\infty}}
+\def\rinfty{\overrightarrow{\boldsymbol\infty}}
+
+%
+% Create inversion algorithm 
+\def\miniblock[#1]#2{%
+    \tikz[baseline=(X.base)y] \node[draw,font=\scriptsize,
+    minimum width=.475cm,minimum height=.4cm,#1] (X) 
+    {$\vphantom{\overleftarrow A_1}#2$};
+}
+\tikzsetfigurename{inv-block_}
+\def\bsize{.8cm}
+
+\foreach \YYY in {0,1,...,17} {
+\begin{tikzpicture}[block/.style={
+      shape=rectangle,draw,minimum size=.8cm},
+  dd/.style={densely dotted},
+  block dd/.style={block,dd},
+  Y/.style={anchor=north west,align=left},
+  ]
+
+  \node[block dd] at (-1.5*\bsize,0.5*\bsize) {};
+  \foreach \x in {0,1,2,3,4,5,6,7} {
+      \node[block] (A\x) at ({(\x-0.5)*\bsize},0.5*\bsize) {$\mathbf H$};
+  }
+  \node[block dd] at (7.5*\bsize,0.5*\bsize) {};
+
+  \draw[->,dd] (A0) to[out=75,in=105] node[above] {$\mathbf V$} (A1);
+  \draw[->,dd] (A1) to[out=75,in=105] node[above] {$\mathbf V$} (A2);
+  \draw[->,dd] (A2) to[out=75,in=105] node[above] {$\mathbf V$} (A3);
+  \draw[->,dd] (A3) to[out=75,in=105] node[above] {$\mathbf V$} (A4);
+  \draw[->,dd] (A4) to[out=75,in=105] node[above] {$\mathbf V$} (A5);
+  \draw[->,dd] (A5) to[out=75,in=105] node[above] {$\mathbf V$} (A6);
+  \draw[->,dd] (A6) to[out=75,in=105] node[above] {$\mathbf V$} (A7);
+
+  \draw[<-,dd] (A0) to[out=-75,in=-105] node[below] {$\mathbf V^\dagger$} (A1);
+  \draw[<-,dd] (A1) to[out=-75,in=-105] node[below] {$\mathbf V^\dagger$} (A2);
+  \draw[<-,dd] (A2) to[out=-75,in=-105] node[below] {$\mathbf V^\dagger$} (A3);
+  \draw[<-,dd] (A3) to[out=-75,in=-105] node[below] {$\mathbf V^\dagger$} (A4);
+  \draw[<-,dd] (A4) to[out=-75,in=-105] node[below] {$\mathbf V^\dagger$} (A5);
+  \draw[<-,dd] (A5) to[out=-75,in=-105] node[below] {$\mathbf V^\dagger$} (A6);
+  \draw[<-,dd] (A6) to[out=-75,in=-105] node[below] {$\mathbf V^\dagger$} (A7);
+
+  \begin{scope}[on background layer,
+    top/.style={red!90!black!##1!white},
+    bot/.style={blue!90!black!##1!white},
+    ]
+    \fill[top=10] (A0.south west) 
+    |- (A0.north east) -- cycle;
+
+    \ifnum\YYY>0
+    \fill[top=20] (A1.south west) 
+    |- (A1.north east) -- cycle;
+    \fi
+    \ifnum\YYY>1
+    \fill[top=30] (A2.south west) 
+    |- (A2.north east) -- cycle;
+    \fi
+    \ifnum\YYY>2
+    \fill[top=40] (A3.south west) 
+    |- (A3.north east) -- cycle;
+    \fi
+    \ifnum\YYY>3
+    \fill[top=50] (A4.south west) 
+    |- (A4.north east) -- cycle;
+    \fi
+    \ifnum\YYY>4
+    \fill[top=60] (A5.south west) 
+    |- (A5.north east) -- cycle;
+    \fi
+    \ifnum\YYY>5
+    \fill[top=70] (A6.south west) 
+    |- (A6.north east) -- cycle;
+    \fi
+    \ifnum\YYY>6
+    \fill[top=70] (A7.south west) 
+    |- (A7.north east) -- cycle;
+    \fi
+
+    \ifnum\YYY>16
+    \fill[bot=70] (A0.south west) 
+    -| (A0.north east) -- cycle;
+    \fi
+    \ifnum\YYY>15
+    \fill[bot=70] (A1.south west) 
+    -| (A1.north east) -- cycle;
+    \fi
+    \ifnum\YYY>14
+    \fill[bot=60] (A2.south west) 
+    -| (A2.north east) -- cycle;
+    \fi
+    \ifnum\YYY>13
+    \fill[bot=50] (A3.south west) 
+    -| (A3.north east) -- cycle;
+    \fi
+    \ifnum\YYY>12
+    \fill[bot=40] (A4.south west) 
+    -| (A4.north east) -- cycle;
+    \fi
+    \ifnum\YYY>11
+    \fill[bot=30] (A5.south west) 
+    -| (A5.north east) -- cycle;
+    \fi
+    \ifnum\YYY>10
+    \fill[bot=20] (A6.south west) 
+    -| (A6.north east) -- cycle;
+    \fi
+    \fill[bot=10] (A7.south west) 
+    -| (A7.north east) -- cycle;
+
+  \end{scope}
+
+\end{tikzpicture}
+
+}
+
+\end{document}
+
+
+%%% Local Variables: 
+%%% mode: latex
+%%% TeX-master: "btd"
+%%% End: 

@@ -102,8 +102,8 @@
 \subsection{Numeric integration}
 
 \begin{frame}
-  \frametitle{Density matrix}
-  \framesubtitle{Numeric integration -- equilibrium}
+  \framesubtitle{Numeric integration}
+  \framesubtitle{Equilibrium}
 
   Calculation of $\DE^\varsigma$:
 
@@ -236,8 +236,8 @@
 \end{frame}
 
 \begin{frame}
-  \frametitle{Density matrix}
-  \framesubtitle{Numeric integration -- equilibrium}
+  \frametitle{Numeric integration}
+  \framesubtitle{Equilibrium}
 
   \begin{block}{Example of numeric integration of equilibrium contour}
     \begin{itemize}
@@ -283,10 +283,49 @@
 
 \end{frame}
 
+\begin{frame}
+  \frametitle{Numeric integration}
+  \framesubtitle{Algorithms}
+
+  \begin{block}{Quadrature methods}
+    TranSiesta implements a wide range of quadrature methods
+    \begin{itemize}[<+->]
+      \item Newton-Cotes quadratures
+      \item Gauss-Legendre
+      \begin{itemize}[<.->]
+        \item<+-> Even quadrature method ($-x_{-i} = x_i$)
+        \item Opportunity to only integrate half of the interval
+      \end{itemize}
+      \item Continued fraction
+      \item \dots
+    \end{itemize}
+  \end{block}
+
+  \begin{center}
+    \begin{tikzpicture}[scale=.8]
+      \begin{axis}[width=17cm,height=8cm,only marks,
+        ymin=0,ymax=20.5,xmin=-41,xmax=1.5,
+        xtick={-36,-32,-28,-24,-20,-16,-12,-8,-4},
+        xlabel={Real Energy [eV]},
+        ylabel={Imaginary Energy [eV]}]
+        \only<1>{
+        \addplot+[red!70!black] table {data/siesta_30_simpson.dat};}
+        \only<2>{
+        \addplot+[blue!70!black] table {data/siesta_30_legendre.dat};}
+        \only<3->{
+        \addplot+[green!70!black] table {data/siesta_30_legendre_right.dat};}
+      \end{axis}
+    \end{tikzpicture}
+  \end{center}
+  
+  \doicite{Papior \etal: \doi{10.1016/j.cpc.2016.09.022}}
+
+\end{frame}
+
 
 \begin{frame}
-  \frametitle{Non-equilibrium Green function}
-  \framesubtitle{Numeric integration}
+  \frametitle{Numeric integration}
+  \framesubtitle{Non-equilibrium}
 
   \begin{block}{Example of numeric integration of non-equilibrium contour}
     The non-equilibrium density is conceptually much easier:

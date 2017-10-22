@@ -29,7 +29,7 @@
     \begin{itemize}
       \item Matrix inversion to calculate the Green function
       \item Green function dimension determined from \# of orbitals ($N$)
-      \item Elements in matrix scales $N^2$, inversion has complexity $N^3$
+      \item Elements in matrix scales $N^2$, inversion has complexity $\mathcal O(N^3)$
     \end{itemize}
   \end{block}
 
@@ -66,8 +66,8 @@
       \item[-] Memory hungry (compared to BTD)
       \item[-] Slow for wide electrodes due to dense Green function requirement
       \item[+] Relatively easy to implement, special MUMPS memory layout (which is nicely documented)
-      \item[+] May be extended for parallel
-      \item[+] Ideal for tight-binding matrices due to sparsity
+      \item[+] May be extended to parallel execution
+      \item[+] Ideal for tight-binding matrices due to extreme sparsity
     \end{description}
 
   \end{block}
@@ -165,7 +165,7 @@
 \subsection{Pivoting for BTD}
 
 
-\begin{frame}
+\begin{frame}[fragile]
   \frametitle{Enforcing BTD --- going quasi 1D}
   \framesubtitle{Pivoting matrix elements, order from dis-order}
 

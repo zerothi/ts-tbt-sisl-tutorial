@@ -1,0 +1,90 @@
+\section{Electrostatic potential}
+
+\begin{framenologo}
+  \frametitle{Electrostatic potential}
+  \tableofcontents[currentsection]
+\end{framenologo}
+
+\subsection{Boundary conditions}
+
+\begin{frame}
+  \frametitle{Electrostatic potential}
+  \framesubtitle{Boundary conditions}
+
+  Boundary conditions are fulfilled via:
+  \begin{itemize}[<+->]
+    \item<.-> Electrodes behave bulk
+
+    \item Extended electrode regions helps the above
+
+    \item Corrections to the Hartree potential are necessary (TranSiesta solves Poisson
+    equation via Fourier transforms, i.e. periodic)
+
+    \item Always remember that the self-energy \emph{forces} the boundary conditions,
+    i.e. long range potential decay may be forced too short
+
+  \end{itemize}
+
+\end{frame}
+
+\begin{frame}
+  \frametitle{Electrostatic potential}
+  \framesubtitle{Boundary conditions}
+
+  \begin{block}<+->{Hartree potential}
+
+    NEGF calculations are \emph{very} different from periodic calculations because of the
+    semi-infinite leads.
+
+  \end{block}
+
+  \begin{block}<+->{Boundary conditions}
+
+    The electrode Hartree potential are the boundary conditions.
+
+    In TranSiesta this is accomplished by fixing the electrostatic potential at one of the
+    electrode planes (the one farthest from the device region).
+
+    \begin{itemize}
+      \item For $N_\idxE=2$ and aligned semi-infinite directions the potential profile can
+      easily be approximated by a linear ramp.
+
+      \item For un-aligned semi-infinite directions (or $N_\idxE\neq2$) the potential
+      profile cannot easily be approximated.
+
+      \begin{itemize}[<+->]
+        \item By default, TranSiesta implements a \emph{box} solution (bad guess) which
+        only defines the boundary conditions on the electrode atoms. I.e. sets the Hartree
+        potential equal to the chemical potential in the cell region of the electrode.
+
+        \item A much better approach is to provide an \emph{external} potential profile
+        guess, i.e. solve the boundary conditions using external Poisson
+        solvers\footnote{This may seem like a more daunting task than it is. The guess is
+            the Poisson solution \emph{without} charges, only the boundary conditions.}
+
+      \end{itemize}
+    \end{itemize}
+    
+  \end{block}
+  
+\end{frame}
+
+
+\subsection{Multi-electrode electrostatic potential}
+
+\begin{frame}
+  \frametitle{Electrostatic potential}
+  \framesubtitle{Multi-electrode electrostatic potential}
+
+  \begin{itemize}
+    \item 6-electrode system
+    \item Default \emph{box} solution for the Poisson equation
+    \item External Poisson solution with electrode regions correct chemical potential
+  \end{itemize}
+
+  \begin{center}
+    \incg[]{insert-figure-here}
+  \end{center}
+  
+\end{frame}
+
