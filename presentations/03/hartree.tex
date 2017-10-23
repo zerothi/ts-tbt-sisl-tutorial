@@ -25,7 +25,40 @@
 
   \end{itemize}
 
+  \uncover<.->{
+  \begin{center}
+
+    \begin{tikzpicture}[z=.5cm,>=latex,scale=.75,font=\scriptsize]
+      \drawcube[draw]
+      \begin{scope}[xshift=-3cm,x=3cm]
+        \begin{scope}
+          \drawcube[draw,densely dotted]
+          \fill[red!50!black,fill opacity=0.5] (0,0,1) -- (1,0,1) -- (1,1,1) -- (0,1,1)
+          -- cycle;
+        \end{scope}
+      \end{scope}
+      \begin{scope}[xshift=1cm,x=3cm]
+        \begin{scope}
+          \drawcube[draw,densely dotted]
+          \fill[blue!50!black,fill opacity=0.5] (0,0,1) -- (1,0,1) -- (1,1,1) -- (0,1,1)
+          -- cycle;
+        \end{scope}
+      \end{scope}
+
+      % Draw arrows
+      \node[anchor=center] at (-1.5,.5,.5) {$-\infty=\SE_\leftarrow$};
+      \node[anchor=center] at (2.5,.5,.5) {$+\infty=\SE_\rightarrow$};
+
+      \draw[<-] (0.5,0,0.) -- ++(0,-1,0) node[below] {Simulation cell};
+      % \draw[->] (.5,.5,.5) -- (1.5,.5,.5);
+      % \draw[->] (.5,.5,.5) -- (.5,1.5,.5);
+
+    \end{tikzpicture}
+
+  \end{center}}
+
 \end{frame}
+
 
 \begin{frame}
   \frametitle{Electrostatic potential}
