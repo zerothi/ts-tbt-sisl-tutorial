@@ -47,8 +47,8 @@
     },%
     -<-/.default=.5,%
 }
-\usepgfplotslibrary{groupplots}
 
+\usepackage[export]{adjustbox}
 \usepackage{biblatex}
 \bibliography{refs}
 
@@ -214,9 +214,11 @@
     ind/.style={xshift=2ex},
     % Matrix opts
     row sep=.4ex,
-    every node/.append style={
-        inner sep=.25ex,outer sep=.25ex,
-        text height=1.25ex,
+    fixed node/.style={
+        every node/.append style={
+            inner sep=.25ex,outer sep=.25ex,
+            text height=1.25ex,
+        },
     },
     ampersand replacement=\&,
 }

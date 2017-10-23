@@ -28,6 +28,7 @@
   \only<6>{Buffer atoms removed from TBtrans/TranSiesta SCF cycle}%
 
   \begin{tikzpicture}[thick,left/.style={densely dotted,color=bad},
+    fixed node,
     right/.style={color=ok}]
 
     % Define the electrode and we are done
@@ -367,7 +368,7 @@
   
   \begin{center}
     \def\mysize{6pt}
-    \begin{tikzpicture}[scale=.6]
+    \begin{tikzpicture}[scale=.6, fixed node]
       
       \draw[densely dashed] (-1,-.5) rectangle ++(1,2);
       \draw (0,-.5) rectangle ++(1,2);
