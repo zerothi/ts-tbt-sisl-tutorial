@@ -165,7 +165,7 @@
 \subsection{Pivoting for BTD}
 
 
-\begin{frame}[fragile]
+\begin{frame}
   \frametitle{Enforcing BTD --- going quasi 1D}
   \framesubtitle{Pivoting matrix elements, order from dis-order}
 
@@ -176,9 +176,9 @@
         \item 21,600 orbitals
       \end{itemize}
       \incg[width=1\linewidth]{dev2}
-      
+
+      \small
       \begin{equation*}
-        \scriptsize
         \text{\huge \only<1>{?}}\quad
         \begin{pmatrix}
           \mathbf A_1 & \mathbf C_2 & 0 & \cdots & \\
@@ -198,22 +198,20 @@
       \begin{center}
         \href{run:fig/pivoting.mp4}{%
             \begin{tikzpicture}%
-              \only<2>{
-                  \node[inner sep=0pt,outer sep=0pt,draw,thick] (A) {%
-                      \includegraphics[height=.5\textheight]{atom+el-3_ani_0}};
+              \only<2>{%
+                  \node[inner sep=0pt,outer sep=0pt] (A) {%
+                      \fbox{\incg[height=.5\textheight]{atom+el-3_ani_0}}};
                   \draw[->] ($(A.west)!.97!(A.north west)-(.5,0)$) node[left,green] {Elec-1} -- ++(.4,0);
                   \draw[->] ($(A.west)!.64!(A.north west)-(.5,0)$) node[left,red] {Elec-2} -- ++(.4,0);
-                  \draw[->] ($(A.west)!.64!(A.south west)-(.5,0)$) node[left,blue] {Elec-3} --
-                  ++(.4,0);
+                  \draw[->] ($(A.west)!.64!(A.south west)-(.5,0)$) node[left,blue] {Elec-3} -- ++(.4,0);
                   \draw[->] ($(A.west)!.97!(A.south west)-(.5,0)$) node[left,purple] {Elec-4} -- ++(.4,0);
               }
-              \only<3>{
+              \only<3>{%
                   \node[inner sep=0pt,outer sep=0pt,draw,thick] (A) {%
                       \includegraphics[height=.5\textheight]{atom+el-3_ani_21483}};
                   \draw[->] ($(A.west)!.97!(A.north west)-(.5,0)$) node[left,blue!80!black] {Elec-3} -- ++(.4,0);
                   \draw[->] ($(A.west)!.64!(A.north west)-(.5,0)$) node[left,purple!80!black] {Elec-4} -- ++(.4,0);
-                  \draw[->] ($(A.west)!.64!(A.south west)-(.5,0)$) node[left,red!80!black] {Elec-2} --
-                  ++(.4,0);
+                  \draw[->] ($(A.west)!.64!(A.south west)-(.5,0)$) node[left,red!80!black] {Elec-2} -- ++(.4,0);
                   \draw[->] ($(A.west)!.97!(A.south west)-(.5,0)$) node[left,green!80!black] {Elec-1} -- ++(.4,0);
               }
             \end{tikzpicture}%
@@ -262,11 +260,6 @@
 
 \end{framenologo}
 
-
-
-\algnewcommand\algorithmicto{\textbf{to}}
-\algrenewtext{For}[2]%
-{\algorithmicfor\ #1 \algorithmicto\ #2 \algorithmicdo}
 
 
 
@@ -350,7 +343,8 @@
 
 
 \begin{frame}[fragile]
-  \frametitle{Calculating the Green function, slightly differently}
+  \frametitle{Transmission algorithm}
+  \framesubtitle{Calculating the Green function, slightly differently}
   
   \begin{itemize}
     \item Reduce Green function calculation to region of interest ($D$)

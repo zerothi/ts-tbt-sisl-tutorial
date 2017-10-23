@@ -104,7 +104,7 @@ function linux_install {
     # First ensure that the correct packages are installed
     for p in gcc gfortran libhdf5-dev libnetcdf-dev libnetcdff-dev python-dev python-tk python-pip python-pip-whl libatlas3-base liblapack3 libfreetype6-dev libpng12-dev
     do
-		sudo apt-get install $p
+	sudo apt-get install $p
     done
     
     # Perform the Python installation
@@ -256,6 +256,7 @@ pushd $indir
 
 # Now download the executables
 mkdir -p bin
+dwn_file sisl-TBT-TS.tar.gz
 case $os in
     linux)
 	dwn_file bin/transiesta

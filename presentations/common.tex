@@ -22,9 +22,8 @@
 %\logo{\includegraphics[width=\logosize]{SIESTA_small}}
 
 % Explicitly set the compatibility version
-\pgfplotsset{compat=1.15}
+%\pgfplotsset{compat=1.15}
 
-\author{Nick R. Papior}
 
 \usetikzlibrary{%
     fadings,calc,arrows,
@@ -50,9 +49,6 @@
 }
 \usepgfplotslibrary{groupplots}
 
-\usepackage{algorithm}
-\usepackage{algpseudocode}
-
 \usepackage{biblatex}
 \bibliography{refs}
 
@@ -71,7 +67,7 @@
 
 
 \makeatletter
-\newcommand\incg[2][align=c]{%
+\newcommand\incg[2][]{%
     \bgroup%
     \let\tmp@file\relax%
     \incg@check{#2}{png}%
