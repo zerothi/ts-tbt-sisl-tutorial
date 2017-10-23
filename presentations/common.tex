@@ -102,6 +102,12 @@
       }{}%
     \fi%
     \ifx\tmp@file\relax%
+      \IfFileExists{../fig/#1.#2}{%
+          % It does
+          \edef\tmp@file{../fig/#1.#2}%
+      }{}%
+    \fi%
+    \ifx\tmp@file\relax%
       \IfFileExists{people/#1.#2}{%
           % It does
           \edef\tmp@file{people/#1.#2}%

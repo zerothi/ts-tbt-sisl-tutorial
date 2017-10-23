@@ -253,9 +253,9 @@
           extra x ticks={0.25},extra x tick label={$\mu$},
           xlabel={Real Energy [eV]},
           ylabel={Imaginary Energy [eV]}]
-          \addplot table {data/EQ_circle.dat};
-          \addplot table {data/EQ_fermi.dat};
-          \addplot table {data/EQ_pole.dat};
+          \addplot table {../data/EQ_circle.dat};
+          \addplot table {../data/EQ_fermi.dat};
+          \addplot table {../data/EQ_pole.dat};
           \draw[densely dashed,green!50!black,very thick] (axis cs:-30,0.1) --
           (axis cs:2,0.1);
           \draw[->,>=latex] (axis cs:-.5,0) -- (axis cs:-8.75,2.2);
@@ -267,9 +267,9 @@
           xtick={-0.5,0,0.5},
           extra x ticks={0.25},extra x tick label={$\mu$},
           xmin=-.5,xmax=.75,ymin=0,ymax=1.3]
-          \addplot table {data/EQ_circle.dat};
-          \addplot table {data/EQ_fermi.dat};
-          \addplot table {data/EQ_pole.dat};
+          \addplot table {../data/EQ_circle.dat};
+          \addplot table {../data/EQ_fermi.dat};
+          \addplot table {../data/EQ_pole.dat};
           \draw[<->] (axis cs:.3,0.568494) -- node[sloped,anchor=south] {$2\pi k_BT$} (axis cs:.3,0.406067);
           \draw[densely dashed,green!50!black,very thick] 
           (axis cs:-1,0.03) -- (axis cs:1,0.03);
@@ -309,11 +309,11 @@
         xlabel={Real Energy [eV]},
         ylabel={Imaginary Energy [eV]}]
         \only<1>{
-        \addplot+[red!70!black] table {data/siesta_30_simpson.dat};}
+        \addplot+[red!70!black] table {../data/siesta_30_simpson.dat};}
         \only<2>{
-        \addplot+[blue!70!black] table {data/siesta_30_legendre.dat};}
+        \addplot+[blue!70!black] table {../data/siesta_30_legendre.dat};}
         \only<3->{
-        \addplot+[green!70!black] table {data/siesta_30_legendre_right.dat};}
+        \addplot+[green!70!black] table {../data/siesta_30_legendre_right.dat};}
       \end{axis}
     \end{tikzpicture}
   \end{center}

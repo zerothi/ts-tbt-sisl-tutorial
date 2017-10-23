@@ -38,7 +38,7 @@
             font=\footnotesize]
             \begin{axis}[width=.7\textwidth,height=3.5cm,%
               xmin=-1,xmax=1,ymin=0,xlabel=Energy]
-              \addplot[black,smooth,my fill] table {data/lorentzian.dat};
+              \addplot[black,smooth,my fill] table {../data/lorentzian.dat};
               \addlegendentry{$\mathfrak{L}$}
               \draw[<->] (axis cs:-0.05, {.5/0.05}) -- node[below=5pt] {$2\eta$}
               (axis cs:0.05,{.5/0.05});
@@ -94,7 +94,7 @@
             font=\footnotesize]
             \begin{axis}[width=.7\textwidth,height=3.5cm,%
               xmin=-1,xmax=1,ymin=0,xlabel=Energy]
-              \addplot[black,smooth,my fill] table {data/lorentzian.dat};
+              \addplot[black,smooth,my fill] table {../data/lorentzian.dat};
               \addlegendentry{$\mathfrak{L}$}
               \draw[<->] (axis cs:-0.05, {.5/0.05}) -- node[below=5pt] {$2\eta$}
               (axis cs:0.05,{.5/0.05});
