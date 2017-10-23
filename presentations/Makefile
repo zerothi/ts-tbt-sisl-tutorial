@@ -17,7 +17,8 @@ extra:
 
 .PHONY: handout.pdf
 handout.pdf:
-	pdflatex -shell-escape -jobname handout "\PassOptionsToClass{handout}{beamer}\input{talk}"
+	pdflatex -shell-escape "\PassOptionsToClass{handout}{beamer}\input{talk}"
+	mv talk.pdf handout.pdf
 
 clean: clean-talk clean-handout
 clean-talk:

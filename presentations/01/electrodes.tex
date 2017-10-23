@@ -370,6 +370,7 @@
     \def\mysize{6pt}
     \begin{tikzpicture}[scale=.6, fixed node]
       
+      \uncover<3->{
       \draw[densely dashed] (-1,-.5) rectangle ++(1,2);
       \draw (0,-.5) rectangle ++(1,2);
       \node[below] at (.5,-.5) {$R_1$};
@@ -382,7 +383,6 @@
           \draw (\x,1) circle (\mysize);
       }
 
-      \uncover<2->{
           \begin{scope}[yshift=-3cm]
             \matrix {
                 \node[fdf] {\%block kgrid.MonkhorstPack}; \\
@@ -401,12 +401,23 @@
         \node[below] at (1,-.5) {$R_3$};
         \draw[densely dashed] (3,-.5) rectangle ++(3,2);
         
-        \fill (.5,0) circle (\mysize) node[above right] {1};
-        \fill (1.5,0) circle (\mysize) node[above right] {2};
-        \fill (2.5,0) circle (\mysize) node[above right] {3};
-        \fill (.5,1) circle (\mysize) node[above right] {4};
-        \fill (1.5,1) circle (\mysize) node[above right] {5};
-        \fill (2.5,1) circle (\mysize) node[above right] {6};
+        \node[above] at (1.5,1.5) {\color{blue!60!black}\emph{device region electrode}};
+        \only<1-2>{
+            \fill (.5,0) circle (\mysize);
+            \fill (1.5,0) circle (\mysize);
+            \fill (2.5,0) circle (\mysize);
+            \fill (.5,1) circle (\mysize);
+            \fill (1.5,1) circle (\mysize);
+            \fill (2.5,1) circle (\mysize);
+        }
+        \uncover<3->{
+            \fill (.5,0) circle (\mysize) node[above right] {1};
+            \fill (1.5,0) circle (\mysize) node[above right] {2};
+            \fill (2.5,0) circle (\mysize) node[above right] {3};
+            \fill (.5,1) circle (\mysize) node[above right] {4};
+            \fill (1.5,1) circle (\mysize) node[above right] {5};
+            \fill (2.5,1) circle (\mysize) node[above right] {6};
+        }
         \foreach \x in {-2.5,-1.5,-.5,3.5,4.5,5.5} {
             \draw (\x,0) circle (\mysize);
             \draw (\x,1) circle (\mysize);
@@ -430,7 +441,7 @@
 
     \vskip 1em
 
-    \uncover<3->{
+    \uncover<4->{
         \begin{tikzpicture}[ft/.style 2 args={
               out=-90,in=90,out looseness=####1,
               in distance=1.5cm,in looseness=####2,
