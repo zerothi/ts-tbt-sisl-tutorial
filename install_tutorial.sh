@@ -256,7 +256,10 @@ pushd $indir
 
 # Now download the executables
 mkdir -p bin
+
+# Download latest tutorial files
 dwn_file sisl-TBT-TS.tar.gz
+
 case $os in
     linux)
 	dwn_file bin/transiesta
@@ -276,3 +279,10 @@ if ! `grep $indir ~/.bashrc` ; then
     echo "export PATH=$indir/bin:\$PATH" >> ~/.bashrc
     echo "" >> ~/.bashrc
 fi
+
+echo ""
+echo "In folder TBT-TS-sisl-workshop you will find everything needed for the tutorial"
+echo "If you use BASH (most likely) you should have transiesta and tbtrans in your path."
+echo "Run (after you have restarted your shell):"
+echo "  which tbtrans"
+echo "and check it returns $indir/bin/tbtrans"
