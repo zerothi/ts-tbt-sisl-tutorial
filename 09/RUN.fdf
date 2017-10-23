@@ -175,6 +175,7 @@ DM.UseSaveDM           true
 
 MD.NumCGSteps 0
 
+SaveElectrostaticPotential T
 SaveHS                          T
 
 %include ../STRUCT_DEVICE.fdf
