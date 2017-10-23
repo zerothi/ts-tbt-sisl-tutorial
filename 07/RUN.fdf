@@ -6,6 +6,7 @@ TBT.HS DEVICE.nc
 
 # Figure out how to save the self-energy function files
 # once, and then re-use them.
+# For reference they are named TBTGF files
 
 %block TBT.Elec.Left
   HS ELEC.nc

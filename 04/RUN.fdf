@@ -19,6 +19,7 @@ TBT.T.All true
 TBT.T.Bulk true
 TBT.T.Eig 5
 TBT.Current.Orb true
+
 # This flag is necessary to obtain the "correct"
 # bond-currents
 TBT.Symmetry.TimeReversal false
