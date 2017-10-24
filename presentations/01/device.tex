@@ -1,0 +1,69 @@
+
+\subsection{NEGF Algorithm in TBtrans}
+
+\begin{frame}[fragile,label=algorithm]
+  \frametitle{Input options}
+  \framesubtitle{NEGF Algorithm in TBtrans}
+  
+  \begin{itemize}
+    \item Reduce Green function calculation to region of interest ($D$)
+    
+    \item Algorithms determined from user-requested quantities
+    
+  \end{itemize}
+
+  \vskip 4em
+
+  \begin{itemize}
+    \item Algorithm:
+  \end{itemize}
+  \begin{center}
+    \incg[]{tbt-algorithm}
+  \end{center}
+
+  \begin{tikzpicture}[remember picture,overlay]
+    \node at ($(current page.center)+(2.5,1.7)$) {%
+        \incg[width=.7\linewidth]{inv-block3}%
+    };
+  \end{tikzpicture}
+
+  \doicite{Papior \etal: \doi{10.1016/j.cpc.2016.09.022}}
+
+  \hfill\hyperlink{electrode<6>}{\beamergotobutton{Return to electrode-setup}}
+
+\end{frame}
+
+\begin{frame}
+  \frametitle{Input options}
+  \framesubtitle{NEGF Algorithm in TBtrans}
+
+  \begin{itemize}[<+->]
+    \item Define $D$ via input
+    
+    \begin{tikzpicture}[thick,fixed node]
+      
+      % Define the electrode and we are done
+      \begin{scope}
+        \matrix {
+            \node[fdf] {\%block TBT.Atoms.Device}; \\
+            \node[fdf,ind] {atom [ 1 -- 3 ]}; \\
+            \node[fdf,ind] {atom 5 11}; \\
+            \node[fdf,ind] {atom -19}; \\
+            \node[fdf] {\%endblock}; \\
+        };
+      \end{scope}
+    \end{tikzpicture}
+    
+    \item TBtrans does everything else by it-self
+    \item A smaller device region drastically reduces required memory(!), and increases
+    throughput
+
+    \item In non-orthogonal basis ($\SO\neq \mathbf I$) \fdf{TBT.Atoms.Device.Connect} may
+    be useful
+
+  \end{itemize}
+
+  \incg[]{tbt-algorithm}
+  
+\end{frame}
+

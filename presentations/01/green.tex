@@ -135,6 +135,33 @@
       E_{\kk+\delta\kk}\approx \eta$. Otherwise band features will not be captured.
       
     \end{itemize}
+
+  \end{block}
+
+  \begin{block}<3->{Difference between diagonalisation and Green function methods}
+
+    \begin{columns}[t]
+      \column{.5\linewidth}
+
+      \begin{center}
+        Diagonalization
+
+        \Large 1D-sampling
+      \end{center}
+
+      $k$-points, all energy-eigenvalues
+
+      \column{.5\linewidth}
+
+      \begin{center}
+        Green functions
+
+        \Large 2D-sampling
+      \end{center}
+
+      $k$-point and $E$-points are both required to be sampled
+
+    \end{columns}
     
   \end{block}
 
@@ -164,6 +191,7 @@
 
       \item%
       $\SE$ is the \emph{self-energy} which is describing semi-infinite directions
+      (integrating out $k$ in that direction)
 
     \begin{center}
       
