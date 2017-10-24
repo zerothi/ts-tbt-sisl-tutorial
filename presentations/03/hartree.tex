@@ -21,7 +21,7 @@
     equation via Fourier transforms, i.e. periodic)
 
     \item Always remember that the self-energy \emph{forces} the boundary conditions,
-    i.e. long range potential decay may be forced too short
+    i.e. a long range decay-potential may be forced too short
 
   \end{itemize}
 
@@ -76,11 +76,11 @@
     The electrode Hartree potential are the boundary conditions.
 
     In TranSiesta this is accomplished by fixing the electrostatic potential at one of the
-    electrode planes (the one farthest from the device region).
+    electrode planes (the plane farthest from the device region).
 
     \begin{itemize}
       \item For $N_\idxE=2$ and aligned semi-infinite directions the potential profile can
-      easily be approximated by a linear ramp.
+      easily be approximated by a linear ramp $V(x) = ax+b$.
 
       \item For un-aligned semi-infinite directions (or $N_\idxE\neq2$) the potential
       profile cannot easily be approximated.
@@ -92,8 +92,9 @@
 
         \item A much better approach is to provide an \emph{external} potential profile
         guess, i.e. solve the boundary conditions using external Poisson
-        solvers\footnote{This may seem like a more daunting task than it is. The guess is
-            the Poisson solution \emph{without} charges, only the boundary conditions.}
+        solvers\footnote{\uncover<4->{This may seem like a more daunting task than it
+                is. The guess is the Poisson solution \emph{without} charges, only the
+                boundary conditions.}}
 
       \end{itemize}
     \end{itemize}
