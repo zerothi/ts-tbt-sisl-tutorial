@@ -265,6 +265,33 @@
 \end{framenologo}
 
 
+\subsection{The omnipotent pivoting scheme?}
+
+\begin{frame}
+  \frametitle{Pivoting for optimal BTD}
+  \framesubtitle{Analyzing the sparsity pattern}
+
+  \begin{center}
+    \texttt{transiesta -fdf TS.Analyze RUN.fdf}
+  \end{center}
+
+  \begin{itemize}[<+->]
+    \item Analysing all build-in pivoting schemes
+
+    \item Extremely fast
+
+    \item Atomic and/or orbital pivoting allowed (similar pivoting table)
+
+    \item Can be run on a single core machine for, practically any size of system(!)
+
+    \item Before starting big calculations, always do this analyse step! It takes
+    \emph{no} time and can save you many hours of computational time.
+
+    \item Example, select the one which uses the least amount of memory
+
+  \end{itemize}
+
+\end{frame}
 
 
 \subsection{Efficient calculation of the spectral function}
