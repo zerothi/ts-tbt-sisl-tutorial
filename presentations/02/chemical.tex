@@ -48,8 +48,14 @@
             %\node[fdf,ind] (NP-1) {contour.eq.pole.n $\langle \mathrm{int}\rangle_1$}; \\
             \node[fdf,ind] {contour.eq}; \\
             \node[fdf,iind] {begin}; \\
+            \only<5->{
             \node[fdf,lmark,iiind] (C-chem-1) {C-chem-1}; \\
             \node[fdf,lmark,iiind] (L-chem-1) {L-chem-1}; \\
+            }
+            \only<1-4>{
+            \node[fdf,iiind] (C-chem-1) {C-chem-1}; \\
+            \node[fdf,iiind] (L-chem-1) {L-chem-1}; \\
+            }
             \node[fdf,iind] {end}; \\
             \node[fdf] {\%endblock}; \\
         };
