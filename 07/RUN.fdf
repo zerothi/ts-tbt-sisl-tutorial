@@ -4,23 +4,9 @@
 # directly from command line
 TBT.HS DEVICE.nc
 
-# Sometimes the default pivoting algorithm
-# will produce "bad" partitions.
-# In this case we KNOW that the ordering of the
-# atoms is linear and there is no need to perform
-# any pivoting, the default input sequence will
-# partition the BTD very efficiently.
-TBT.BTD.Pivot none
-
-# We are ONLY interested in the transmission
-# in this example.
-# Thus we may reduce the device region to the smallest
-# region which disconnects the left and the right
-# electrode from each other. Doing this will greatly
-# increase throughput
-%block TBT.Atoms.Device
- atom  [4291 -- 4315]
-%endblock
+# Figure out how to save the self-energy function files
+# once, and then re-use them.
+# For reference they are named TBTGF files
 
 %block TBT.Elec.Left
   HS ELEC.nc
@@ -34,10 +20,10 @@ TBT.BTD.Pivot none
   electrode-position end -1
 %endblock TBT.Elec.Right
 
-# Reduce the energy-grid to [-0.05 : 0.5] eV
+# Reduce the energy-grid to [-0.005 : 0.5] eV
 %block TBT.Contour.line
   part line
-     from -0.05 eV to 0.5 eV
+     from -0.005 eV to 0.5 eV
       delta 0.01 eV
         method mid-rule
 %endblock TBT.Contour.line

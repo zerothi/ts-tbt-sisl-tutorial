@@ -1,0 +1,284 @@
+\section{Non-equilibrium Green function}
+
+\begin{framenologo}
+  \frametitle{Non-equilibrium Green function}
+  \tableofcontents[currentsection]
+\end{framenologo}
+
+\subsection{Variables}
+
+\begin{frame}
+  \frametitle{Non-equilibrium Green function}
+  \framesubtitle{Variables}
+
+  \begin{block}<+->{Important variables in Green function techniques}
+    
+    \begin{tabular}[c]{>{$}l<{$}|l}
+      \idxE & electrode index
+      \\
+      \HH_\kk & Hamiltonian
+      \\
+      \SO_\kk & Overlap, for orthogonal basis sets equals $\mathbf I$
+      \\
+      \DM_\kk & Density matrix
+      \\
+      \SE_\kk(\E)& Self-energy (not necessarily an electrode!)
+      \\
+      \Scat_{\idxE,\kk}(\E) & Scattering matrix from $\idxE$
+      \\
+      \G_\kk(\E) & Green function
+      \\
+      \Spec_{\idxE,\kk}(\E) & Spectral function originating from $\idxE$
+      \\
+      \T_{\idxE\mto\idxE'}(\E) & Transmission function from $\idxE$ to $\idxE'$
+      \\
+      \T_\idxE(\E) & Total transmission function out of $\idxE$
+    \end{tabular}
+
+  \end{block}
+  
+  \begin{block}<+->{Basic equations for Green function techniques}
+    \vskip-2ex
+\input{../equations.tex}
+  \end{block}
+
+\end{frame}
+
+
+\subsection{Density of states}
+
+\begin{frame}[label=DOS]
+  \frametitle{Non-equilibrium Green function}
+  \framesubtitle{Density of states}
+  
+  \begin{itemize}
+    \item Density of states over all orbitals
+    \begin{align*}
+      \mathrm{DOS}(\E) &= \Tr[\DM(\E) \SO]
+      \\
+      \mathrm{DOS}(\E) &= -\frac1\pi\Im\Tr[\G(\E) \SO]
+      \\
+      \mathrm{ADOS}(\E) &= \frac1{2\pi}\Re\Tr[\Spec_\idxE(\E) \SO]
+      \\
+      \mathrm{DOS}(\E) &=\sum_\idxE \mathrm{ADOS}(\E) + \text{bound states}
+    \end{align*}
+
+    \vspace{-2ex}
+
+    \item Local density of states on orbital $\nu$
+    \begin{align*}
+      \mathrm{DOS}_\nu(\E) &= [\DM(\E) \SO]_{\nu,\nu}
+      \\
+      \mathrm{DOS}_\nu(\E) &= -\frac1\pi\Im[\G(\E) \SO]_{\nu,\nu}
+      \\
+      \mathrm{ADOS}_\nu(\E) &= \frac1{2\pi}\Re[\Spec_\idxE(\E) \SO]_{\nu,\nu}
+      \\
+      \mathrm{DOS}_\nu(\E) &=\sum_\idxE \mathrm{ADOS}_\nu(\E) + \text{bound states}_\nu
+    \end{align*}
+
+    \vspace{-2ex}
+
+    \item<2->%
+    The overlap matrix is extremely important when calculating the density of states!
+
+    \item<3->%
+    $\SE$ broadens the DOS similarly to a large $\eta$ value, for states
+    coupling to the electrodes
+    
+  \end{itemize}
+
+  \only<2>{\hfill \hyperlink{integration<3>}{\beamergotobutton{Go to Rules of
+              integration}}}
+
+\end{frame}
+
+
+\subsection{Transmission}
+
+\begin{frame}
+  \frametitle{Non-equilibrium Green function}
+  \framesubtitle{Transmission}
+
+  \begin{block}<+->{Transmission}
+    \begin{itemize}
+      \item Transmission between any two electrodes $\T_{\idxE\mto\idxE'}$ 
+
+      \item Total transmission out of any electrode $\T_\idxE$ 
+
+      \item Reflection into electrode $\RE_\idxE$, note $\mathbf 1$ is the \emph{bulk}
+      transmission (open channels)
+
+    \end{itemize}
+    \vskip -2ex
+    \begin{align*}
+      \T_{\idxE\mto\idxE'}(\E) &=
+      \Tr\big[\Scat_{\idxE'}(\E)\G(\E)\Scat_{\idxE}(\E)\G^\dagger(\E)\big]\quad\text{, for $\idxE\neq\idxE'$}
+      \\
+      \T_{\idxE}(\E) &\equiv\sum_{\idxE'\neq\idxE}\T_{\idxE\mto\idxE'} (\E)
+      \\
+      \RE_\idxE(\E) &=\mathbf 1 -\T_\idxE (\E)
+      = \mathbf 1 -\Big\{
+      \im \Tr\big[(\G(\E)-\G^\dagger(\E))\Scat_\idxE(\E)\big]
+      -\Tr[\Scat_\idxE(\E) \G(\E)\Scat_\idxE(\E)\G^\dagger(\E)]
+      \Big\}
+    \end{align*}
+
+  \end{block}
+
+  \begin{block}<+->{Symmetries}
+    When time-reversal symmetry applies we have:
+    \begin{equation*}
+      \T_{\idxE\mto\idxE',\kk} = \T_{\idxE'\mto\idxE,\kk} = \T_{\idxE\mto\idxE',-\kk}
+    \end{equation*}
+  \end{block}
+  
+\end{frame}
+
+\begin{frame}
+  \frametitle{Non-equilibrium Green function}
+  \framesubtitle{Local currents/bond-currents}
+
+  \begin{block}<+->{Orbital/Bond currents}
+    Bond currents are \emph{local} currents flowing between two orbitals/bonds and are
+    associated with \emph{out-going} states from electrode $\idxE$
+    \begin{equation*}
+      \JJ_{\idxE,\nu\mu} = \frac e h \Im\big[
+      \Spec_{\idxE,\nu\mu}(\HH_{\mu\nu} - \E\SO_{\mu\nu})
+      -
+      \Spec_{\idxE,\mu\nu}(\HH_{\nu\mu} - \E\SO_{\nu\mu})\big]
+    \end{equation*}
+
+    The sum of bond-currents crossing \emph{any} device cross-section is equal to the
+    current between the leads. Without the prefactor $e/h$ this also applies for the
+    bond-transmissions\footnote{TBtrans calculates bond-\emph{transmissions}, although
+        they are named \emph{currents}.}.
+
+    The bond-currents obey Kirchoff's laws.
+    
+  \end{block}
+  
+  \begin{block}<+->{Symmetries}
+    \emph{NOTE}, even when time-reversal symmetry is present
+    \begin{align*}
+      \JJ_{\idxE,\kk,\nu\mu} &= - \JJ_{\idxE,\kk,\mu\nu}
+      \\
+      \JJ_{\idxE,\kk,\nu\mu} &\neq \JJ_{\idxE,-\kk,\nu\mu}
+    \end{align*}
+    hence when calculating bond-currents for periodic structures it is imperative to
+    average the \emph{entire} Brillouin zone. This may be understood from \emph{momentum}
+    considerations. 
+  \end{block}
+  
+\end{frame}
+
+
+\begin{frame}
+  \frametitle{Bond-current in periodic calculations}
+  \framesubtitle{Importance of Brillouin-zone averaging}
+
+  \vskip -6em
+  \begin{center}
+    \begin{itemize}
+      \item Square lattice
+      \item Periodicity along $x$ direction
+      \item Transport along $y$ direction
+      \item Bond-currents $k$-averaged
+    \end{itemize}
+  \end{center}
+
+  \begin{columns}
+    
+    \column{.5\linewidth}
+    \incg[width=.99\linewidth]{trs}
+    
+    \begin{itemize}
+      \item Sampled $k_x\in \big[0;\frac12\big]$
+    \end{itemize}
+
+    \column{.5\linewidth}
+    \incg[width=.99\linewidth]{no_trs}
+
+    \begin{itemize}
+      \item Sampled $k_x\in \big]-\frac12;\frac12\big]$
+    \end{itemize}
+
+  \end{columns}
+
+\end{frame}
+
+
+
+
+\begin{frame}
+  \frametitle{Non-equilibrium Green function}
+  \footnotesize
+
+  \vskip -2ex
+  \begin{columns}
+
+    \column{.5\textwidth}
+    \begin{block}{Basic equations}
+      \vskip-2ex
+\input{../equations.tex}
+    \end{block}
+
+    \column{.5\textwidth}
+    \begin{block}{Local Density of States}
+      \vskip-2ex
+      \begin{align*}
+        \rho_{\nu}(\E) &= -\frac1\pi\Im[\G(\E) \SO]_{\nu} = \sum_\idxE\rho_\nu^\idxE(\E) +
+        \text{bound states}
+        \\
+        \rho_{\nu}^{\idxE}(\E) &= \frac1{2\pi}\Re[\Spec_\idxE(\E) \SO]_{\nu}
+      \end{align*}
+    \end{block}
+
+  \end{columns}
+
+  \begin{block}{Transmission}
+    \vskip-2ex
+
+    \begin{align*}
+      \T_{\idxE\mto\idxE'}(\E) &=
+      \Tr\big[\Scat_{\idxE'}(\E)\G(\E)\Scat_{\idxE}(\E)\G^\dagger(\E)\big]\quad\text{, for $\idxE\neq\idxE'$}
+      \\
+      \T_{\idxE}(\E) &\equiv\sum_{\idxE'\neq\idxE}\T_{\idxE\mto\idxE'} (\E)
+      \\
+      \RE_\idxE(\E) & %=\mathbf 1 -\T_\idxE (\E)
+      = \mathbf 1 -\Big\{
+      \im \Tr\big[(\G(\E)-\G^\dagger(\E))\Scat_\idxE(\E)\big]
+      -\Tr[\Scat_\idxE(\E) \G(\E)\Scat_\idxE(\E)\G^\dagger(\E)]
+      \Big\}
+      \\
+      I_{\idxE\mto\idxE'} &= \frac{e^2}{h}\iint\cd\E\dd\kk\, \T_{\idxE\mto\idxE'}(\E)[n_{F,\idxE}(\E) - n_{F,\idxE'}(\E)].
+    \end{align*}
+
+  \end{block}
+
+  \begin{block}{Orbital current}
+      
+    \begin{equation*}
+      \JJ_{\idxE,\nu\mu} = \frac e h \Im\big[
+      \Spec_{\idxE,\nu\mu}(\HH_{\mu\nu} - \E\SO_{\mu\nu})
+      -
+      \Spec_{\idxE,\mu\nu}(\HH_{\nu\mu} - \E\SO_{\nu\mu})\big]
+    \end{equation*}
+
+  \end{block}
+
+  \begin{center}
+    Quantities depend on $\int_\BZ$, i.e. required $k$ points are typically \emph{very}
+    high for correct energy resolved physical quantities.
+
+    Related to the band-structure, a fine $k$-grid is necessary to correctly reproduce the
+    band-structure.
+  \end{center}
+  
+\end{frame}
+
+
+
+%%% Local Variables:
+%%% mode: latex
+%%% TeX-master: "talk"
+%%% End:

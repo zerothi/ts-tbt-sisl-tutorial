@@ -12,12 +12,11 @@ SolutionMethod transiesta
 # tselecs.sh script which enables easy
 # creation of input options for N-electrodes
 # (up to 9).
-# 
 
 TS.Voltage 0 eV
 
 # To perform bias calculations one is FORCED
-# to define the required *different* chemical
+# to define the *different* chemical
 # potentials.
 # Note that there will NEVER be more chemical
 # potentials than electrodes.
@@ -53,7 +52,7 @@ TS.Voltage 0 eV
     end
 %endblock TS.ChemPot.Right
 
-# From this energy the number of poles will be calculated
+# From this cutoff-energy the number of poles will be calculated
 # from the energy and the temperature.
 TS.Contours.Eq.Pole 2.5 eV
 
@@ -126,6 +125,9 @@ TS.Contours.Eq.Pole 2.5 eV
   electrode-position end -1
 %endblock
 
+####
+# TBtrans options follow
+####
 
 # Interpolation for the bias Hamiltonians
 # The default is a spline interpolation
@@ -133,13 +135,13 @@ TS.Contours.Eq.Pole 2.5 eV
 # Hamiltonian files and their respective
 # applied bias
 %block TBT.HS.Files
-   ../V0/siesta.TSHS   0.  eV
-   ../V0.5/siesta.TSHS 0.5 eV
-   ../V1.0/siesta.TSHS 1.  eV
+   ../TS_0/siesta.TSHS   0.  eV
+   ../TS_0.5/siesta.TSHS 0.5 eV
+   ../TS_1.0/siesta.TSHS 1.  eV
 %endblock
 
 # If one is only interested in the IV curves
-# one may easily reduce the integration to the
+# one may reduce the integration to the
 # energy window defined by the chemical potentials.
 # This will greatly increase throughput although the
 # transmission will be calculated in a very reduced
@@ -173,6 +175,7 @@ DM.UseSaveDM           true
 
 MD.NumCGSteps 0
 
+SaveElectrostaticPotential T
 SaveHS                          T
 
 %include ../STRUCT_DEVICE.fdf

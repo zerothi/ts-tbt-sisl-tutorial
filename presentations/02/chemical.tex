@@ -1,0 +1,345 @@
+\section{Input options}
+
+\begin{framenologo}
+  \frametitle{Input options}
+  \tableofcontents[currentsection]
+\end{framenologo}
+
+\subsection{Chemical potentials}
+
+
+\begin{frame}%[fragile]
+  \frametitle{Input options}
+  \framesubtitle{Chemical potentials}
+
+  \begin{itemize}
+    \item Define list of all different chemical potentials
+
+    \item<2-> Define each, different chemical potential
+
+    \item<3-> Remark their physical meaning
+
+  \end{itemize}
+
+  \begin{tikzpicture}[fixed node]
+    \def\chem{chem}
+    \def\bias{V/2}
+
+    \only<1-5>{
+        \begin{scope}[yshift=-2cm]
+          \matrix {
+              \node[fdf] {\%block TS.ChemPots}; \\
+              \node[fdf,ind,lmark] (chem-1) {\chem-1}; \\
+              \node[fdf,ind,lmark] (chem-2) {\chem-2}; \\
+              \node[fdf,ind] {...}; \\
+              \node[fdf] {\%endblock}; \\
+          };
+        \end{scope}
+    }
+
+    \uncover<2->{
+    \begin{scope}[xshift=4.1cm]
+      \begin{scope}
+        \matrix {
+            \node[fdf,rmark] (chem-b-1) {\%block TS.ChemPot.\chem-1}; \\
+            \node[fdf,ind] (mu-1) {mu \bias}; \\
+            \node[fdf,ind] (kT-1) {temp $k_BT_1$}; \\
+            \node[fdf,ind] (E-1) {contour.eq.pole $\langle \mathrm{energy}\rangle_1$}; \\
+            %\node[fdf,ind] (NP-1) {contour.eq.pole.n $\langle \mathrm{int}\rangle_1$}; \\
+            \node[fdf,ind] {contour.eq}; \\
+            \node[fdf,iind] {begin}; \\
+            \only<5->{
+            \node[fdf,lmark,iiind] (C-chem-1) {C-chem-1}; \\
+            \node[fdf,lmark,iiind] (L-chem-1) {L-chem-1}; \\
+            }
+            \only<1-4>{
+            \node[fdf,iiind] (C-chem-1) {C-chem-1}; \\
+            \node[fdf,iiind] (L-chem-1) {L-chem-1}; \\
+            }
+            \node[fdf,iind] {end}; \\
+            \node[fdf] {\%endblock}; \\
+        };
+      \end{scope}
+
+      \only<-5>{
+      \begin{scope}[yshift=-3.8cm]
+        \matrix {
+            \node[fdf,rmark] (chem-b-2) {\%block TS.ChemPot.\chem-2}; \\
+            \node[fdf,ind] (mu-2) {mu -\bias}; \\
+            \node[fdf,ind] (kT-2) {temp $k_BT_2$}; \\
+            \node[fdf,ind] (E-2) {contour.eq.pole $\langle \mathrm{energy}\rangle_2$}; \\
+            \node[fdf,ind] {\dots};\\
+
+            %\node[fdf,ind] (NP-2) {contour.eq.pole.n $\langle \mathrm{int}\rangle_2$}; \\
+            \node[fdf] {\%endblock}; \\
+        };
+      \end{scope}}
+    \end{scope}
+
+    \only<-5>{
+        \draw[->] (chem-1) -- ++(1.8,0) to[out=0,in=180] (chem-b-1);
+        \draw[->] (chem-2) -- ++(1.8,0) to[out=0,in=180] (chem-b-2);
+    }
+
+    }
+
+    \begin{scope}[xshift=8.2cm]
+      \uncover<3->{%
+          \matrix[yshift=2.5cm] {
+              \node {$n_{F,1}(E-$};
+              \&
+              \node[circle,draw=good] (chem-mu-1) {$\mu$};
+              \&
+              \node {$,$};
+              \&
+              \node[circle,draw=bad] (chem-kT-1) {$k_BT$};
+              \&
+              \node {$)$};
+              \\
+          };
+          \draw[->,good] (mu-1) to[out=0,in=-150] (chem-mu-1);
+          \draw[->,bad] (kT-1) to[out=0,in=-140] (chem-kT-1);
+
+      }
+
+      \uncover<3-5>{%
+          \matrix[yshift=-3cm] {
+              \node {$n_{F,2}(E-$};
+              \&
+              \node[circle,draw=good] (chem-mu-2) {$\mu$};
+              \&
+              \node {$,$};
+              \&
+              \node[circle,draw=bad] (chem-kT-2) {$k_BT$};
+              \&
+              \node {$)$};
+              \\
+          };
+          \draw[<-,good] (chem-mu-2) to[out=-160,in=0] (mu-2);
+          \draw[<-,bad] (chem-kT-2) to[out=-150,in=0] (kT-2);
+
+      }
+    \end{scope}
+
+    \uncover<4->{%
+        \begin{scope}[xshift=8.5cm,yshift=.75cm]
+          \draw (-1,0) -- ++(2,0);
+          \draw (0,0) node[below] {$\mu_1$} -- ++(0,1);
+          \foreach \pole in {0.2,0.4} {
+              \fill (0,\pole) circle (2pt);
+          }
+          \coordinate (E-pole-1) at (0,0.5);
+          \foreach \pole in {0.6,0.8,1} {
+              \draw (0,\pole) circle (2pt);
+          }
+        \end{scope}
+        \draw[->,thick,shorten >=4pt] (E-1) to[out=0,in=180] (E-pole-1);
+        
+    \only<-5>{%
+
+        \begin{scope}[xshift=8.4cm,yshift=-5cm]
+          \draw (-1,0) -- ++(2,0);
+          \draw (0,0) node[below] {$\mu_2$} -- ++(0,1);
+          \foreach \pole in {0.2,0.4,0.6} {
+              \fill (0,\pole) circle (2pt);
+          }
+          \coordinate (E-pole-2) at (0,0.7);
+          \foreach \pole in {0.8,1} {
+              \draw (0,\pole) circle (2pt);
+          }
+        \end{scope}
+        \draw[->,thick,shorten >=4pt] (E-2) to[out=0,in=180] (E-pole-2);
+}
+    }
+
+    \uncover<5->{
+        \def\eta{0.1}%
+        \def\radius{3.25}%
+        \def\lineS{-1}%
+        \def\poles{4}%
+        \def\poleSep{.25}%
+        % Calculate alpha angle
+        \pgfmathparse{\poleSep*(\poles+.5)/\radius}%
+        \edef\betaA{\pgfmathresult}%
+        \pgfmathparse{atan(\betaA)}%
+        \edef\alphaA{\pgfmathresult}%
+        \pgfmathparse{asin(\betaA)}%
+        \edef\betaA{\pgfmathresult}%
+        \begin{scope}[xshift=10cm, yshift=-2cm,scale=.5]
+          
+          % The axes
+          \begin{scope}[draw=gray!80!black,thick,->]
+            \draw (-2*\radius+\lineS-.5,0) -- (\radius+1.5,0) node[text=black,below] {$E$};
+            \draw (0,0) -- (0,\radius+.5) node[text=black,left] {$\Im$};
+          \end{scope}
+          \node[below] (mu-1) at (0,0) {$\mu_1$};
+          
+          % The specific coordinates on the path
+          \coordinate (EB) at (-2*\radius+\lineS,\eta);
+          \coordinate (C-mid) at ({-\radius+\lineS-sin(\alphaA)*\radius},{cos(\alphaA)*\radius});
+          \coordinate (C-end) at (\lineS,{\poleSep*(\poles+.5)});
+          \coordinate (L-end) at (\radius,{\poleSep*(\poles+.5)});
+          \coordinate (L-end-end) at (\radius+1,{\poleSep*(\poles+.5)});
+          \coordinate (real-L-end) at (\radius,\eta);
+          \coordinate (real-L-end-end) at (\radius+1,\eta);
+          
+          \begin{scope}[thick]
+            
+            % The path (we draw it backwards)
+            \draw[->-=.3,very thick,ok] (L-end) -- node[above right] (L) 
+            {$\mathcal L$} (C-end);
+            \draw[->-=.333,->-=.666,very thick,bad] (C-end) to[out=90+\betaA,in=\alphaA] (C-mid)
+            node[above] (C)
+            {$\mathcal C$} 
+            to[out=180+\alphaA,in=90] (EB);
+            \draw[->-=.25,->-=.75] (EB) -- (real-L-end) node[above left] {$\mathcal R$};
+
+            % draw the continued lines
+            \draw[densely dotted] (real-L-end) -- (real-L-end-end);
+            \draw[densely dotted] (L-end) -- (L-end-end);
+
+          \end{scope}
+          
+          % Draw the poles
+          \foreach \pole in {1,...,14} {
+              \ifnum\pole>\poles
+              \draw (0,\pole*\poleSep) circle (2pt);
+              \else
+              \fill (0,\pole*\poleSep) circle (2pt);        
+              \fi
+          }
+          \node[left,anchor=east] at (0,{\poleSep*(\poles/2+.5)}) {$z_\nu$};
+
+          % correct size
+          \path[use as bounding box] (-8,-.5) rectangle ++(13,4.5);
+
+          \draw[densely dotted] (real-L-end-end) to[out=0,in=0] (L-end-end);
+          \draw[densely dotted,thick] (EB) -- ++(-.5,0);
+
+        \end{scope}
+
+        \draw[->,thick,bad] (C) -- (C-chem-1);
+        \draw[->,thick,good] (L) -- (L-chem-1);
+
+    }
+    
+    \uncover<6->{
+        \begin{scope}[yshift=-3.5cm,xshift=.25cm]
+          \matrix {
+              \node[fdf,rmark] (dC-chem-1) {\%block TS.Contour.C-chem-1}; \\
+              \node[fdf,ind] {part circle}; \\
+              \node[fdf,iind] {from -40. eV + V/2 to -10 kT + V/2}; \\
+              \node[fdf,iind] {points 25}; \\
+              \node[fdf,iind] {method g-legendre}; \\
+              \node[fdf] {\%endblock}; \\
+          };
+        \end{scope}
+
+        \begin{scope}[yshift=-3.5cm,xshift=6cm]
+          \matrix {
+              \node[fdf,rmark] (dL-chem-1){\%block TS.Contour.L-chem-1}; \\
+              \node[fdf,ind] {part line}; \\
+              \node[fdf,iind] {from prev to inf}; \\
+              \node[fdf,iind] {points 12}; \\
+              \node[fdf,iind] {method g-fermi}; \\
+              \node[fdf] {\%endblock}; \\
+          };
+        \end{scope}
+        
+        \draw[->] (C-chem-1) -- (dC-chem-1);
+        \draw[->] (L-chem-1) -- (dL-chem-1);
+
+    }
+
+  \end{tikzpicture}
+  
+\end{frame}
+
+\subsection{Non-equilibrium contours}
+
+
+\begin{frame}%[fragile]
+  \frametitle{Input options}
+  \framesubtitle{Non-equilibrium}
+
+  \begin{block}{Non-equilibrium contour}
+
+    \begin{itemize}
+      \item The contour spans the entire bias-window
+      \item<3-> One may add additional lines to increase precision at certain energies
+    \end{itemize}
+    
+  \end{block}
+
+  \small
+
+  \begin{tikzpicture}[fixed node]
+    \begin{scope}
+      \matrix {
+          \node[fdf] {\%block TS.Contours.nEq}; \\
+          \node[fdf,ind,lmark] (lneq) {neq}; \\
+          \node[fdf] {\%endblock}; \\
+      };
+    \end{scope}
+
+    \uncover<2->{
+    \begin{scope}[xshift=6cm]
+      \matrix {
+          \node[fdf,rmark] (rneq) {\%block TS.Contour.nEq.neq}; \\
+          \node[fdf,ind] {part line}; \\
+          \node[fdf,iind] {from -5 kT -|V|/2 to |V|/2 + 5 kT}; \\
+          \node[fdf,iind] {delta 0.01 eV}; \\
+          \node[fdf,iind] {method mid-rule}; \\
+          \node[fdf] {\%endblock}; \\
+      };
+    \end{scope}
+    \draw[->] (lneq) -- ++(2.5,0) to[out=0,in=180] (rneq);
+    }
+  \end{tikzpicture}
+
+  \vskip 2em
+
+  \uncover<4->{
+      \begin{tikzpicture}[fixed node]
+        \begin{scope}
+          \matrix {
+              \node[fdf] {\%block TS.Contours.nEq}; \\
+              \node[fdf,ind,lmark] (lneq-1) {neq-1}; \\
+              \node[fdf,ind,lmark] (lneq-2) {neq-2}; \\
+              \node[fdf] {\%endblock}; \\
+          };
+        \end{scope}
+
+        \begin{scope}[xshift=6cm]
+          \matrix {
+              \node[fdf,rmark] (rneq-1) {\%block TS.Contour.nEq.neq-1}; \\
+              \node[fdf,ind] {part line}; \\
+              \node[fdf,iind] {from -5 kT -|V|/2 to 0 eV}; \\
+              \node[fdf,iind] {delta 0.02 eV}; \\
+              \node[fdf,iind] {method mid-rule}; \\
+              \node[fdf] {\%endblock}; \\
+          };
+        \end{scope}
+        \draw[->] (lneq-1) -- ++(2.5,0) to[out=0,in=180] (rneq-1);
+
+        \begin{scope}[xshift=6cm, yshift=-2.4cm]
+          \matrix {
+              \node[fdf,rmark] (rneq-2) {\%block TS.Contour.nEq.neq-2}; \\
+              \node[fdf,ind] {part line}; \\
+              \node[fdf,iind] {from prev to |V|/2 + 5 kT}; \\
+              \node[fdf,iind] {delta 0.005 eV}; \\
+              \node[fdf,iind] {method mid-rule}; \\
+              \node[fdf] {\%endblock}; \\
+          };
+        \end{scope}
+        \draw[->] (lneq-2) -- ++(2.5,0) to[out=0,in=180] (rneq-2);
+      \end{tikzpicture}
+  }
+  
+\end{frame}
+
+
+%%% Local Variables:
+%%% mode: latex
+%%% TeX-master: "talk"
+%%% End:

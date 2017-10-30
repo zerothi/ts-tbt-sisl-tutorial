@@ -1,0 +1,459 @@
+\section{Non-equilibrium Green function}
+
+\begin{framenologo}
+  \frametitle{Non-equilibrium Green function}
+  \tableofcontents[currentsection]
+\end{framenologo}
+
+\subsection{Density matrix}
+
+\begin{frame}
+  \frametitle{Density matrix}
+  \framesubtitle{Recollection of basic equations}
+
+  \begin{block}{Basic equations for Green function techniques}
+    \vskip-2ex
+\input{../equations.tex}
+  \end{block}
+
+\end{frame}
+
+\begin{frame}
+  \frametitle{Density matrix}
+  \framesubtitle{Equilibrium}
+
+  \begin{itemize}
+    \item All electrodes have same Fermi-distribution and here the density is easily
+    calculated using \emph{only} the Green function
+  \end{itemize}
+
+  \begin{block}<+->{Equilibrium density matrix $V=0$}
+    \vskip -2ex
+    \begin{align*}
+      \DM &= \frac1{2\pi}\iint_\BZ\dEBZ\cd \kk \dd\E\, %
+      \G_\kk \sum_\idxE\Scat_{\idxE,\kk} \G^\dagger_\kk\eikr n_F(\E) %
+      \\
+      \DE &= \frac i{2\pi}\iint_\BZ\dEBZ\cd \kk\dd\E\, %
+      \G_\kk \big[\SE_{\kk}-\SE^\dagger_{\kk} \big]
+      \G^\dagger_\kk\eikr n_F(\E) & \SE_\kk = \sum_\idxE \SE_{\idxE,\kk} %
+      \\
+      \DE & = \frac i{2\pi}\iint_\BZ\dEBZ\cd \kk\dd\E\, %
+      \G_\kk \left[%
+        \G^{\dagger,-1}_\kk - \G^{-1}_\kk + 2i\eta\SO_\kk %
+      \right]\G^\dagger_\kk\eikr n_F(\E)
+      \\
+      \DE & = \frac i{2\pi}\iint_\BZ\dEBZ\cd \kk\dd\E%
+      \left[\G_\kk  - \G^\dagger_\kk + 2i\eta\G_\kk\SO_\kk\G^\dagger_\kk %
+      \right]\eikr n_F(\E)
+      \\
+      &\approxeq \frac i{2\pi}\iint_\BZ\dEBZ\cd \kk\dd\E%
+      \left[\G_\kk  - \G^\dagger_\kk \right]\eikr n_F(\E)
+    \end{align*}
+  \end{block}
+  
+\end{frame}
+
+
+\begin{frame}
+  \frametitle{Density matrix}
+  \framesubtitle{Non-equilibrium}
+
+  \begin{itemize}
+    \item Electrodes \emph{may} have different Fermi-distribution (at least two different)
+  \end{itemize}
+
+  \begin{block}<+->{Non-equilibrium density matrix $V\neq0$}
+    \begin{itemize}
+      \item Non-equilibrium density may conveniently be split into an equilibrium part and
+      a non-equilibrium ``correction''
+    \end{itemize}
+    \begin{align*}
+      \DM &= \frac1{2\pi}\iint_\BZ\dEBZ\cd \kk \dd\E\, %
+      \G_\kk \sum_\idxE\Scat_{\idxE,\kk} \G^\dagger_\kk\eikr n_{F,\idxE}(\E) %
+      \\
+      \DM=\DE^\idxE+\DN^\idxE &=\DE^\idxE+
+      \frac1{2\pi}\sum_{\idxE'\neq\idxE}\iint_\BZ\dEBZ\cd \kk\dd\E\, %
+      \G_\kk \Scat_{\idxE',\kk}
+      \G^\dagger_\kk\eikr\big[n_{F,\idxE'}(\E)-n_{F,\idxE}(\E)\big]
+      \uncover<3->{
+      \\
+      \DM=\DE^\varsigma+\DN^\varsigma &=\DE^\varsigma+
+      \frac1{2\pi}\sum_{\idxE'\neq\varsigma}\iint_\BZ\dEBZ\cd \kk\dd\E\, %
+      \G_\kk \Scat_{\idxE',\kk}
+      \G^\dagger_\kk\eikr\big[n_{F,\idxE'}(\E)-n_{F,\varsigma}(\E)\big]
+      }
+    \end{align*}
+    \begin{itemize}
+      \item<+-> %
+      Note that if two electrodes have the same Fermi-distribution we have
+      $n_{F,\idxE}=n_{F,\idxE'}$
+
+      \item<+-> %
+      Enables the reduction of ($N_\idxE$) different equations to the number of different
+      chemical potentials ($N_\varsigma$)
+
+    \end{itemize}
+
+  \end{block}
+  
+\end{frame}
+
+
+\subsection{Numeric integration}
+
+\begin{frame}
+  \frametitle{Numeric integration}
+  \framesubtitle{Equilibrium}
+
+  Calculation of $\DE^\varsigma$:
+
+  \begin{center}
+    \def\eta{0.1}%
+    \def\radius{3.25}%
+    \def\lineS{-1}%
+    \def\poles{4}%
+    \def\poleSep{.25}%
+    % Calculate alpha angle
+    \pgfmathparse{\poleSep*(\poles+.5)/\radius}%
+    \edef\betaA{\pgfmathresult}%
+    \pgfmathparse{atan(\betaA)}%
+    \edef\alphaA{\pgfmathresult}%
+    \pgfmathparse{asin(\betaA)}%
+    \edef\betaA{\pgfmathresult}%
+    \begin{tikzpicture}[scale=.75]
+      
+      % The axes
+      \begin{scope}[draw=gray!80!black,thick,->]
+        \draw (-2*\radius+\lineS-.5,0) -- (\radius+1.5,0) node[text=black,below] {$E$};
+        \draw (0,0) -- (0,\radius+.5) node[text=black,left] {$\Im$};
+      \end{scope}
+      \node[below] at (0,0) {$\mu$};
+      
+      % The specific coordinates on the path
+      \coordinate (EB) at (-2*\radius+\lineS,\eta);
+      \coordinate (C-mid) at ({-\radius+\lineS-sin(\alphaA)*\radius},{cos(\alphaA)*\radius});
+      \coordinate (C-end) at (\lineS,{\poleSep*(\poles+.5)});
+      \coordinate (L-end) at (\radius,{\poleSep*(\poles+.5)});
+      \coordinate (L-end-end) at (\radius+1,{\poleSep*(\poles+.5)});
+      \coordinate (real-L-end) at (\radius,\eta);
+      \coordinate (real-L-end-end) at (\radius+1,\eta);
+      
+      \begin{scope}[thick]
+        
+        % The path (we draw it backwards)
+        \draw[->-=.3,very thick] (L-end) -- node[above right] 
+        {$\mathcal L$} (C-end);
+        \draw[->-=.333,->-=.666,very thick] (C-end) to[out=90+\betaA,in=\alphaA] (C-mid)
+        node[above] 
+        {$\mathcal C$}
+        to[out=180+\alphaA,in=90] (EB);
+        \draw[->-=.25,->-=.75] (EB) -- (real-L-end) node[above left] {$\mathcal R$};
+
+        % draw the continued lines
+        \draw[densely dotted] (real-L-end) -- (real-L-end-end);
+        \draw[densely dotted] (L-end) -- (L-end-end);
+
+      \end{scope}
+      
+      % Draw the poles
+      \foreach \pole in {1,...,14} {
+          \ifnum\pole>\poles
+          \draw (0,\pole*\poleSep) circle (2pt);
+          \else
+          \fill (0,\pole*\poleSep) circle (2pt);        
+          \fi
+      }
+      \node[left,anchor=east] at (0,{\poleSep*(\poles/2+.5)}) {$z_\nu$};
+
+      % correct size
+      \path[use as bounding box] (-8,-.5) rectangle ++(13,4.5);
+
+      \draw[densely dotted] (real-L-end-end) to[out=0,in=0] (L-end-end);
+      \draw[densely dotted,thick] (EB) -- ++(-.5,0);
+
+      \uncover<2->{
+          \begin{scope}
+            \def\muS{.5}%
+            \node[below] at (\muS,0) {$\mu'$};
+
+            
+      % The specific coordinates on the path
+      \coordinate (EB) at (-2*\radius+\lineS+\muS,\eta);
+      \coordinate (C-mid) at ({-\radius+\lineS-sin(\alphaA)*\radius+\muS},{cos(\alphaA)*\radius});
+      \coordinate (C-end) at (\lineS+\muS,{\poleSep*(\poles+.5)});
+      \coordinate (L-end) at (\radius+\muS,{\poleSep*(\poles+.5)});
+      \coordinate (L-end-end) at (\radius+1+\muS,{\poleSep*(\poles+.5)});
+      \coordinate (real-L-end) at (\radius+\muS,\eta);
+      \coordinate (real-L-end-end) at (\radius+1+\muS,\eta);
+      
+      \begin{scope}[thick,color=good]
+        
+        % The path (we draw it backwards)
+        \draw[->-=.3,very thick] (L-end) -- node[above right] 
+        {$\mathcal L$} (C-end);
+        \draw[->-=.333,->-=.666,very thick] (C-end) to[out=90+\betaA,in=\alphaA] (C-mid)
+        node[above] 
+        {$\mathcal C$}
+        to[out=180+\alphaA,in=90] (EB);
+        \draw[->-=.25,->-=.75] (EB) -- (real-L-end) node[above left] {$\mathcal R$};
+
+        % draw the continued lines
+        \draw[densely dotted] (real-L-end) -- (real-L-end-end);
+        \draw[densely dotted] (L-end) -- (L-end-end);
+
+      \end{scope}
+      
+      % Draw the poles
+      \foreach \pole in {1,...,14} {
+          \ifnum\pole>\poles
+          \draw (\muS,\pole*\poleSep) circle (2pt);
+          \else
+          \fill (\muS,\pole*\poleSep) circle (2pt);        
+          \fi
+      }
+
+      \draw[densely dotted] (real-L-end-end) to[out=0,in=0] (L-end-end);
+      \draw[densely dotted,thick] (EB) -- ++(-.5,0);
+    \end{scope}
+
+}
+
+    \end{tikzpicture}
+  \end{center}
+
+  \begin{equation*}
+    \oint\cd \E = 
+    \textcolor{good}{\int_{\mathcal{R}}\cd \E} +
+    \int_{\mathcal{L}}\cd \E +
+    \int_{\mathcal{C}}\cd \E
+    = 
+    i2\pi \sum_\nu z_\nu
+  \end{equation*}
+
+  \vskip 1em
+  Applying the residue theorem from complex analysis.
+
+\end{frame}
+
+\begin{frame}
+  \frametitle{Numeric integration}
+  \framesubtitle{Equilibrium}
+
+  \begin{block}{Example of numeric integration of equilibrium contour}
+    \begin{itemize}
+      \item Ensure the lowest integrated energy is \emph{far} below the lowest
+      eigenvalue of your system
+    \end{itemize}
+    
+    \begin{center}
+      \begin{tikzpicture}[scale=.8]
+        \begin{axis}[width=14cm,height=8cm,name=circ,only marks,
+          ymin=0,ymax=15.5,xmin=-31,xmax=1.5,
+          xtick={-28,-24,-20,-16,-12,-8,-4},
+          extra x ticks={0.25},extra x tick label={$\mu$},
+          xlabel={Real Energy [eV]},
+          ylabel={Imaginary Energy [eV]}]
+          \addplot table {../data/EQ_circle.dat};
+          \addplot table {../data/EQ_fermi.dat};
+          \addplot table {../data/EQ_pole.dat};
+          \draw[densely dashed,green!50!black,very thick] (axis cs:-30,0.1) --
+          (axis cs:2,0.1);
+          \draw[->,>=latex] (axis cs:-.5,0) -- (axis cs:-8.75,2.2);
+          \draw[->,>=latex] (axis cs:-.5,1.25) -- (axis cs:-8.75,10.75);
+          \node[rotate=35] at (axis cs:-21.5,11.5) {Gauss-Legendre};
+        \end{axis}
+        \begin{axis}[width=6cm,height=5cm,only marks,
+          at={($(circ.south)+(0,1cm)$)},anchor=south,
+          xtick={-0.5,0,0.5},
+          extra x ticks={0.25},extra x tick label={$\mu$},
+          xmin=-.5,xmax=.75,ymin=0,ymax=1.3]
+          \addplot table {../data/EQ_circle.dat};
+          \addplot table {../data/EQ_fermi.dat};
+          \addplot table {../data/EQ_pole.dat};
+          \draw[<->] (axis cs:.3,0.568494) -- node[sloped,anchor=south] {$2\pi k_BT$} (axis cs:.3,0.406067);
+          \draw[densely dashed,green!50!black,very thick] 
+          (axis cs:-1,0.03) -- (axis cs:1,0.03);
+          \node[anchor=south] at (axis cs:0.25,1) {Gauss-Fermi};
+          \node[rotate=90,anchor=south] at (axis cs:0.25,.5) {Poles};
+        \end{axis}
+      \end{tikzpicture}
+
+    \end{center}
+  \end{block}
+
+\end{frame}
+
+\begin{frame}
+  \frametitle{Numeric integration}
+  \framesubtitle{Algorithms}
+
+  \begin{block}{Quadrature methods}
+    TranSiesta implements a wide range of quadrature methods
+    \begin{itemize}[<+->]
+      \item Newton-Cotes quadratures
+      \item Gauss-Legendre
+      \begin{itemize}[<.->]
+        \item<+-> Even quadrature method ($-x_{-i} = x_i$)
+        \item Opportunity to only integrate half of the interval
+      \end{itemize}
+      \item Continued fraction
+      \item \dots
+    \end{itemize}
+  \end{block}
+
+  \begin{center}
+    \begin{tikzpicture}[scale=.8]
+      \begin{axis}[width=17cm,height=8cm,only marks,
+        ymin=0,ymax=20.5,xmin=-41,xmax=1.5,
+        xtick={-36,-32,-28,-24,-20,-16,-12,-8,-4},
+        xlabel={Real Energy [eV]},
+        ylabel={Imaginary Energy [eV]}]
+        \only<1>{
+        \addplot+[red!70!black] table {../data/siesta_30_simpson.dat};}
+        \only<2>{
+        \addplot+[blue!70!black] table {../data/siesta_30_legendre.dat};}
+        \only<3->{
+        \addplot+[green!70!black] table {../data/siesta_30_legendre_right.dat};}
+      \end{axis}
+    \end{tikzpicture}
+  \end{center}
+  
+  \doicite{Papior \etal: \doi{10.1016/j.cpc.2016.09.022}}
+
+\end{frame}
+
+
+\begin{frame}
+  \frametitle{Numeric integration}
+  \framesubtitle{Non-equilibrium}
+
+  \begin{block}{Example of numeric integration of non-equilibrium contour}
+    The non-equilibrium density is conceptually much easier:
+    \begin{equation*}
+      \DN \propto n_{F,\idxE}(\E) - n_{F,\idxE'}(\E)
+    \end{equation*}
+
+    \begin{center}
+      \begin{tikzpicture}[scale=.8]
+        \begin{axis}[width=15cm,height=8cm,
+          ymin=0,ymax=2,xmin=-1,xmax=1,gen/.style={only marks,opacity=.7},
+          xlabel={Energy [eV]},
+          ylabel={Weight}]
+          \only<1>{
+              %\addplot[gen,bad,domain=-.3:.3,samples=25] {1./(exp((x-0.25)/0.01) + 1)-
+              %    1./(exp((x+0.25)/0.01) + 1)};
+              \addplot[gen,good,domain=-.55:.55,samples=30] {1./(exp((x-0.5)/0.01)
+                  + 1)- 1./(exp((x+0.5)/0.01) + 1)};
+              %\draw[<->,bad,very thick] (axis cs:-.25, 0.3) -- (axis cs:.25,0.3) node[midway,above]
+              %{$n_F(\E+0.25\,\mathrm{eV}) - n_F(\E-0.25\,\mathrm{eV})$};
+              \draw[<->,good,very thick] (axis cs:-.5, 1.3) -- (axis cs:.5,1.3) node[midway,above]
+              {$n_F(\E+0.5\,\mathrm{eV}) - n_F(\E-0.5\,\mathrm{eV})$};
+              \node[below left] at (rel axis cs:.9,.9) {2 different $\mu$};
+          }
+          \only<2>{
+              \addplot[gen,ok,domain=-.05:0.55,samples=25] {1./(exp((x-0.5)/0.01)+1)-1./(exp((x)/0.01)+1)};
+              \addplot[gen,good,domain=-.55:.55,samples=30] {1./(exp((x-0.5)/0.01)+1)-1./(exp((x+0.5)/0.01)+1)};
+              \addplot[gen,bad,domain=-.55:.05,samples=25] {1./(exp((x)/0.01)+1)- 1./(exp((x+0.5)/0.01)+1)};
+              \draw[<->,very thick,bad] (axis cs:-.5, 0.6) -- (axis cs:0,0.6) node[midway,above] 
+              {$n_F(\E) - n_F(\E-0.5\,\mathrm{eV})$};
+              \draw[<->,very thick,ok] (axis cs:0, 0.2) -- (axis cs:0.5,0.2) node[midway,above]
+              {$n_F(\E+0.5\,\mathrm{eV}) - n_F(\E)$};
+              \draw[<->,very thick,good] (axis cs:-.5, 1.3) -- (axis cs:.5,1.3) node[midway,above]
+              {$n_F(\E+0.5\,\mathrm{eV}) - n_F(\E-0.5\,\mathrm{eV})$};
+
+              \node[below left] at (rel axis cs:.9,.9) {3 different $\mu$};
+          }
+
+        \end{axis}
+      \end{tikzpicture}
+    \end{center}
+  \end{block}
+
+\end{frame}
+
+
+% Skip the last summation of results page
+\endinput
+
+\begin{frame}
+  \frametitle{Non-equilibrium Green function}
+  \footnotesize
+
+  \vskip -2ex
+  \begin{columns}
+
+    \column{.5\textwidth}
+    \begin{block}{Basic equations}
+      \vskip-2ex
+\input{../equations.tex}
+    \end{block}
+
+    \column{.5\textwidth}
+    \begin{block}{Local Density of States}
+      \vskip-2ex
+      \begin{align*}
+        \rho_{\nu}(\E) &= -\frac1\pi\Im[\G(\E) \SO]_{\nu} = \sum_\idxE\rho_\nu^\idxE(\E) +
+        \text{bound states}
+        \\
+        \rho_{\nu}^{\idxE}(\E) &= \frac1{2\pi}\Re[\Spec_\idxE(\E) \SO]_{\nu}
+      \end{align*}
+    \end{block}
+
+  \end{columns}
+
+  \begin{block}{Density matrix using non-equilibrium Green functions}
+    \vskip -2ex
+    \begin{align*}
+      \DM &=\frac1{2\pi}
+      \iint_\BZ\dEBZ\cd \kk \dd\E\, \sum_\idxE\Spec_{\idxE,\kk}(\E) n_{F,\idxE}(\E)
+      \eikr
+      \\
+      \DM^\varsigma &=\frac i{2\pi}\iint_\BZ\dEBZ\cd \kk\dd\E%
+      \left[\G_\kk  - \G^\dagger_\kk \right]\eikr n_{F,\varsigma}(\E)
+      +
+      \frac1{2\pi}\sum_{\idxE|\varsigma_\idxE\neq\varsigma}\iint_\BZ\dEBZ\cd \kk\dd\E\, %
+      \G_\kk \Scat_{\idxE,\kk}
+      \G^\dagger_\kk\eikr\big[n_{F,\varsigma_\idxE}(\E)-n_{F,\varsigma}(\E)\big]
+      & \text{$\varsigma = \{\mu, k_BT\}$}
+    \end{align*}
+  \end{block}
+
+  \begin{block}{Transmission}
+    \vskip-2ex
+    \begin{columns}
+      
+      \column{.45\linewidth}
+      \begin{align*}
+        \T_{\idxE\mto\idxE'}(\E) &=
+        \Tr\big[\Scat_{\idxE'}(\E)\G(\E)\Scat_{\idxE}(\E)\G^\dagger(\E)\big]\quad\text{, for $\idxE\neq\idxE'$}
+        \\
+        \T_{\idxE}(\E) &\equiv\sum_{\idxE'\neq\idxE}\T_{\idxE\mto\idxE'} (\E)
+        \\
+        \RE_\idxE(\E) & %=\mathbf 1 -\T_\idxE (\E)
+        = \mathbf 1 -\Big\{
+        \im \Tr\big[(\G(\E)-\G^\dagger(\E))\Scat_\idxE(\E)\big]
+        -\Tr[\Scat_\idxE(\E) \G(\E)\Scat_\idxE(\E)\G^\dagger(\E)]
+        \Big\}
+        \\
+        I_{\idxE\mto\idxE'} &= \frac{e^2}{h}\iint\cd\E\dd\kk\, \T_{\idxE\mto\idxE'}(\E)[n_{F,\idxE}(\E) - n_{F,\idxE'}(\E)].
+      \end{align*}
+
+      \column{.41\linewidth}
+      \vskip -2em
+      \begin{equation*}
+        \JJ_{\idxE,\nu\mu} = \frac e h \Im\big[
+        \Spec_{\idxE,\nu\mu}(\HH_{\mu\nu} - \E\SO_{\mu\nu})
+        -
+        \Spec_{\idxE,\mu\nu}(\HH_{\nu\mu} - \E\SO_{\nu\mu})\big]
+      \end{equation*}
+
+    \end{columns}
+  \end{block}
+  
+\end{frame}
+
+
+%%% Local Variables:
+%%% mode: latex
+%%% TeX-master: "talk"
+%%% End:

@@ -1,22 +1,22 @@
 #!/bin/bash
 
-url=www.student.dtu.dk/~nicpa/sisl/workshop/16
+url=www.student.dtu.dk/~nicpa/sisl/workshop/17
 
 function _help {
-    echo "This script may be used to install the dependencies for"
-    echo "the tutorial such as Python, numpy, scipy and sisl."
+    echo "This script may be used to install the dependencies for the"
+    echo "tutorial such as Python, numpy, scipy matplotlib, jupyter and sisl."
     echo ""
     echo "This script is a two-step script. Please read below."
     echo ""
-    echo "If you do not Python, numpy, scipy or sisl installed you should probably run"
-    echo "this script in installation mode:"
+    echo "If you do not have Python, numpy, scipy, jupyter, matplotlib or sisl installed"
+    echo "you should probably run this script in installation mode:"
     echo ""
     echo "  $0 install"
     echo ""
     echo "If you have a working Python installation with pip you may only need"
     echo "to run"
     echo ""
-    echo "  pip install --upgrade numpy scipy netCDF4 sisl"
+    echo "  pip install --upgrade numpy scipy matplotlib netCDF4 jupyter sisl"
     echo ""
     echo "Once the above steps are fulfilled you should run the download part"
     echo "of the script. It will download the required files for the tutorial:"
@@ -75,7 +75,8 @@ case $1 in
 	if [ $? -eq 0 ]; then
 	    mv $cwd/new_$base $cwd/$base
 	    chmod u+x $cwd/$base
-	    echo "Succesfully updated the script..."
+	    echo ""
+	    echo "Successfully updated the script..."
 	    rm $cwd/old_$base
  	fi
 	exit 0
@@ -87,7 +88,7 @@ case $1 in
 	echo "###########################################"
 	echo "# Unknown argument: $1"
 	echo "#"
-	echo "# Should be either 'install' or 'download'"
+	echo "# Should be either 'install', 'update' or 'download'"
 	echo "#"
 	echo "###########################################"
 	echo ""
@@ -102,16 +103,21 @@ function linux_install {
 
     # First ensure that the correct packages are installed
     for p in gcc gfortran libhdf5-dev libnetcdf-dev libnetcdff-dev python-dev python-tk python-pip python-pip-whl libatlas3-base liblapack3 libfreetype6-dev libpng12-dev
-	do 
-		sudo apt-get install $p
+    do
+	sudo apt-get install $p
     done
     
     # Perform the Python installation
-    pip install --upgrade six numpy scipy matplotlib netCDF4 sisl
+    pip install --upgrade six numpy scipy matplotlib netCDF4 jupyter sisl
     if [ $? -ne 0 ]; then
 	echo "pip failed to install the packages, will try to install"
 	echo "in your user directory, if this fails you will have to fix it"
-	pip install --user --upgrade six numpy scipy matplotlib netCDF4 sisl
+	pip install --user --upgrade six numpy scipy matplotlib netCDF4 jupyter sisl
+	if [ $? -ne 0 ]; then
+	    echo ""
+	    echo "pip failed to install the packages, in either the global or user domain."
+	    echo "Please try and get pip to work and re-run the installation proceduce."
+	fi
     fi
     
     # You probably need to add to the path, this is a simplistic way of
@@ -120,12 +126,14 @@ function linux_install {
     if [ $? -eq 1 ]; then
 	echo "" >> ~/.bashrc
 	echo "export PATH=\$HOME/.local/bin:\$PATH" >> ~/.bashrc
+	echo ""
 	echo "PLEASE RESTART YOUR SHELL!"
     fi
     grep "/.local/lib/python2.7" ~/.bashrc > /dev/null
     if [ $? -eq 1 ]; then
 	echo "" >> ~/.bashrc
 	echo "export PYTHONPATH=\$HOME/.local/lib/python2.7/site-packages:\$PYTHONPATH" >> ~/.bashrc
+	echo ""
 	echo "PLEASE RESTART YOUR SHELL!"
     fi
     exit 0
@@ -162,6 +170,8 @@ function macos_install {
 
     # Now try and install gcc (it should also include gfortran)
     my_brew install gcc
+    # Ensure wget is installed
+    my_brew install wget --with-libressl
 
     # Add the science tap
     my_brew tap homebrew/science
@@ -171,11 +181,16 @@ function macos_install {
     my_brew install python
     sudo easy_install pip
 
-    pip install --upgrade six numpy scipy matplotlib netCDF4 sisl
+    pip install --upgrade six numpy scipy matplotlib netCDF4 jupyter sisl
     if [ $? -ne 0 ]; then
 	echo "pip failed to install the packages, will try to install"
 	echo "in your user directory, if this fails you will have to fix it"
-	pip install --user --upgrade six numpy scipy matplotlib netCDF4 sisl
+	pip install --user --upgrade six numpy scipy matplotlib netCDF4 jupyter sisl
+	if [ $? -ne 0 ]; then
+	    echo ""
+	    echo "pip failed to install the packages, in either the global or user domain."
+	    echo "Please try and get pip to work and re-run the installation proceduce."
+	fi
     fi
     exit 0
 }
@@ -218,16 +233,17 @@ function download_warning {
 }
 
 function dwn_file {
+    local rname=$1
+    local outname=$1
+    if [ $# -eq 2 ]; then
+	outname=$2
+    fi
     if [ ! -e $1 ]; then
-	if [ $# -eq 2 ]; then
-	    wget -O $2 $url/$(basename $1)
-	else
-	    wget -O $1 $url/$(basename $1)
-	fi
+	wget -O $outname $url/$(basename $rname)
 	if [ $? -eq 0 ]; then
-	    chmod u+x $1
+	    chmod u+x $outname
 	else
-	    rm -f $1
+	    rm -f $outname
 	fi
     fi
 }
@@ -240,23 +256,33 @@ pushd $indir
 
 # Now download the executables
 mkdir -p bin
+
+# Download latest tutorial files
+dwn_file sisl-TBT-TS.tar.gz
+
 case $os in
     linux)
 	dwn_file bin/transiesta
 	dwn_file bin/tbtrans
 	;;
     macos)
-	echo Please retry this script later, the executables
-	echo are not present at the current moment.
-	#dwn_file bin/transiesta_mac bin/transiesta
-	#dwn_file bin/tbtrans_mac bin/tbtrans
+	dwn_file bin/transiesta_mac bin/transiesta
+	dwn_file bin/tbtrans_mac bin/tbtrans
 	;;
 esac
 
 # We will simply add it if it does not exist
+# We also assume the SHELL is BASH
 if ! `grep $indir ~/.bashrc` ; then
     echo "" >> ~/.bashrc
     echo "# Variable for the TBT-TS-sisl workshop" >> ~/.bashrc
     echo "export PATH=$indir/bin:\$PATH" >> ~/.bashrc
     echo "" >> ~/.bashrc
 fi
+
+echo ""
+echo "In folder TBT-TS-sisl-workshop you will find everything needed for the tutorial"
+echo "If you use BASH (most likely) you should have transiesta and tbtrans in your path."
+echo "Run (after you have restarted your shell):"
+echo "  which tbtrans"
+echo "and check it returns $indir/bin/tbtrans"

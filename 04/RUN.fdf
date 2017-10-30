@@ -2,6 +2,8 @@ TBT.HS DEVICE.nc
 
 # This is also a transverse periodic system and
 # again the k-mesh is important for converged results.
+# In this example you shouldn't converge the k-point
+# sampling. You can do that in the next example.
 TBT.k [5 1 1]
 
 # Define which physical quantites to calculate.
@@ -17,6 +19,9 @@ TBT.T.All true
 TBT.T.Bulk true
 TBT.T.Eig 5
 TBT.Current.Orb true
+
+# This flag is necessary to obtain the "correct"
+# bond-currents
 TBT.Symmetry.TimeReversal false
 
 

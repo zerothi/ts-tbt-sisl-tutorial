@@ -10,6 +10,7 @@ do
     sdata siesta.TBT.nc \
 	  --atom 21:60 --dos --ados $elec \
 	  --atom 81:90 --dos --ados $elec \
+	  --atom : --dos --ados $elec \
 	  --out atomic-DOS-$elec.dat
 done
 

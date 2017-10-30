@@ -1,0 +1,11 @@
+# Contour path for the equilibrium contour segment.
+# This segment belongs to the chemical potential: Left
+# It has the chemical potential:
+#    0.25000 eV
+#  Re(c) [eV]    Im(c) [eV]         Re(w)         Im(w)
+ 0.250000E+00  0.812134E-01  0.000000E+00 -0.119381E-01
+ 0.250000E+00  0.243640E+00  0.000000E+00 -0.119381E-01
+ 0.250000E+00  0.406067E+00  0.000000E+00 -0.119381E-01
+ 0.250000E+00  0.568494E+00  0.000000E+00 -0.119381E-01
+ 0.250000E+00  0.730920E+00  0.000000E+00 -0.119381E-01
+ 0.250000E+00  0.893347E+00  0.000000E+00 -0.119381E-01

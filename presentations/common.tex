@@ -1,0 +1,257 @@
+\def\classopts{11pt}
+\input ../beamertemplate.tex
+
+\definecolor{good}{cmyk}{0.50, 0.00, 0.70, 0.20}
+\definecolor{bad}{cmyk}{0.00, 0.50, 1.00, 0.50}
+\definecolor{ok}{cmyk}{0.50, 0.10, 1.00, 0.50}
+\definecolor{check}{cmyk}{0.90, 0.20, 0.20, 0.40}
+
+\mode<handout>{%
+    \nofiles % do not overwrite 
+    \usetheme{workshopdtu}
+}
+\mode<presentation>
+{
+    \usetheme{workshopdtu}
+}
+
+\usepackage{listings}
+\usepackage{fancyvrb}
+
+% Change logo to cecam
+%\logo{\includegraphics[width=\logosize]{SIESTA_small}}
+
+% Explicitly set the compatibility version
+\pgfplotsset{compat=1.15}
+
+
+\usetikzlibrary{%
+    fadings,calc,arrows,
+    positioning,
+    decorations,
+    decorations.markings,
+    decorations.pathreplacing,
+    decorations.text,
+    matrix,
+}
+
+\tikzset{
+    ->-/.style={postaction={decorate},decoration={%
+            markings,mark=at position #1 with {\arrow[line width=2pt]{stealth}}%
+        }%
+    },%
+    ->-/.default=.5,%
+    -<-/.style={postaction={decorate},decoration={%
+            markings,mark=at position #1 with {\arrowreversed[line width=2pt]{stealth}}%
+        }%
+    },%
+    -<-/.default=.5,%
+}
+
+\usepackage[export]{adjustbox}
+\usepackage{biblatex}
+\bibliography{refs}
+
+
+\def\tsiesta{\texttt{transiesta}}
+\def\siesta{\texttt{siesta}}
+\def\tbt{\texttt{tbtrans}}
+\def\fdf#1{\texttt{#1}}
+\def\mcite#1{{\small \citeauthor{#1}, DOI: \citefield{#1}{doi}}}
+
+\newwrite\foundfile
+\immediate\openout\foundfile=\jobname.foundfiles
+\newwrite\nonfoundfile
+\immediate\openout\nonfoundfile=\jobname.nonfoundfiles
+
+
+
+\makeatletter
+\newcommand\incg[2][]{%
+    \bgroup%
+    \let\tmp@file\relax%
+    \incg@check{#2}{png}%
+    \ifx\tmp@file\relax%
+      \incg@check{#2}{pdf}%
+    \fi%
+    \ifx\tmp@file\relax%
+      \incg@check{#2}{jpg}%
+    \fi%
+    \ifx\tmp@file\relax%
+      \incg@check{#2}{jpeg}%
+    \fi%
+    \ifx\tmp@file\relax%
+      \immediate\write\nonfoundfile{#2}%
+      \rule{3cm}{4cm}%
+    \else%
+      \immediate\write\foundfile{\tmp@file}%
+      \includegraphics[#1]{\tmp@file}%
+    \fi%
+    \let\tmp@file\relax%
+    \egroup%
+}
+\newcommand\incg@check[2]{%
+    \IfFileExists{#1.#2}{%
+        % It does
+        \edef\tmp@file{#1.#2}%
+    }{}%
+    \ifx\tmp@file\relax%
+      \IfFileExists{fig/#1.#2}{%
+          % It does
+          \edef\tmp@file{fig/#1.#2}%
+      }{}%
+    \fi%
+    \ifx\tmp@file\relax%
+      \IfFileExists{../fig/#1.#2}{%
+          % It does
+          \edef\tmp@file{../fig/#1.#2}%
+      }{}%
+    \fi%
+    \ifx\tmp@file\relax%
+      \IfFileExists{people/#1.#2}{%
+          % It does
+          \edef\tmp@file{people/#1.#2}%
+      }{}%
+    \fi%
+}
+\makeatother
+
+
+% Define all variables used in this paper
+\newcommand\G{\mathbf{G}}
+\newcommand\Spec{\mathcal{A}}
+\newcommand\Gr{\mathbf{G}^r}
+\newcommand\Ga{\mathbf{G}^a}
+\newcommand\HH{\mathbf{H}}
+\newcommand\VV{\mathbf{V}}
+\newcommand\DM{\boldsymbol{\rho}}
+\newcommand\DE{\DM_\Eq}
+\newcommand\DN{\DM_\Neq}
+\newcommand\ncor{\boldsymbol{\Delta}}
+\newcommand\SO{\mathbf{S}}
+\newcommand\SE{\boldsymbol{\Sigma}}
+\newcommand\Scat{\boldsymbol{\Gamma}}
+\newcommand\kk{\mathbf{k}}
+\newcommand\RR{\mathbf{R}}
+\newcommand\rr{\mathbf{r}}
+\newcommand\im{\mathfrak{i}}
+\newcommand\ID{\mathbf{I}}
+\newcommand\sumE{\sum^{\mathfrak{E}}}
+\newcommand\NE{\mathfrak{E}}
+\newcommand\idxE{\mathfrak{e}}
+\newcommand\sumU{\sum^{\NU}}
+\newcommand\NU{N_\mu}
+\newcommand\idxU{\mu}
+\newcommand\cd{\!\dd}
+\newcommand\Cd{\!\!\dd}
+\newcommand\dd{\mathrm{d}}
+\newcommand\E{\epsilon}
+\newcommand\JJ{\mathcal{J}}
+\newcommand\BZ{\mathrm{BZ}}
+\newcommand\Eq{\mathrm{eq}}
+\newcommand\Neq{\mathrm{neq}}
+\newcommand\varneq{\boldsymbol{\beta}}
+\DeclareMathOperator\Var{Var}
+\DeclareMathOperator\Tr{Tr}
+\newcommand\dEBZ{\!\!\!\!\!\!\!\!}
+\newcommand\dE{\!\!\!\!}
+\newcommand\DOS{\mathrm{DOS}}
+\newcommand\T{\mathcal{T}}
+\newcommand\RE{\mathcal{R}}
+\def\mto{\rightarrow}
+\newcommand\mrc[2]{%
+    \bgroup%
+    \{#1,#2\}%
+    \egroup%
+}
+\newcommand\eikr{e^{-\im\kk\cdot\RR}}
+
+\def\etal{\emph{et.al.}}
+\newcommand\doi[1]{\href{https://dx.doi.org/#1}{#1}}
+
+
+\colorlet{cm1}{green!80!black}
+\colorlet{cm2}{red!80!black}
+\tikzset{
+    s >/.style={shorten >=#1},
+    s >/.default=4pt,
+    s </.style={shorten <=#1},
+    s </.default=4pt,
+    s <>/.style={s >=#1,s <=#1},
+    s <>/.default=4pt,
+    >=latex,
+    font=\footnotesize,
+    block/.style={
+        local bounding box=localbb,
+        execute at end scope={
+            \node[rounded corners=5pt,
+            inner sep=5pt,
+            fit=(localbb),draw,#1] {};
+        },
+    },
+    fdf/.style={
+        font=\ttfamily\footnotesize,
+        anchor=west,
+    },
+    connect/.style={
+        >=latex,
+        ->,
+        shorten >=4pt,
+        shorten <=1pt,
+    },
+    my mark/.style={
+        rectangle,rounded corners=2pt,very thick,
+        inner sep=2pt,
+    },
+    lmark/.style={
+        my mark,draw=cm1,%green!80!black,
+    },
+    rmark/.style={
+        my mark,draw=red!80!black,densely dotted,
+    },
+    iiind/.style={xshift=6ex},
+    iind/.style={xshift=4ex},
+    ind/.style={xshift=2ex},
+    % Matrix opts
+    row sep=.4ex,
+    fixed node/.style={
+        every node/.append style={
+            inner sep=.25ex,outer sep=.25ex,
+            text height=1.25ex,
+        },
+    },
+    ampersand replacement=\&,
+}
+
+
+\def\matsize{.8cm}
+\def\Full{\begin{tikzpicture}
+      \fill (0,0) rectangle (\matsize,\matsize);
+    \end{tikzpicture}
+}
+\def\Left{\begin{tikzpicture}
+      \draw (0,0) rectangle (\matsize,\matsize);
+      \fill (0,\matsize) rectangle ++(.3*\matsize,-.3*\matsize);
+    \end{tikzpicture}
+}
+\def\FullLeft{\begin{tikzpicture}
+      \draw (0,0) rectangle (\matsize,\matsize);
+      \fill (0,0) rectangle (.3*\matsize,\matsize);
+    \end{tikzpicture}
+}
+
+\def\drawcube[#1]{%
+    \path[#1] (0,0,0) -- (0,0,1);
+    \path[#1] (0,0,0) -- (1,0,0);
+    \path[#1] (0,0,0) -- (0,1,0);
+    \path[#1] (1,0,0) -- (1,1,0);
+    \path[#1] (1,0,0) -- (1,0,1);
+    \path[#1] (0,1,0) -- (1,1,0);
+    \path[#1] (0,1,0) -- (0,1,1);
+    \path[#1] (0,0,1) -- (1,0,1);
+    \path[#1] (0,0,1) -- (0,1,1);
+    \path[#1] (1,1,0) -- (1,1,1);
+    \path[#1] (1,1,1) -- (0,1,1);
+    \path[#1] (1,1,1) -- (1,0,1);
+}
+

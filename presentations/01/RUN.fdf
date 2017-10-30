@@ -1,0 +1,18 @@
+
+TBT.k [ 3 1 1 ]
+
+TBT.DOS.A
+TBT.Current.Orb
+
+TBT.HS DEVICE.nc
+%block TBT.Elec.Left
+  HS ELEC.nc
+  semi-inf-direction -a2
+  electrode-position 1
+%endblock
+%block TBT.Elec.Right
+  HS ELEC.nc
+  semi-inf-direction +a2
+  electrode-position end -1
+%endblock
+    

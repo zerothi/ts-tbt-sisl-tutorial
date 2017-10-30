@@ -1,6 +1,8 @@
 #!/bin/bash
 
 # Run tbtrans on the non-magnetic system
+echo "Running no magnetic field"
+rm -f siesta.TBT.nc
 tbtrans RUN.fdf > TBT.out
 
 # Loop over the M_*.dH.nc files created with 'run.py'

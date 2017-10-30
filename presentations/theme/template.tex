@@ -1,0 +1,129 @@
+\documentclass[presentation]{beamer}   % to compile the presentation
+% \documentclass[handout]{beamer}        % to compile 2x2 handouts
+\usepackage{tikz}
+\usepackage{pgf}
+\usetheme{workshopdtu}
+\begin{document}
+
+
+\author{Insert name}
+\title{Insert title}
+\date{Insert date}
+\institute[%
+  Insert left footer
+  ]{%
+  DTU -- Technical University of Denmark \\
+  MIC -- Department of Micro and Nanotechnology
+}
+
+% The somelogo, if you want to use it! :D
+%\pgfdeclareimage[width=0.8\framesep]{mylogo}{<picture name>}
+%\logo{\pgfuseimage{mylogo}} % The right logo
+
+\begin{frame}
+  \maketitle
+\end{frame}
+
+\begin{frame}
+  \frametitle{Outline}
+  \tableofcontents
+\end{frame}
+
+\section{Lists}
+\begin{frame}[fragile]
+  \frametitle{A slide with a list}
+  \framesubtitle{Use <number> to specify layers}
+  \begin{itemize}
+    \item<1-> First item on all overlays
+    \item<2>  Second item only on the second overlay.
+    \item<1,3> Third on first and last.
+      \begin{description}
+        \item<3>[Note]  Lists can be nested.
+        \item<3>[Point] Use this to structure your presentation.
+      \end{description}
+  \end{itemize}
+  
+\end{frame}
+
+\section{Columns}
+\begin{frame}
+  \frametitle{A slide with columns}
+  \begin{columns}[t] % Align the columns at the top
+    \column{0.4\textwidth}
+      This is the \alert{first} column. It occupies $40$\% of the text width.
+    \column{0.6\textwidth}
+      This is the \alert{second} column. This could be a nice image\ldots
+      \begin{center}
+        \rule{0.4\textwidth}{0.3\textwidth}
+      \end{center}
+  \end{columns}
+\end{frame}
+
+\section{Blocks}
+\begin{frame}
+  \frametitle{Use blocks to highlight your points}
+  \begin{block}{<The title of the block>}
+    This is the point you want to highlight. It could be an important formula
+    \[
+      a^2+b^2=c^2
+    \]
+  \end{block}
+
+  \begin{example}
+    The example block is useful for typesetting examples consistently.
+  \end{example}
+\end{frame}
+
+\section{Verbatim}
+\begin{frame}[fragile]
+  \frametitle{Verbatim material}
+  If the slide contains verbatim material you must use the \texttt{fragile} option for the frame.
+
+
+  
+  The \texttt{listings} package can be used for more fancy verbatim text and pretty printing of source code.
+\end{frame}
+
+\section{Finding documentation}
+\begin{frame}
+  \frametitle{Beamer documentation}
+  The Beamer userguide is available on-line at CTAN:
+  \begin{center}
+    \url{ftp://tug.ctan.org/pub/tex-archive/macros/latex/contrib/beamer/doc/beameruserguide.pdf}
+  \end{center}
+
+  If Beamer is installed on your system you can find the manual by running
+  \begin{center}
+    \texttt{mthelp beamer}
+  \end{center}
+  in a Command Prompt.
+\end{frame}
+
+\section{DTU stuff}
+
+\begin{frame}
+  \frametitle{The template}
+  This presentation template is a \texttt{beamer} implementation of the official DTU PowerPoint template available at
+  \begin{center}
+    \url{http://portalen.dtu.dk/Services/Kommunikation.aspx}
+  \end{center}
+  
+  To follow the design guidelines completely, you should use the colors from the DTU color palette
+  \begin{center}
+    \url{http://portalen.dtu.dk/upload/ak/design/dtu-farvemanual_03_07_2006.pdf}
+  \end{center}
+  These colors are defined in the DTU beamer theme with the names shown on the next slide.
+\end{frame}
+  
+  \newcommand\dtucolorbox[1]{\parbox[b][1cm+2ex][c]{2cm}{\tiny \centering\color{#1}\rule{.8cm}{.8cm}\\ \textcolor{black}{#1}}}%
+\begin{frame}
+  \frametitle{DTU colors}
+  \centering
+  \dtucolorbox{dtudarkgray}\dtucolorbox{dtugray}\dtucolorbox{dtulightgray}\\
+  \dtucolorbox{dtudarkblue}\dtucolorbox{dtublue}\dtucolorbox{dtulightblue}\\
+  \dtucolorbox{dtured}\dtucolorbox{dtupurpur}\dtucolorbox{dtupurple}\\
+  \dtucolorbox{dtudarkorange}\dtucolorbox{dtuorange}\dtucolorbox{dtuyellow}\\
+  \dtucolorbox{dtudarkgreen}\dtucolorbox{dtugreen}\rule{2cm}{0pt}\\
+\end{frame}
+
+\end{document} 
