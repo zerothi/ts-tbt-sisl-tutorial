@@ -7,9 +7,9 @@ This is the tutorial used for sisl + TBtrans + TranSiesta workshops.
 The sources used for these tutorials can be found elsewhere:
 
 
-- [sisl][sisl@git] (> 9.0.1)
-- [TBtrans][tbtrans] (> 4.1-b3)
-- [TranSiesta][tbtrans] (> 4.1-b3)
+- [sisl][sisl@git] (>= 0.9.5)
+- [TBtrans][tbtrans] (>= 4.1-b4)
+- [TranSiesta][tbtrans] (>= 4.1-b4)
 
 
 <!---

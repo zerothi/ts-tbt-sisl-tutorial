@@ -1,5 +1,9 @@
 SolutionMethod transiesta
 
+TBT.DOS.A
+TBT.DOS.Gf
+TBT.DOS.A.All
+
 # This helps the block-tri-diagonal partitioning.
 # Please try and run transiesta like this:
 #    transiesta -fdf TS.Analyze RUN.fdf > analyze.out
