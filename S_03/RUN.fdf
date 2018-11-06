@@ -1,0 +1,46 @@
+Diag.ParallelOverK true
+%block kgrid.MonkhorstPack
+    21  0  0 0.
+    0 21  0 0.
+    0  0  1 0.
+%endblock kgrid.MonkhorstPack
+
+# This is the remaining default SIESTA options
+PAO.BasisSize         SZP
+
+XC.functional     GGA
+XC.authors        PBE
+MeshCutoff        250.000000 Ry
+FilterCutoff      150.000000 Ry
+
+ElectronicTemperature   300 K
+
+MinSCFIterations       3
+SCF.DM.Tolerance       0.0001
+# Mixing parameters:
+SCF.Mixer.Weight       0.10
+SCF.Mixer.History      12
+SCF.Mix.First          true
+DM.UseSaveDM           true
+
+SaveHS     true
+TS.HS.Save true
+
+LatticeConstant 1.0 Ang
+%block LatticeVectors
+ 2.16000000 1.24707658 0.00000000
+ 2.16000000 -1.24707658 0.00000000
+ 0.00000000 0.00000000 14.40000000
+%endblock LatticeVectors
+
+NumberOfAtoms 2
+AtomicCoordinatesFormat Ang
+%block AtomicCoordinatesAndAtomicSpecies
+ 0.00000000 0.00000000 0.00000000 1 # 1: C
+ 1.44000000 0.00000000 0.00000000 1 # 2: C
+%endblock AtomicCoordinatesAndAtomicSpecies
+
+NumberOfSpecies 1
+%block ChemicalSpeciesLabel
+ 1 6 C
+%endblock ChemicalSpeciesLabel

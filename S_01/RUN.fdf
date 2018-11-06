@@ -1,0 +1,31 @@
+Diag.ParallelOverK true
+%block kgrid.MonkhorstPack
+    21  0  0 0.
+    0 21  0 0.
+    0  0  1 0.
+%endblock kgrid.MonkhorstPack
+
+# This is the remaining default SIESTA options
+PAO.BasisSize         SZP
+
+XC.functional     GGA
+XC.authors        PBE
+MeshCutoff        250.000000 Ry
+FilterCutoff      150.000000 Ry
+
+ElectronicTemperature   300 K
+
+MinSCFIterations       3
+SCF.DM.Tolerance       0.0001
+# Mixing parameters:
+SCF.Mixer.Weight       0.10
+SCF.Mixer.History      12
+SCF.Mix.First          true
+DM.UseSaveDM           true
+
+MD.NumCGSteps 0
+
+SaveHS     true
+TS.HS.Save true
+
+%include STRUCT.fdf
