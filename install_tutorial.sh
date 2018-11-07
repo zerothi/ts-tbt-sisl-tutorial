@@ -1,6 +1,6 @@
 #!/bin/bash
 
-url=www.student.dtu.dk/~nicpa/sisl/workshop/17
+url=www.student.dtu.dk/~nicpa/sisl/workshop/18
 
 function _help {
     echo "This script may be used to install the dependencies for the"
@@ -22,6 +22,9 @@ function _help {
     echo "of the script. It will download the required files for the tutorial:"
     echo ""
     echo "  $0 download"
+    echo ""
+    echo "During the download part a new directory will be created:"
+    echo "  $home/TBT-TS-sisl-workshop"
     echo ""
 }
 
@@ -76,7 +79,7 @@ case $1 in
 	    mv $cwd/new_$base $cwd/$base
 	    chmod u+x $cwd/$base
 	    echo ""
-	    echo "Successfully updated the script..."
+	    echo "Successfully updated script..."
 	    rm $cwd/old_$base
  	fi
 	exit 0
@@ -119,6 +122,14 @@ function linux_install {
 	    echo "Please try and get pip to work and re-run the installation proceduce."
 	fi
     fi
+
+    # Figure out the local pip version
+    # Note that sometimes this may be wrong since Python should be `python3`.
+    local py_v=$(pip -V | awk '{print $NF}' | tr -d ')')
+
+    echo ""
+    echo "This script assumes you are using Python $py_v"
+    echo ""
     
     # You probably need to add to the path, this is a simplistic way of
     # adding the default ubuntu installation directories
@@ -129,10 +140,10 @@ function linux_install {
 	echo ""
 	echo "PLEASE RESTART YOUR SHELL!"
     fi
-    grep "/.local/lib/python2.7" ~/.bashrc > /dev/null
+    grep "/.local/lib/python$py_v" ~/.bashrc > /dev/null
     if [ $? -eq 1 ]; then
 	echo "" >> ~/.bashrc
-	echo "export PYTHONPATH=\$HOME/.local/lib/python2.7/site-packages:\$PYTHONPATH" >> ~/.bashrc
+	echo "export PYTHONPATH=\$HOME/.local/lib/python$py_v/site-packages:\$PYTHONPATH" >> ~/.bashrc
 	echo ""
 	echo "PLEASE RESTART YOUR SHELL!"
     fi
@@ -262,11 +273,11 @@ dwn_file sisl-TBT-TS.tar.gz
 
 case $os in
     linux)
-	dwn_file bin/transiesta
+	dwn_file bin/siesta
 	dwn_file bin/tbtrans
 	;;
     macos)
-	dwn_file bin/transiesta_mac bin/transiesta
+	dwn_file bin/siesta_mac bin/siesta
 	dwn_file bin/tbtrans_mac bin/tbtrans
 	;;
 esac
@@ -282,7 +293,7 @@ fi
 
 echo ""
 echo "In folder TBT-TS-sisl-workshop you will find everything needed for the tutorial"
-echo "If you use BASH (most likely) you should have transiesta and tbtrans in your path."
+echo "If you use BASH (most likely) you should have siesta and tbtrans in your path."
 echo "Run (after you have restarted your shell):"
 echo "  which tbtrans"
 echo "and check it returns $indir/bin/tbtrans"
