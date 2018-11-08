@@ -108,6 +108,10 @@ TS.Contours.Eq.Pole 2.5 eV
   electrode-position end -1
 %endblock TS.Elec.elec-y-2
 
+# Specify the initial TSDE file (in case SystemLabel.TSDE does
+# not exist)
+File.TSDE.Init siesta.TSDE
+
 
 # For TBtrans we would like
 # the spectral density of states
@@ -141,7 +145,8 @@ DM.UseSaveDM           true
 
 MD.NumCGSteps 0
 
-SaveHS                          T
+# Save the electrostaticpotential
+SaveElectrostaticPotential true
 
 %include DEVICE.fdf
 
