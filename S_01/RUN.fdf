@@ -28,4 +28,21 @@ MD.NumCGSteps 0
 SaveHS     true
 TS.HS.Save true
 
-%include STRUCT.fdf
+LatticeConstant 1.0 Ang
+%block LatticeVectors
+ 2.16000000 1.24707658 0.00000000
+ 2.16000000 -1.24707658 0.00000000
+ 0.00000000 0.00000000 14.40000000
+%endblock LatticeVectors
+
+NumberOfAtoms 2
+AtomicCoordinatesFormat Ang
+%block AtomicCoordinatesAndAtomicSpecies
+ 0.00000000 0.00000000 0.00000000 1 # 1: C
+ 1.44000000 0.00000000 0.00000000 1 # 2: C
+%endblock AtomicCoordinatesAndAtomicSpecies
+
+NumberOfSpecies 1
+%block ChemicalSpeciesLabel
+ 1 6 C
+%endblock ChemicalSpeciesLabel
