@@ -218,19 +218,19 @@ function install_warning {
 }
 
 if [ $action == install ]; then
-# os will be download
-case $os in
-    linux)
-	install_warning
-	linux_install
-	;;
-    macos)
-	install_warning
-    	macos_install
-	;;
-esac
+    # os will be download
+    case $os in
+	linux)
+	    install_warning
+	    linux_install
+	    ;;
+	macos)
+	    install_warning
+	    macos_install
+	    ;;
+    esac
 
-exit 0
+    exit 0
 fi
 
 # Now create a common folder in the top-home directory
@@ -271,10 +271,25 @@ mkdir -p bin
 # Download latest tutorial files
 dwn_file sisl-TBT-TS.tar.gz
 
+# Determine the optimization level for the current architecture
+_suffix=
 case $os in
     linux)
-	dwn_file bin/siesta
-	dwn_file bin/tbtrans
+	# Figure out if the user has AVX
+	if $(grep "avx2" /proc/cpuinfo > /dev/null) ; then
+	    _suffix=_avx2
+	elif $(grep "avx" /proc/cpuinfo > /dev/null) ; then
+	    _suffix=_avx
+	elif $(grep "sse2" /proc/cpuinfo > /dev/null) ; then
+	    _suffix=_sse
+	fi
+	;;
+esac
+
+case $os in
+    linux)
+	dwn_file bin/siesta$_suffix bin/siesta
+	dwn_file bin/tbtrans$_suffix bin/tbtrans
 	;;
     macos)
 	dwn_file bin/siesta_mac bin/siesta
