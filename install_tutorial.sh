@@ -111,11 +111,11 @@ function linux_install {
     done
     
     # Perform the Python installation
-    pip install --upgrade six numpy scipy matplotlib netCDF4 jupyter sisl
+    pip install --upgrade six numpy scipy matplotlib netCDF4 jupyter sisl pyamg
     if [ $? -ne 0 ]; then
 	echo "pip failed to install the packages, will try to install"
 	echo "in your user directory, if this fails you will have to fix it"
-	pip install --user --upgrade six numpy scipy matplotlib netCDF4 jupyter sisl
+	pip install --user --upgrade six numpy scipy matplotlib netCDF4 jupyter sisl pyamg
 	if [ $? -ne 0 ]; then
 	    echo ""
 	    echo "pip failed to install the packages, in either the global or user domain."
@@ -192,11 +192,11 @@ function macos_install {
     my_brew install python
     sudo easy_install pip
 
-    pip install --upgrade six numpy scipy matplotlib netCDF4 jupyter sisl
+    pip install --upgrade six numpy scipy matplotlib netCDF4 jupyter sisl pyamg
     if [ $? -ne 0 ]; then
 	echo "pip failed to install the packages, will try to install"
 	echo "in your user directory, if this fails you will have to fix it"
-	pip install --user --upgrade six numpy scipy matplotlib netCDF4 jupyter sisl
+	pip install --user --upgrade six numpy scipy matplotlib netCDF4 jupyter sisl pyamg
 	if [ $? -ne 0 ]; then
 	    echo ""
 	    echo "pip failed to install the packages, in either the global or user domain."
