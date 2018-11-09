@@ -16,7 +16,7 @@ function _help {
     echo "If you have a working Python installation with pip you may only need"
     echo "to run"
     echo ""
-    echo "  pip install --upgrade numpy scipy matplotlib netCDF4 jupyter sisl"
+    echo "  pip install --upgrade numpy scipy matplotlib netCDF4 jupyter sisl pyamg"
     echo ""
     echo "Once the above steps are fulfilled you should run the download part"
     echo "of the script. It will download the required files for the tutorial:"
@@ -184,8 +184,8 @@ function macos_install {
     # Ensure wget is installed
     my_brew install wget --with-libressl
 
-    # Add the science tap
-    my_brew tap homebrew/science
+    # Add the science tap (it HAS been deprecated, so probably not needed
+    #my_brew tap homebrew/science
 
     my_brew install szip hdf5
     my_brew install netcdf --with-fortran
