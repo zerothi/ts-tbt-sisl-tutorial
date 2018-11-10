@@ -307,7 +307,9 @@ if ! `grep $indir ~/.bashrc` ; then
 fi
 
 echo ""
-echo "In folder TBT-TS-sisl-workshop you will find everything needed for the tutorial"
+echo "In folder"
+echo "   $indir"
+echo "you will find everything needed for the tutorial"
 echo "If you use BASH (most likely) you should have siesta and tbtrans in your path."
 echo "Run (after you have restarted your shell):"
 echo "  which tbtrans"
