@@ -93,12 +93,18 @@
           \begin{tikzpicture}[my fill/.style={fill=good},
             font=\footnotesize]
             \begin{axis}[width=.7\textwidth,height=3.5cm,%
+              my eta/.style={forget plot, only marks, mark=*, opacity=0.9, mark size=2pt},
               xmin=-1,xmax=1,ymin=0,xlabel=Energy]
               \addplot[black,smooth,my fill] table {../data/lorentzian.dat};
               \addlegendentry{$\mathfrak{L}$}
               \draw[<->] (axis cs:-0.05, {.5/0.05}) -- node[below=5pt] {$2\eta$}
               (axis cs:0.05,{.5/0.05});
               \node[my fill] at (axis cs:0.5, 10) {$\int=\pi$};
+              \only<4->{
+                  \addplot[my eta,color=good] table {../data/lorentzian_1o5eta.dat};
+                  \addplot[my eta,color=bad] table {../data/lorentzian_5eta.dat};
+                  \addplot[my eta,color=ok] table {../data/lorentzian_eta.dat};
+              }
             \end{axis}
           \end{tikzpicture}
         \end{center}
@@ -106,7 +112,7 @@
     
   \end{block}
 
-  \uncover<3>{\hfill\hyperlink{DOS<3>}{\beamergotobutton{Return to DOS}}}
+  \uncover<3->{\hfill\hyperlink{DOS<3>}{\beamergotobutton{Return to DOS}}}
 
 \end{frame}
 

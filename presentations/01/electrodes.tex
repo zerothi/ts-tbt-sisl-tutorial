@@ -311,7 +311,7 @@
       \;
       \sum_{
           \mathclap{
-              \substack{j\\
+              \substack{j=1\\
                   k_j=k_n+2\pi\frac{j-1}{nR}
               }
           }
@@ -324,7 +324,7 @@
         &
         \cdots
         &
-        e^{-i nk_jR}
+        e^{-i (n-1)k_jR}
         \\
         e^{i k_jR}
         &
@@ -332,7 +332,7 @@
         &
         \cdots
         &
-        e^{-i (n-1)k_jR}
+        e^{-i (n-2)k_jR}
         \\
         \vdots
         &
@@ -342,9 +342,9 @@
         &
         \vdots
         \\
-        e^{i nk_jR}
-        &
         e^{i (n-1)k_jR}
+        &
+        e^{i (n-2)k_jR}
         &
         \cdots
         &1
@@ -362,7 +362,7 @@
   \framesubtitle{Bloch's theorem}
 
   \begin{itemize}
-    \item Atomic ordering is important, see sisl \texttt{Geometry.repeat} for details
+    \item Atomic ordering is important, see sisl \texttt{Geometry.tile} for details
     \item $k$-point sampling is important, \emph{has} to sample equivalently
   \end{itemize}
   

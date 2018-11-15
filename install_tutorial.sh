@@ -104,8 +104,11 @@ esac
 # Function for installation on Linux
 function linux_install {
 
+    # Update lists
+    sudo apt-get update
+
     # First ensure that the correct packages are installed
-    for p in gcc gfortran libhdf5-dev libnetcdf-dev libnetcdff-dev python-dev python-tk python-pip python-pip-whl libatlas3-base liblapack3 libfreetype6-dev libpng12-dev
+    for p in gcc gfortran libhdf5-dev libnetcdf-dev libnetcdff-dev python-dev python-tk python-pip python-pip-whl libatlas3-base liblapack3 libfreetype6-dev libpng-dev
     do
 	sudo apt-get install $p
     done
@@ -217,6 +220,16 @@ function install_warning {
     sleep 3
 }
 
+function install_test_sisl {
+    echo ""
+    echo " Will try and run sisl"
+    echo "    import sisl ; print(sisl.geom.graphene())"
+    python -c "import sisl ; print(sisl.geom.graphene())"
+    if [ $? -ne 0 ]; then
+	echo "Failed running sisl, please mail the organizer with the error message (unless some of the installations failed)"
+    fi
+}
+
 if [ $action == install ]; then
     # os will be download
     case $os in
@@ -229,6 +242,7 @@ if [ $action == install ]; then
 	    macos_install
 	    ;;
     esac
+    install_test_sisl
 
     exit 0
 fi

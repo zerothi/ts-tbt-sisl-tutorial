@@ -283,6 +283,9 @@
 
 \end{frame}
 
+
+\pgfplotsset{my c/.style={/tikz/color=#1, /tikz/fill=#1}}
+
 \begin{frame}
   \frametitle{Numeric integration}
   \framesubtitle{Algorithms}
@@ -309,11 +312,11 @@
         xlabel={Real Energy [eV]},
         ylabel={Imaginary Energy [eV]}]
         \only<1>{
-        \addplot+[red!70!black] table {../data/siesta_30_simpson.dat};}
+        \addplot+[my c=red!70!black] table {../data/siesta_30_simpson.dat};}
         \only<2>{
-        \addplot+[blue!70!black] table {../data/siesta_30_legendre.dat};}
+        \addplot+[my c=blue!70!black] table {../data/siesta_30_legendre.dat};}
         \only<3->{
-        \addplot+[green!70!black] table {../data/siesta_30_legendre_right.dat};}
+        \addplot+[my c=green!70!black] table {../data/siesta_30_legendre_right.dat};}
       \end{axis}
     \end{tikzpicture}
   \end{center}
