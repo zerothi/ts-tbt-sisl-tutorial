@@ -34,7 +34,7 @@ add_file */*/C.psf
 # Add executables
 add_file */run.sh
 
-#echo These files will be added to the tar file:
-#echo "$(echo $_files | tr ' ' '\n')"
+echo These files will be added to the tar file:
+echo "$(echo $_files | tr ' ' '\n')"
 
 tar cfz sisl-TBT-TS.tar.gz $_files
