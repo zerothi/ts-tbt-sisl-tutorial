@@ -1,14 +1,15 @@
 \input ../common.tex
 
-\graphicspath{{fig/}}
+\graphicspath{{fig/}{fig-defence/}{paper-fig/}}
+\usepackage[export]{adjustbox}
 
 \institute[2018, Nick R. Papior; DTU Nanotech]{\begin{tikzpicture}
       \node[shape=rectangle split,rectangle split parts=2,anchor=base] at (0,0)
       {DTU: sisl, TBtrans and TranSiesta workshop};
     \end{tikzpicture}}
 
-\date{21. November 2018}
-\title{Siesta and sisl analysis}
+\date{20. November 2018}
+\title{TBtrans/TranSiesta for smarties}
 \author{Nick R. Papior}
 
 \begin{document}
@@ -22,7 +23,10 @@
   \tableofcontents
 \end{frame}
 
-\input siesta.tex
-\input sisl.tex
+\input steps.tex
+\input negf.tex
+\input contour.tex
+\input chemical.tex
+\input summary.tex
 
 \end{document}

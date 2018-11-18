@@ -1,0 +1,256 @@
+
+\section{Using sisl as analysis tool}
+
+\begin{frame}
+  \frametitle{Using sisl as analysis tool}
+  \tableofcontents[currentsection]
+\end{frame}
+
+\subsection{Siesta utilities}
+
+\begin{frame}
+  \frametitle{Using sisl as analysis tool}
+  \framesubtitle{Siesta utilities}
+
+  \begin{block}{sisl}
+
+    sisl replaces nearly all utilities in Siesta by generalised Python
+    modules which results in a combined analysis tool.
+    
+  \end{block}
+
+  \begin{block}{Command line utilities}
+
+    sisl exposes 3 command line utilities:
+
+    \begin{description}
+      \item[sgeom] Geometry manipulation, move, extend etc.
+
+      \item[sgrid] Real-space grid manipulation, sum, subtract remove etc.
+
+      \item[sdata] Generic command utility for \emph{any} file (a parser per file)
+
+    \end{description}
+
+  \end{block}
+  
+  \begin{tabular}{lcll}
+    File & Utility & sisl & Content
+    \\
+    \hline
+    EIG & Eig2DOS & \texttt{eigSileSiesta} & Eigenvalue spectrum
+    \\
+    bands & gnubands & \texttt{bandsSileSiesta} & Band-structure eigenvalues
+    \\
+    VH & grid2cube & \texttt{gridSileSiesta} & Electrostatic potential
+    \\
+    VT & grid2cube & \texttt{gridSileSiesta} & Total potential
+    \\
+    RHO & grid2cube & \texttt{gridSileSiesta} & Electronic charge
+    \\
+    \dots & \dots & & Real-space quantities in many variants
+    \\
+    PDOS & \texttt{pdosxml} & \texttt{pdosSileSiesta} & Projected Density of States
+    \\
+    DM & \texttt{denchar} & \texttt{dmSileSiesta} & Density matrix $\to$ real-space charge
+    \\
+    WFS/WFSX & \texttt{denchar} & \texttt{Hamiltonian.eigenstate} & Wavefunction/Molecular
+    orbitals
+    \\
+    \vdots
+  \end{tabular}
+
+\end{frame}
+
+\subsection{A word of caution}
+
+\begin{frame}
+  \frametitle{A word of caution}
+
+  Some of these features are relatively new and have not been extensively tested. Please
+  test it against the Siesta utilities (until you trust it), and report back if there are problems!!!
+
+  \vspace{1cm}
+  I have tested them for certain things, but there may be cases I have missed!
+  
+\end{frame}
+
+\subsection{Calculating DOS}
+
+\begin{frame}[fragile]
+  \frametitle{Calculating DOS}
+
+  \begin{block}{Siesta}
+    \begin{enumerate}
+      \item Converge density matrix
+      \item Calculate a dense eigenspectrum (using Siesta)
+      \item Post-process .EIG file to calculate DOS
+    \end{enumerate}
+\begin{verbatim}
+$> Eig2DOS -f -n 1000 -e -4 -E 4 siesta.EIG > DOS.dat
+\end{verbatim}
+    
+  \end{block}
+
+  \begin{block}{sisl}
+    \begin{enumerate}
+      \item Converge density matrix, save Hamiltonian
+      \item Read Hamiltonian in sisl
+      \item Calculate DOS on \emph{any} energy grid
+    \end{enumerate}
+
+\begin{verbatim}
+    H = sisl.Hamiltonian.read('RUN.fdf')
+    mp = sisl.MonkhorstPack(H, [nx, ny, nz]).asaverage()
+    E = np.linspace(-4, 4, 1000)
+    DOS = mp.DOS(E)
+\end{verbatim}
+  \end{block}
+  
+\end{frame}
+
+
+\subsection{Plotting charge-density}
+
+\begin{frame}[fragile]
+  \frametitle{Plotting charge-density}
+
+  \begin{block}{Siesta}
+\begin{verbatim}
+  Write.Denchar true
+  Denchar.TypeOfRun 3D
+  Denchar.PlotCharge true
+\end{verbatim}
+    
+  \end{block}
+
+  \begin{block}{sisl}
+
+    \begin{itemize}
+      \item \textbf{Not} limited to square boxes!
+    \end{itemize}
+
+\begin{verbatim}
+  DM = sisl.DensityMatrix.read('RUN.fdf')
+  grid = sisl.Grid(0.2, geometry=DM.geometry)
+  DM.density(grid)
+\end{verbatim}
+  \end{block}
+  
+\end{frame}
+
+
+\subsection{Plotting wavefunctions}
+
+\begin{frame}[fragile]
+  \frametitle{Plotting wavefunctions}
+
+  \begin{block}{Siesta}
+\begin{verbatim}
+  Write.Denchar true
+  Write.WaveFunctions true
+  WaveFuncKPointsScale pi/a
+  %block WaveFuncKPoints
+    0.000 0.000 0.000 from 1 to 10
+  %endblock WaveFuncKPoints
+
+  Denchar.TypeOfRun 3D
+  Denchar.PlotWaveFunctions true
+\end{verbatim}
+    
+  \end{block}
+
+  \begin{block}{sisl}
+
+\begin{verbatim}
+  H = sisl.Hamiltonian.read('RUN.fdf')
+  grid = sisl.Grid(0.2, geometry=H.geometry)
+  H.eigenstate().sub(4).wavefunction(grid)
+\end{verbatim}
+  \end{block}
+  
+\end{frame}
+
+
+\subsection{Command-line utilities}
+
+\begin{frame}[fragile]
+  \frametitle{Command-line utilities}
+  \framesubtitle{Real-space grids}
+
+  \begin{block}{Real-space grid}
+
+    A huge amount of data is contained in the real-space grid files.
+
+    There are some difficulties in operating with these:
+    \begin{itemize}
+      \item Binary files not easily converted to cube/xsf files
+      \item No easy way to subtract two grids
+    \end{itemize}
+    
+  \end{block}
+
+  \begin{block}{sisl}
+
+    With sisl it is extremely easy to do all these, on the command line:
+
+    \begin{description}
+      \item[\texttt{sgrid siesta.VT siesta.VT.cube}]\mbox{}\\
+
+      Convert the total potential to a cube file (no geometry)
+
+      \item[\texttt{sgrid siesta.VT --geometry RUN.fdf siesta.VT.cube}]\mbox{}\\
+            
+      Convert the total potential and geometry to a cube file
+
+      \item[\texttt{sgrid siesta.VT --diff ../siesta.VT diff.VT.cube}]\mbox{}\\
+
+      Subtract two total-potential grids from each other and store the difference in a
+      cube file.
+
+      \item[\texttt{sgrid siesta.VT --diff ../siesta.VT --sub 10:20 x diff-10-20x.VT.cube}]\mbox{}\\
+
+      Subtract two total-potential grids from each other, then reduce the grid to only
+      retain the volume containing 10 Ang to 20 Ang along the first lattice vector, store the difference in a
+      cube file.
+
+    \end{description}
+    
+  \end{block}
+  
+\end{frame}
+
+
+\begin{frame}[fragile]
+  \frametitle{Command-line utilities}
+  \framesubtitle{Other files}
+
+  \begin{description}
+    \item[\texttt{sdata siesta.bands --plot}]\mbox{}\\
+
+    Plot band-structure from \texttt{.bands} file
+
+    \item[\texttt{sdata siesta.bands -E -4:4 --plot bs.png}]\mbox{}\\
+
+    Save band-structure from \texttt{.bands} file to \texttt{bs.png} file only showing
+    energy range $-4\,\mathrm{eV}$ to $4\,\mathrm{eV}$.
+
+    \item[\texttt{sdata siesta.EIG -E -4:4 --dos}]\mbox{}\\
+
+    Plot DOS calculated from \texttt{.EIG} file only showing
+    energy range $-4\,\mathrm{eV}$ to $4\,\mathrm{eV}$.
+
+    \item[\texttt{sdata siesta.EIG -E -4:4 --dos dos.png}]\mbox{}\\
+
+    Save DOS calculated from \texttt{.EIG} file to \texttt{dos.png} only showing
+    energy range $-4\,\mathrm{eV}$ to $4\,\mathrm{eV}$.
+
+    \item[\texttt{sgeom RUN.fdf --vector force siesta.FA --out force.xsf}]\mbox{}\\
+
+    Write geometry plus force vector on each atom to an XSF file (note default scaling)
+
+  \end{description}
+
+  \emph{To-come implementations:} \texttt{.PDOS}, \texttt{.PDOS.xml}
+  
+\end{frame}

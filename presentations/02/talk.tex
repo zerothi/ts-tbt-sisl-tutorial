@@ -1,15 +1,14 @@
 \input ../common.tex
 
-\graphicspath{{fig/}{fig-defence/}{paper-fig/}}
-\usepackage[export]{adjustbox}
+\graphicspath{{fig/}}
 
 \institute[2018, Nick R. Papior; DTU Nanotech]{\begin{tikzpicture}
       \node[shape=rectangle split,rectangle split parts=2,anchor=base] at (0,0)
       {DTU: sisl, TBtrans and TranSiesta workshop};
     \end{tikzpicture}}
 
-\date{20. November 2018}
-\title{TBtrans/TranSiesta for smarties}
+\date{21. November 2018}
+\title{Siesta and sisl analysis}
 \author{Nick R. Papior}
 
 \begin{document}
@@ -23,10 +22,33 @@
   \tableofcontents
 \end{frame}
 
-\input steps.tex
-\input negf.tex
-\input contour.tex
-\input chemical.tex
-\input summary.tex
+\input siesta.tex
+\input sisl.tex
+
+\section{Conclusion}
+
+\begin{frame}
+  \frametitle{Conclusion}
+
+  \begin{block}{Siesta}
+    \begin{description}
+      \item[+] ``All'' necessary tools
+      \item[-] Utilites uses a variety of executables
+      \item[-] Utilites uses a variety of input methods
+      \item[-] Utilites are limited to the current sources (\emph{very} rarely changed/updated)
+    \end{description}
+  \end{block}
+
+  \begin{block}{sisl}
+    \begin{description}
+      \item[-] Not all utilities are present
+      \item[-] Macroave not present
+      \item[+] A unified interface for post-processing
+      \item[+] Easy to extend due to simpler programming language
+      \item[+] Many functionalities present, and some utilities has more flexibility
+    \end{description}
+  \end{block}
+  
+\end{frame}
 
 \end{document}

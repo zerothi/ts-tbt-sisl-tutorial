@@ -24,7 +24,7 @@ function _help {
     echo "  $0 download"
     echo ""
     echo "During the download part a new directory will be created:"
-    echo "  $home/TBT-TS-sisl-workshop"
+    echo "  $HOME/TBT-TS-sisl-workshop"
     echo ""
 }
 
@@ -62,10 +62,10 @@ case "x$OSTYPE" in
 	esac
 	;;
 esac
+
 action=install
 case $1 in
     install)
-	echo nothing > /dev/null
 	# do nothing, we use the OS to determine stuff
 	action=install
 	;;
@@ -150,7 +150,6 @@ function linux_install {
 	echo ""
 	echo "PLEASE RESTART YOUR SHELL!"
     fi
-    exit 0
 }
 
 
@@ -206,7 +205,6 @@ function macos_install {
 	    echo "Please try and get pip to work and re-run the installation proceduce."
 	fi
     fi
-    exit 0
 }
 
 function install_warning {

@@ -1,0 +1,242 @@
+
+\section{Analysing Siesta output}
+
+%\begin{frame}
+%  \frametitle{Analysing Siesta output}
+%  \tableofcontents[currentsection]
+%\end{frame}
+
+
+\subsection{Siesta utilities}
+
+\begin{frame}
+  \frametitle{Analysing Siesta output}
+  \framesubtitle{Siesta utilities}
+
+  \begin{block}{Siesta}
+
+    \siesta\ calculates \emph{many} quantities and writes out a large number of auxiliary
+    files which may be used for post-processing.
+
+    Among the output one finds:
+    \begin{itemize}
+      \item Real-space quantities
+      \item Eigenspectrum
+      \item Sparse matrices
+      \begin{itemize}
+        \item Density matrix
+        \item Hamiltonian
+        \item Overlap
+      \end{itemize}
+      \item Basis set information
+      \item Wavefunction coefficients
+    \end{itemize}
+    
+  \end{block}
+  
+\end{frame}
+
+
+\begin{frame}
+  \frametitle{Analysing Siesta output}
+  \framesubtitle{Siesta utilities}
+
+  \footnotesize
+  \begin{tabular}{lcll}
+    File & Utility & fdf & Content
+    \\
+    \hline
+    EIG & Eig2DOS & \texttt{kgrid.MonkhorstPack} & Eigenvalue spectrum
+    \\
+    bands & gnubands & \texttt{kgrid.MonkhorstPack} & Band-structure eigenvalues
+    \\
+    VH & grid2cube & \texttt{SaveElectrostaticPotential} & Electrostatic potential
+    \\
+    VT & grid2cube & \texttt{SaveTotalPotential} & Total potential
+    \\
+    RHO & grid2cube & \texttt{SaveRho} & Electronic charge
+    \\
+    \dots & \dots & \texttt{Save}\dots & Real-space quantities in many variants
+    \\
+    PDOS & \texttt{pdosxml} & \texttt{ProjectedDensityOfStates} & Projected Density of States
+    \\
+    DM & \texttt{denchar} & \texttt{Write.DM} & Density matrix $\to$ real-space charge
+    \\
+    WFS/WFSX & \texttt{denchar} & \texttt{WriteWaveFunctions} & Wavefunction/Molecular
+    orbitals
+    \\
+    \vdots
+  \end{tabular}
+
+  Using a combination of the above tools one can post-process a lot of Siesta output
+
+  However, all utilities are required to be compiled separately and each program has its
+  own input. Some utilities (\texttt{pdosxml}) requires a new compilation per different
+  analysis, making the entry barrier high.
+
+\end{frame}
+
+
+\subsection{Calculating DOS}
+
+\begin{frame}[fragile]
+  \frametitle{Analysing Siesta output}
+  \framesubtitle{Density of States from .EIG file}
+
+  \begin{itemize}
+    \item Remember to use a \emph{dense} $\mathbf k$-grid for DOS calculations!
+  \end{itemize}
+
+  \begin{columns}
+    \column{0.4\linewidth}
+    \footnotesize
+
+    All: shifted to $E_F$, between $-4\,\mathrm{eV}$ and $4\,\mathrm{eV}$, distributed
+    with $1000$ points ($\Delta E=0.008\,\mathrm{eV}$).
+    \vspace{.5cm}
+
+    Gaussian, $\sigma\sqrt2=0.2\,\mathrm{eV}$:
+\begin{verbatim}
+  $> Eig2DOS -f -n 1000 \
+      -e -4 -E 4 siesta.EIG > DOS.dat
+\end{verbatim}
+
+    Lorentzian (Green function), $\eta=0.2\,\mathrm{eV}$:
+\begin{verbatim}
+  $> Eig2DOS -l -f -n 1000 \
+       -e -4 -E 4 siesta.EIG > DOS.dat
+\end{verbatim}
+
+    Gaussian, $\sigma\sqrt2=0.1\,\mathrm{eV}$:
+\begin{verbatim}
+  $> Eig2DOS -s 0.1 -f -n 1000 \
+      -e -4 -E 4 siesta.EIG > DOS.dat
+\end{verbatim}
+
+    \column{0.6\linewidth}
+
+%    10 x 10 x 4 (graphite)
+
+    \begin{tikzpicture}
+      \begin{axis}[my style/.style={smooth, no markers,very thick}, ymin=0,xmin=-4,xmax=0,
+        xlabel={$E-E_F$ [eV]},ylabel={DOS [1/eV]}]
+        \addplot+[my style] table {data/DOS.dat};
+        \addlegendentry{G: $\sigma\sqrt2=0.2$}
+        \addplot+[my style] table {data/DOS_l.dat};
+        \addlegendentry{L: $\eta=0.2$}
+        \addplot+[my style] table {data/DOS_s.dat};
+        \addlegendentry{G: $\sigma\sqrt2=0.1$}
+      \end{axis}
+    \end{tikzpicture}
+    
+
+  \end{columns}
+
+\end{frame}
+
+
+\subsection{Plotting charge-density}
+
+\begin{frame}[fragile]
+  \frametitle{Analysing Siesta output}
+  \framesubtitle{Plotting charge density}
+
+  \begin{columns}
+    \column{.45\linewidth}
+
+    \begin{equation*}
+      \rho(\mathbf r) = \sum_{\nu\mu} \boldsymbol\rho_{\nu\mu}\phi^*_\nu(\mathbf
+      r)\phi_\mu(\mathbf r)
+    \end{equation*}
+
+    \begin{itemize}
+      \item \texttt{Denchar} limited to square boxes!
+    \end{itemize}
+    
+    
+  \footnotesize
+  Input:
+\begin{verbatim}
+  Write.Denchar true
+  Denchar.TypeOfRun 3D
+  Denchar.PlotCharge true
+\end{verbatim}
+  Execute:
+\begin{verbatim}
+  siesta RUN.fdf
+  denchar < RUN.fdf
+\end{verbatim}
+
+  Or:
+\begin{verbatim}
+ grid2cube << EOL
+   h2o
+   drho
+   3. 3. 3.
+   1
+   unformatted
+  EOL
+\end{verbatim}
+
+  \column{0.5\linewidth}
+
+  \uncover<2->{
+      \centering
+      \incg[width=0.9\linewidth]{h2o_drho}
+
+      $\delta\rho(r) = \rho(r) - \rho_{\mathrm{atom}}(r)$
+  }
+  
+\end{columns}
+\end{frame}
+
+
+
+
+\subsection{Plotting wavefunction}
+
+\begin{frame}[fragile]
+  \frametitle{Analysing Siesta output}
+  \framesubtitle{Plotting wavefunction}
+
+  \begin{columns}
+    \column{.45\linewidth}
+
+    \begin{equation*}
+    \psi_i(\mathbf r) = \sum_{\mu} \phi_\mu(\mathbf r)c_{\mu i}
+  \end{equation*}
+
+  \begin{itemize}
+    \item \texttt{Denchar} limited to square boxes!
+  \end{itemize}
+
+  \footnotesize
+  Input:
+\begin{verbatim}
+  Write.Denchar true
+  Write.WaveFunctions true
+  WaveFuncKPointsScale pi/a
+  %block WaveFuncKPoints
+    0.000 0.000 0.000 from 1 to 10
+  %endblock WaveFuncKPoints
+
+  Denchar.TypeOfRun 3D
+  Denchar.PlotWaveFunctions true
+\end{verbatim}
+  Execute:
+\begin{verbatim}
+  siesta RUN.fdf
+  denchar < RUN.fdf
+\end{verbatim}
+
+  \column{0.5\linewidth}
+
+  \uncover<2->{
+  \incg[width=0.9\linewidth,clip,trim=0 3cm 0 0.1cm]{h2o_lumo}
+
+  \vspace{.1cm}
+  \incg[width=0.9\linewidth]{h2o_homo}}
+  
+\end{columns}
+  
+\end{frame}
