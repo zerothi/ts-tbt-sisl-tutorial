@@ -261,7 +261,7 @@ function dwn_file {
     if [ $# -eq 2 ]; then
 	outname=$2
     fi
-    if [ ! -e $1 ]; then
+    if [ ! -e $outname ]; then
 	wget -O $outname $url/$(basename $rname)
 	if [ $? -eq 0 ]; then
 	    chmod u+x $outname
@@ -281,6 +281,9 @@ pushd $indir
 mkdir -p bin
 
 # Download latest tutorial files
+if [ -e sisl-TBT-TS.tar.gz ]; then
+    rm sisl-TBT-TS.tar.gz
+fi
 dwn_file sisl-TBT-TS.tar.gz
 
 # Determine the optimization level for the current architecture
