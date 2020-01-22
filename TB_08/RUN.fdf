@@ -1,0 +1,34 @@
+TBT.HS DEVICE.nc
+
+TBT.DOS.A
+TBT.DOS.Gf
+TBT.Current.Orb
+
+%block TBT.Elecs
+ STM
+ graphene
+%endblock
+
+# The graphene electrode
+# is semi-infinite in both A and B directions.
+# This is denoted in the semi-inf-direction flag.
+%block TBT.Elec.graphene
+  HS GRAPHENE.nc
+  semi-inf-direction AB
+  electrode-position 1
+  # Add flags to read in the self-energy file generated
+  # in the tutorial.
+%endblock
+
+%block TBT.Elec.STM
+  HS STM.nc
+  semi-inf-direction +A3
+  electrode-position end -1
+%endblock
+
+# For TBtrans to accept a for
+%block TBT.Contour.line
+  part line
+     from -2 eV to 2 eV
+       # Add flag here to read in the contour.E file
+%endblock TBT.Contour.line
