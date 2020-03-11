@@ -1,6 +1,6 @@
 #!/bin/bash
 
-url=www.student.dtu.dk/~nicpa/sisl/workshop/18
+url=www.student.dtu.dk/~nicpa/sisl/workshop/20
 
 function _help {
     echo "This script may be used to install the dependencies for the"
@@ -13,10 +13,10 @@ function _help {
     echo ""
     echo "  $0 install"
     echo ""
-    echo "If you have a working Python installation with pip you may only need"
+    echo "If you have a working Python installation with pip3 you may only need"
     echo "to run"
     echo ""
-    echo "  pip install --upgrade numpy scipy matplotlib netCDF4 jupyter pyamg sisl"
+    echo "  pip3 install --upgrade numpy scipy matplotlib netCDF4 jupyter pyamg sisl z2pack"
     echo ""
     echo "Once the above steps are fulfilled you should run the download part"
     echo "of the script. It will download the required files for the tutorial:"
@@ -108,27 +108,27 @@ function linux_install {
     sudo apt-get update
 
     # First ensure that the correct packages are installed
-    for p in gcc gfortran libhdf5-dev libnetcdf-dev libnetcdff-dev python-dev python-tk python-pip python-pip-whl libatlas3-base liblapack3 libfreetype6-dev libpng-dev
+    for p in gcc gfortran libhdf5-dev libnetcdf-dev libnetcdff-dev python3-dev python3-tk python3-pip libatlas3-base liblapack3 libfreetype6-dev libpng-dev
     do
 	sudo apt-get install $p
     done
     
     # Perform the Python installation
-    pip install --upgrade six numpy scipy matplotlib netCDF4 jupyter pyamg sisl
+    pip3 install --upgrade six numpy scipy matplotlib netCDF4 jupyter pyamg sisl z2pack
     if [ $? -ne 0 ]; then
-	echo "pip failed to install the packages, will try to install"
+	echo "pip3 failed to install the packages, will try to install"
 	echo "in your user directory, if this fails you will have to fix it"
-	pip install --user --upgrade six numpy scipy matplotlib netCDF4 jupyter pyamg sisl
+	pip3 install --user --upgrade six numpy scipy matplotlib netCDF4 jupyter pyamg sisl z2pack
 	if [ $? -ne 0 ]; then
 	    echo ""
-	    echo "pip failed to install the packages, in either the global or user domain."
-	    echo "Please try and get pip to work and re-run the installation proceduce."
+	    echo "pip3 failed to install the packages, in either the global or user domain."
+	    echo "Please try and get pip3 to work and re-run the installation proceduce."
 	fi
     fi
 
-    # Figure out the local pip version
+    # Figure out the local pip3 version
     # Note that sometimes this may be wrong since Python should be `python3`.
-    local py_v=$(pip -V | awk '{print $NF}' | tr -d ')')
+    local py_v=$(pip3 -V | awk '{print $NF}' | tr -d ')')
 
     echo ""
     echo "This script assumes you are using Python $py_v"
@@ -191,18 +191,18 @@ function macos_install {
 
     my_brew install szip hdf5
     my_brew install netcdf --with-fortran
-    my_brew install python
-    sudo easy_install pip
+    my_brew install python3
+    sudo easy_install pip3
 
-    pip install --upgrade six numpy scipy matplotlib netCDF4 jupyter pyamg sisl
+    pip3 install --upgrade six numpy scipy matplotlib netCDF4 jupyter pyamg sisl z2pack
     if [ $? -ne 0 ]; then
-	echo "pip failed to install the packages, will try to install"
+	echo "pip3 failed to install the packages, will try to install"
 	echo "in your user directory, if this fails you will have to fix it"
-	pip install --user --upgrade six numpy scipy matplotlib netCDF4 jupyter pyamg sisl
+	pip3 install --user --upgrade six numpy scipy matplotlib netCDF4 jupyter pyamg sisl z2pack
 	if [ $? -ne 0 ]; then
 	    echo ""
-	    echo "pip failed to install the packages, in either the global or user domain."
-	    echo "Please try and get pip to work and re-run the installation proceduce."
+	    echo "pip3 failed to install the packages, in either the global or user domain."
+	    echo "Please try and get pip3 to work and re-run the installation proceduce."
 	fi
     fi
 }
@@ -222,7 +222,7 @@ function install_test_sisl {
     echo ""
     echo " Will try and run sisl"
     echo "    import sisl ; print(sisl.geom.graphene())"
-    python -c "import sisl ; print(sisl.geom.graphene())"
+    python3 -c "import sisl ; print(sisl.geom.graphene())"
     if [ $? -ne 0 ]; then
 	echo "Failed running sisl, please mail the organizer with the error message (unless some of the installations failed)"
     fi
