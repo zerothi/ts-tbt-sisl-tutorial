@@ -8,7 +8,7 @@ tbtrans RUN.fdf > TBT.out
 # Loop over the M_*.dH.nc files created with 'run.py'
 for f in M_*.dH.nc
 do
-    echo "Running for dH =  $f"
+    echo "Running for dH = $f"
     B=${f//.dH.nc/}
 
     # Clean Magnetic directory
