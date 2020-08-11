@@ -1,3 +1,5 @@
+![GitHub release (latest by date)](https://img.shields.io/github/v/release/zerothi/ts-tbt-sisl-tutorial?label=tutorial)
+[![Join discussion on Discord](https://img.shields.io/discord/742636379871379577.svg?label=&logo=discord&logoColor=ffffff&color=green&labelColor=red)](https://discord.gg/bvJ9Zuk)
 
 Welcome to sisl + TBtrans + TranSiesta tutorial
 ===============================================
