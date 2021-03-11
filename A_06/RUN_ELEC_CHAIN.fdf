@@ -1,0 +1,33 @@
+SystemLabel electrode_CHAIN
+
+%include ELEC_CHAIN.fdf
+
+%block kgrid.MonkhorstPack
+    1   0  0 0.
+    0   1  0 0.
+    0   0  100 0.
+%endblock kgrid.MonkhorstPack
+
+PAO.BasisSize         SZP
+PAO.EnergyShift       0.01 Ry
+XC.functional     GGA
+XC.authors        PBE
+MeshCutoff        200.000000 Ry
+FilterCutoff      150.000000 Ry
+
+ElectronicTemperature   300 K
+OccupationFunction      FD
+
+MinSCFIterations       3
+MaxSCFIterations       200
+SCF.DM.Tolerance       0.0001
+# Mixing parameters:
+SCF.Mixer.Weight       0.10
+SCF.Mixer.History      12
+SCF.Mix.First          true
+DM.UseSaveDM           .true.
+
+MD.NumCGSteps 0
+
+SaveHS                          T
+
