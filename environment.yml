@@ -9,3 +9,4 @@ dependencies:
 - pyamg
 - sisl
 - siesta
+- tqdm
