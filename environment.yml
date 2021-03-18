@@ -1,0 +1,11 @@
+channels:
+- conda-forge
+dependencies:
+- python
+- numpy
+- scipy
+- matplotlib
+- netcdf4
+- pyamg
+- sisl
+- siesta
