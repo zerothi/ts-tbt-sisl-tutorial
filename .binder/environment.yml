@@ -2,7 +2,9 @@ channels:
 - conda-forge
 dependencies:
 - python
-- numpy
+- pyparsing
+- pathos
+- numpy>=1.13
 - scipy
 - matplotlib
 - netcdf4
