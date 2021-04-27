@@ -13,6 +13,9 @@ TBT.DOS.A.All
 TS.BTD.Pivot PCG
 
 TS.Voltage 0 eV
+
+TS.Hartree.Fix -A+A
+
 # Although we have 4 electrodes we will only
 # use two different chemical potentials
 # One for each chain.
