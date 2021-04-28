@@ -76,7 +76,7 @@
     The electrode Hartree potential are the boundary conditions.
 
     In TranSiesta this is accomplished by fixing the electrostatic potential at one of the
-    electrode planes (the plane farthest from the device region).
+    electrode planes.
 
     \begin{itemize}
       \item For $N_\idxE=2$ and aligned semi-infinite directions the potential profile can
@@ -95,6 +95,9 @@
         solvers\footnote{\uncover<4->{This may seem like a more daunting task than it
                 is. The guess is the Poisson solution \emph{without} charges, only the
                 boundary conditions.}}
+
+        \item \sisl\ has a tool to ease this. \shell{stoolbox ts-fft} may be used to
+        create a better boundary condition as direct input for TranSiesta.
 
       \end{itemize}
     \end{itemize}
