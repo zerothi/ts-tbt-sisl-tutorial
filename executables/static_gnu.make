@@ -31,7 +31,7 @@ KINDS = $(SP_KIND) $(DP_KIND)
 #LIB_PATH = -L/usr/local/lib -L/usr/lib
 
 # Add local paths for NetCDF4 installation and OpenBLAS
-INSTALL_NCDF4_PATH = /home/nicpa/siesta/ts-tbt-sisl-tutorial/executables/static-libs
+INSTALL_NCDF4_PATH ?= /home/nicpa/siesta/ts-tbt-sisl-tutorial/executables/static-libs
 INC_PATH = -I$(INSTALL_NCDF4_PATH)/include
 LIB_PATH = -L$(INSTALL_NCDF4_PATH)/lib -L$(INSTALL_NCDF4_PATH)/lib64
 

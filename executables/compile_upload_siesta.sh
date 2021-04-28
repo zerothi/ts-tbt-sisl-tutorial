@@ -3,13 +3,15 @@
 # This small script will compile and upload the executables to the
 # website
 base=$(pwd)
-SIESTA_DIR=/home/nicpa/siesta/4.1
-year=18
+SIESTA_DIR=/home/nicpa/siesta/siesta
+year=20
 
 _obj=ObjTutorial$year
 
 # First download and compile NetCDF
-./install_netcdf4.bash
+_ncdf_prefix=/home/nicpa/siesta/netcdf-serial
+./install_netcdf4.bash -p $_ncdf_prefix --single-directory
+[ $? -ne 0 ] && exit 1
 
 pushd $SIESTA_DIR
 
@@ -19,7 +21,6 @@ mkdir -p $_obj
 cd $_obj
 
 # Ensure arch.make exists
-rm -f arch.make
 [ ! -e $base/static_gnu.make ] && echo "Failed to find static_gnu.make" && exit 1
 ln -s $base/static_gnu.make arch.make
 
@@ -31,7 +32,7 @@ function mmake {
     local suffix=$1
     shift
     make clean
-    make -j4 $@
+    make -j4 INSTALL_NCDF4_PATH=$_ncdf_prefix $@
     [ $? -ne 0 ] && exit 1
     scp $base tr:.p/sisl/workshop/$year/$base$suffix
     [ $? -ne 0 ] && exit 1

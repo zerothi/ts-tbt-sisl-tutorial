@@ -9,12 +9,12 @@ TBT.Current.Orb
  graphene
 %endblock
 
-# The graphene electrode
-# is semi-infinite in both A and B directions.
-# This is denoted in the semi-inf-direction flag.
+# The graphene electrode is semi-infinite in
+# two directions? Which ones?
 %block TBT.Elec.graphene
   HS GRAPHENE.nc
-  semi-inf-direction AB
+  # What should be written here?
+  semi-inf-direction ?
   electrode-position 1
   # Add flags to read in the self-energy file generated
   # in the tutorial.

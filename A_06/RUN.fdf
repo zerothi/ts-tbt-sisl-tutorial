@@ -1,0 +1,130 @@
+
+%block TS.Elecs
+  Left
+  Right
+  Tip
+%endblock TS.Elecs
+
+# Edit these to 
+%block TS.Elec.Left
+  HS electrode_GRAPHENE.TSHS
+  # fill in correct direction
+  semi-inf-direction ?
+  electrode-position 1
+  # We are using Bloch repetitions
+  # How should it look like here:
+  bloch
+%endblock
+%block TS.Elec.Right
+  HS electrode_GRAPHENE.TSHS
+  # fill in correct direction
+  semi-inf-direction ?
+  # fill in correct index
+  electrode-position end ?
+  # We are using Bloch repetitions
+  # How should it look like here:
+  bloch
+%endblock
+
+%block TS.Elec.Tip
+  HS electrode_CHAIN.TSHS
+  # fill in correct direction
+  semi-inf-direction +a3
+  # fill in correct index
+  electrode-position end -1
+  check-kgrid false
+%endblock
+
+
+# Basic options, doesn't need to be changed
+
+SolutionMethod transiesta
+TS.Hartree.Fix -A
+
+%block kgrid.MonkhorstPack
+    3  0  0 0.
+    0 10  0 0.
+    0  0  1 0.
+%endblock kgrid.MonkhorstPack
+
+# We need to change it for TranSiesta
+# since we have 3 electrodes.
+%block TS.kgrid.MonkhorstPack
+    1  0  0 0.
+    0 10  0 0.
+    0  0  1 0.
+%endblock kgrid.MonkhorstPack
+
+
+# To highlight the simplest options
+# for transiesta we here show the input
+# in its reduced form. This may ONLY
+# be used for non-bias calculations.
+# In the next example we will reuse this
+# setup but create the input options for
+# a bias calculation.
+%block TS.ChemPots
+  Fermi
+%endblock TS.ChemPots
+
+# Define how the "Fermi" chemical potential
+# should be defined, i.e.
+# the energy shift of the chemical potential
+# with regards to the device "Fermi" level.
+# Also, we define the contours needed to
+# integegrate the equilibrium contour for
+# this chemical potential.
+%block TS.ChemPot.Fermi
+  mu 0. eV
+  contour.eq
+    begin
+      C-Fermi
+      T-Fermi
+    end
+%endblock
+
+# From this energy the number of poles will be calculated
+# from the energy and the temperature.
+TS.Contours.Eq.Pole 2.5 eV
+%block TS.Contour.C-Fermi
+  part circle
+   from -40. eV to -10 kT
+     points 25
+      method g-legendre
+%endblock
+%block TS.Contour.T-Fermi
+  part tail
+   from prev to inf
+     points 10
+      method g-fermi
+%endblock
+
+
+# This is the remaining default SIESTA options
+PAO.BasisSize         SZP
+
+XC.functional     GGA
+XC.authors        PBE
+MeshCutoff        200.000000 Ry
+FilterCutoff      150.000000 Ry
+
+ElectronicTemperature   300 K
+
+# the graphene actually spills out a bit.
+# We neglect that here But please, never use
+# this flag in production runs!
+TS.Elecs.Neglect.Principal true
+
+MinSCFIterations       3
+SCF.DM.Tolerance       0.0001
+# Mixing parameters:
+SCF.Mixer.Weight       0.10
+SCF.Mixer.History      12
+SCF.Mix.First          true
+DM.UseSaveDM           true
+
+MD.NumCGSteps 0
+
+SaveHS                          T
+
+%include DEVICE.fdf
