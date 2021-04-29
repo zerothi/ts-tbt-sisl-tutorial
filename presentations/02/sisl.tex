@@ -101,7 +101,7 @@ $> Eig2DOS -f -n 1000 -e -4 -E 4 siesta.EIG > DOS.dat
 
 \begin{verbatim}
     H = sisl.Hamiltonian.read('RUN.fdf')
-    mp = sisl.MonkhorstPack(H, [nx, ny, nz]).asaverage()
+    mp = sisl.MonkhorstPack(H, [nx, ny, nz]).apply.average
     E = np.linspace(-4, 4, 1000)
     DOS = mp.DOS(E)
 \end{verbatim}

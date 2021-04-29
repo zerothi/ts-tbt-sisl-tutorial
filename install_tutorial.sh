@@ -1,30 +1,31 @@
 #!/bin/bash
 
-url=www.student.dtu.dk/~nicpa/sisl/workshop/20
+url=www.student.dtu.dk/~nicpa/sisl/workshop/21
+indir=$HOME/TBT-TS-sisl-workshop
 
 function _help {
     echo "This script may be used to install the dependencies for the"
-    echo "tutorial such as Python, numpy, scipy matplotlib, jupyter and sisl."
+    echo "tutorial such as Python, numpy, scipy matplotlib, jupyter, sisl and z2pack."
     echo ""
     echo "This script is a two-step script. Please read below."
     echo ""
-    echo "If you do not have Python, numpy, scipy, jupyter, matplotlib or sisl installed"
-    echo "you should probably run this script in installation mode:"
+    echo "Running this script in installation mode will download and install conda"
+    echo "conda provides both Siesta executables as well as the sisl and dependency packages"
+    echo "so once installed all required infrastructure is available."
+    echo "It does, however, require a disk space of approximately >4GB"
+    echo ""
+    echo "To use the conda framework, run this script in installation mode:"
     echo ""
     echo "  $0 install"
     echo ""
-    echo "If you have a working Python installation with pip3 you may only need"
-    echo "to run"
+    echo "If you can install Siesta 4.1.5 and sisl 0.11.0 and the rest of the dependencies"
+    echo "manually then you won't be needing the above installation procedure."
+    echo "However, we cannot assist installing the packages manually."
     echo ""
-    echo "  pip3 install --upgrade numpy scipy matplotlib netCDF4 jupyter pyamg sisl z2pack"
-    echo ""
-    echo "Once the above steps are fulfilled you should run the download part"
+    echo "Once the above step is fulfilled you should run the download part"
     echo "of the script. It will download the required files for the tutorial:"
     echo ""
     echo "  $0 download"
-    echo ""
-    echo "During the download part a new directory will be created:"
-    echo "  $HOME/TBT-TS-sisl-workshop"
     echo ""
 }
 
@@ -55,7 +56,7 @@ case "x$OSTYPE" in
 		os=macos
 		;;
 	    *)
-		echo "Are you using MingGW or FreeBSD? Or a third?"
+		echo "Are you using MingGW or FreeBSD? Or a ($(uname -s))?"
 		echo "Either way this installation script does not work for your distribution..."
 		exit 1
 		;;
@@ -101,160 +102,6 @@ case $1 in
 esac
 
 
-# Function for installation on Linux
-function linux_install {
-
-    # Update lists
-    sudo apt-get update
-
-    # First ensure that the correct packages are installed
-    for p in gcc gfortran libhdf5-dev libnetcdf-dev libnetcdff-dev python3-dev python3-tk python3-pip libatlas3-base liblapack3 libfreetype6-dev libpng-dev
-    do
-	sudo apt-get install $p
-    done
-    
-    # Perform the Python installation
-    pip3 install --upgrade six numpy scipy matplotlib netCDF4 jupyter pyamg sisl z2pack
-    if [ $? -ne 0 ]; then
-	echo "pip3 failed to install the packages, will try to install"
-	echo "in your user directory, if this fails you will have to fix it"
-	pip3 install --user --upgrade six numpy scipy matplotlib netCDF4 jupyter pyamg sisl z2pack
-	if [ $? -ne 0 ]; then
-	    echo ""
-	    echo "pip3 failed to install the packages, in either the global or user domain."
-	    echo "Please try and get pip3 to work and re-run the installation proceduce."
-	fi
-    fi
-
-    # Figure out the local pip3 version
-    # Note that sometimes this may be wrong since Python should be `python3`.
-    local py_v=$(pip3 -V | awk '{print $NF}' | tr -d ')')
-
-    echo ""
-    echo "This script assumes you are using Python $py_v"
-    echo ""
-    
-    # You probably need to add to the path, this is a simplistic way of
-    # adding the default ubuntu installation directories
-    grep "/.local/bin" ~/.bashrc > /dev/null
-    if [ $? -eq 1 ]; then
-	echo "" >> ~/.bashrc
-	echo "export PATH=\$HOME/.local/bin:\$PATH" >> ~/.bashrc
-	echo ""
-	echo "PLEASE RESTART YOUR SHELL!"
-    fi
-    grep "/.local/lib/python$py_v" ~/.bashrc > /dev/null
-    if [ $? -eq 1 ]; then
-	echo "" >> ~/.bashrc
-	echo "export PYTHONPATH=\$HOME/.local/lib/python$py_v/site-packages:\$PYTHONPATH" >> ~/.bashrc
-	echo ""
-	echo "PLEASE RESTART YOUR SHELL!"
-    fi
-}
-
-
-# Function for installation on Linux
-function my_brew {
-    brew $@
-    if [ $? -ne 0 ]; then
-	echo "Running:"
-	echo "   brew $@"
-	echo "failed."
-	echo "If this requests you should do a link brew:"
-	echo "   brew link ..."
-	echo "then most probably your write access to this folder is prohibited:"
-	echo "   /usr/local/include/Frameworks"
-	echo "If the folder does not exist, create it."
-	exit 1
-    fi
-}
-	
-function macos_install {
-
-    # Check that brew is installed?
-    which brew 2>/dev/null
-    if [ $? -ne 0 ]; then
-	echo "You have not installed brew, this script requires that you have brew installed"
-	exit 1
-    fi
-    
-    # First we need to install xcode-select
-    xcode-select --install
-
-    # Now try and install gcc (it should also include gfortran)
-    my_brew install gcc
-    # Ensure wget is installed
-    my_brew install wget --with-libressl
-
-    # Add the science tap (it HAS been deprecated, so probably not needed
-    #my_brew tap homebrew/science
-
-    my_brew install szip hdf5
-    my_brew install netcdf --with-fortran
-    my_brew install python3
-    sudo easy_install pip3
-
-    pip3 install --upgrade six numpy scipy matplotlib netCDF4 jupyter pyamg sisl z2pack
-    if [ $? -ne 0 ]; then
-	echo "pip3 failed to install the packages, will try to install"
-	echo "in your user directory, if this fails you will have to fix it"
-	pip3 install --user --upgrade six numpy scipy matplotlib netCDF4 jupyter pyamg sisl z2pack
-	if [ $? -ne 0 ]; then
-	    echo ""
-	    echo "pip3 failed to install the packages, in either the global or user domain."
-	    echo "Please try and get pip3 to work and re-run the installation proceduce."
-	fi
-    fi
-}
-
-function install_warning {
-    echo "RUNNING THIS SCRIPT IS AT YOUR OWN RISK!!!"
-    echo "THIS SCRIPT IS MADE FOR HELPFUL PURPOSE, BUT YOU ARE"
-    echo "RESPONSIBLE FOR ANY ERRORS/DATALOSSES THIS SCRIPT MAY INFER."
-    echo "IF YOU DO NOT WANT TO RUN THIS SCRIPT PRESS:"
-    echo ""
-    echo "  CTRL+^C"
-    echo ""
-    sleep 3
-}
-
-function install_test_sisl {
-    echo ""
-    echo " Will try and run sisl"
-    echo "    import sisl ; print(sisl.geom.graphene())"
-    python3 -c "import sisl ; print(sisl.geom.graphene())"
-    if [ $? -ne 0 ]; then
-	echo "Failed running sisl, please mail the organizer with the error message (unless some of the installations failed)"
-    fi
-}
-
-if [ $action == install ]; then
-    # os will be download
-    case $os in
-	linux)
-	    install_warning
-	    linux_install
-	    ;;
-	macos)
-	    install_warning
-	    macos_install
-	    ;;
-    esac
-    install_test_sisl
-
-    exit 0
-fi
-
-# Now create a common folder in the top-home directory
-
-function download_warning {
-    echo ""
-    echo "This script will create a folder in your $HOME directory:"
-    echo "  $HOME/TBT-TS-sisl-workshop"
-    echo "where all the tutorials and executable files will be downloaded."
-    echo ""
-}
-
 function dwn_file {
     local rname=$1
     local outname=$1
@@ -271,14 +118,108 @@ function dwn_file {
     fi
 }
 
-download_warning
 
-indir=$HOME/TBT-TS-sisl-workshop
+function conda_install {
+    local exe=$1 ; shift
+
+    [ ! -e $exe ] && wget -O $exe https://repo.anaconda.com/miniconda/$exe
+
+    if [ -e $indir/miniconda3/etc/profile.d/conda.sh ]; then
+	# it should already be installed
+	source $indir/miniconda3/etc/profile.d/conda.sh
+    else
+	sh ./$exe -b -s -f -p $indir/miniconda3
+	source $indir/miniconda3/etc/profile.d/conda.sh
+    fi
+
+    conda install -c conda-forge -y siesta=4.1.5 sisl=0.11.0 matplotlib jupyter pyamg
+
+    # remove unused tarballs (no need for them to be around)
+    conda clean -t -y
+
+    echo ""
+    echo "Before you can run exercises etc. you should execute the following:"
+    echo ""
+    echo " source $indir/setup.sh"
+    echo ""
+    {
+	echo "#!/bin/bash"
+	echo "source $indir/miniconda3/etc/profile.d/conda.sh"
+	echo "conda activate"
+    } > $indir/setup.sh
+
+    source $indir/setup.sh
+
+    # now install packages not part of conda-forge
+    pip install z2pack
+}
+
+# Function for installation on Linux
+function linux_install {
+    conda_install Miniconda3-latest-Linux-x86_64.sh
+}
+
+
+function macos_install {
+    conda_install Miniconda3-latest-MacOSX-x86_64.sh
+}
+
+function install_warning {
+    echo "RUNNING THIS SCRIPT IS AT YOUR OWN RISK!!!"
+    echo "THIS SCRIPT IS MADE FOR HELPFUL PURPOSE, BUT YOU ARE"
+    echo "RESPONSIBLE FOR ANY ERRORS/DATALOSSES THIS SCRIPT MAY INFER."
+    echo "IF YOU DO NOT WANT TO RUN THIS SCRIPT PRESS:"
+    echo ""
+    echo "  CTRL+^C"
+    echo ""
+    echo "Please ensure you have more than 5 GB of disk space available!"
+    echo ""
+    sleep 3
+}
+
+# Now create a common folder in the top-home directory
+
+function download_warning {
+    echo ""
+    echo "This script will create a folder in your $HOME directory:"
+    echo "  $HOME/TBT-TS-sisl-workshop"
+    echo "where all the tutorials and executable files will be downloaded."
+    echo ""
+}
+
+function install_test_sisl {
+    echo ""
+    echo " Will try and run sisl"
+    echo "    import sisl ; print(sisl.__version__, sisl.__file__)"
+    python -c "import sisl ; print(sisl.__version__, sisl.__file__)"
+    if [ $? -ne 0 ]; then
+	echo "Failed running sisl, please mail the organizer with the error message (unless some of the installations failed)"
+    fi
+}
+
+# create installation directory
 mkdir -p $indir
 pushd $indir
 
-# Now download the executables
-mkdir -p bin
+if [ $action == install ]; then
+    # os will be download
+    download_warning
+    install_warning
+    case $os in
+	linux)
+	    linux_install
+	    ;;
+	macos)
+	    macos_install
+	    ;;
+    esac
+    install_test_sisl
+
+    exit 0
+else
+    download_warning
+fi
+
 
 # Download latest tutorial files
 if [ -e sisl-TBT-TS.tar.gz ]; then
@@ -286,46 +227,16 @@ if [ -e sisl-TBT-TS.tar.gz ]; then
 fi
 dwn_file sisl-TBT-TS.tar.gz
 
-# Determine the optimization level for the current architecture
-_suffix=
-case $os in
-    linux)
-	# Figure out if the user has AVX
-	if $(grep "avx2" /proc/cpuinfo > /dev/null) ; then
-	    _suffix=_avx2
-	elif $(grep "avx" /proc/cpuinfo > /dev/null) ; then
-	    _suffix=_avx
-	elif $(grep "sse2" /proc/cpuinfo > /dev/null) ; then
-	    _suffix=_sse
-	fi
-	;;
-esac
-
-case $os in
-    linux)
-	dwn_file bin/siesta$_suffix bin/siesta
-	dwn_file bin/tbtrans$_suffix bin/tbtrans
-	;;
-    macos)
-	dwn_file bin/siesta_mac bin/siesta
-	dwn_file bin/tbtrans_mac bin/tbtrans
-	;;
-esac
-
-# We will simply add it if it does not exist
-# We also assume the SHELL is BASH
-if ! `grep $indir ~/.bashrc` ; then
-    echo "" >> ~/.bashrc
-    echo "# Variable for the TBT-TS-sisl workshop" >> ~/.bashrc
-    echo "export PATH=$indir/bin:\$PATH" >> ~/.bashrc
-    echo "" >> ~/.bashrc
-fi
-
 echo ""
 echo "In folder"
 echo "   $indir"
-echo "you will find everything needed for the tutorial"
-echo "If you use BASH (most likely) you should have siesta and tbtrans in your path."
+echo "you will find everything needed for the tutorial."
+echo "If you are using the conda installation provided by this script"
+echo "please always start your sessions by executing:"
+echo ""
+echo "  source $indir/setup.sh"
+echo ""
+echo "which will correctly setup the environment for you."
 echo "Run (after you have restarted your shell):"
 echo "  which tbtrans"
-echo "and check it returns $indir/bin/tbtrans"
+echo "and check it returns $indir/miniconda3/bin/tbtrans"
