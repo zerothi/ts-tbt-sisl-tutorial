@@ -75,7 +75,7 @@ case $1 in
 	# Try and update
 	base=$(basename $0)
 	cp $cwd/$0 $cwd/old_$base
-	wget -O $cwd/new_$base $url/install_tutorial.sh
+	curl -o $cwd/new_$base -LO $url/install_tutorial.sh
 	if [ $? -eq 0 ]; then
 	    mv $cwd/new_$base $cwd/$base
 	    chmod u+x $cwd/$base
@@ -109,7 +109,7 @@ function dwn_file {
 	outname=$2
     fi
     if [ ! -e $outname ]; then
-	wget -O $outname $url/$(basename $rname)
+	curl -o $outname -LO $url/$(basename $rname)
 	if [ $? -eq 0 ]; then
 	    chmod u+x $outname
 	else
@@ -122,7 +122,7 @@ function dwn_file {
 function conda_install {
     local exe=$1 ; shift
 
-    [ ! -e $exe ] && wget -O $exe https://repo.anaconda.com/miniconda/$exe
+    [ ! -e $exe ] && curl -o $exe -LO https://repo.anaconda.com/miniconda/$exe
 
     if [ -e $indir/miniconda3/etc/profile.d/conda.sh ]; then
 	# it should already be installed
