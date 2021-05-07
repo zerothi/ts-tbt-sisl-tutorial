@@ -3,6 +3,28 @@
 url=www.student.dtu.dk/~nicpa/sisl/workshop/21
 indir=$HOME/TBT-TS-sisl-workshop
 
+
+if command -v wget &> /dev/null ; then
+    function download_file {
+	local url=$1
+	local out=$2
+	shift 2
+	wget -O $out $url
+	[ $? -ne 0 ] && echo "Failed to download: $url" && exit 1
+    }
+elif command -v curl &> /dev/null ; then
+    function download_file {
+	local url=$1
+	local out=$2
+	shift 2
+	curl -o $out -LO $url
+	[ $? -ne 0 ] && echo "Failed to download: $url" && exit 1
+    }
+else
+    echo "Cannot find either wget or curl command, please install one of them on your machine"
+    exit 1
+fi
+
 function _help {
     echo "This script may be used to install the dependencies for the"
     echo "tutorial such as Python, numpy, scipy matplotlib, jupyter, sisl and z2pack."
@@ -75,7 +97,7 @@ case $1 in
 	# Try and update
 	base=$(basename $0)
 	cp $cwd/$0 $cwd/old_$base
-	curl -o $cwd/new_$base -LO $url/install_tutorial.sh
+	download_file $url/install_tutorial.sh $cwd/new_$base
 	if [ $? -eq 0 ]; then
 	    mv $cwd/new_$base $cwd/$base
 	    chmod u+x $cwd/$base
@@ -109,7 +131,7 @@ function dwn_file {
 	outname=$2
     fi
     if [ ! -e $outname ]; then
-	curl -o $outname -LO $url/$(basename $rname)
+	download_file $url/$(basename $rname) $outname
 	if [ $? -eq 0 ]; then
 	    chmod u+x $outname
 	else
@@ -122,7 +144,7 @@ function dwn_file {
 function conda_install {
     local exe=$1 ; shift
 
-    [ ! -e $exe ] && curl -o $exe -LO https://repo.anaconda.com/miniconda/$exe
+    [ ! -e $exe ] && download_file https://repo.anaconda.com/miniconda/$exe $exe
 
     if [ -e $indir/miniconda3/etc/profile.d/conda.sh ]; then
 	# it should already be installed
