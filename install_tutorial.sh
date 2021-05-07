@@ -134,6 +134,9 @@ function conda_install {
 
     conda install -c conda-forge -y siesta=4.1.5 sisl=0.11.0 matplotlib jupyter pyamg
 
+    # The inelastica package requires also the compilers and static libraries
+    conda install -c conda-forge -y c-compiler fortran-compiler libblas liblapack
+
     # remove unused tarballs (no need for them to be around)
     conda clean -t -y
 
@@ -150,8 +153,26 @@ function conda_install {
 
     source $indir/setup.sh
 
-    # now install packages not part of conda-forge
+    # now install the different packages
+
+    # z2pack
     pip install z2pack
+
+    # inelastica
+    git clone https://github.com/tfrederiksen/inelastica.git
+    cd inelastica
+    python setup.py install
+    [ $? -ne 0 ] && exit 1
+    cd ../
+    rm -rf inelastica
+
+    # hubbard
+    git clone https://github.com/dipc-cc/hubbard.git
+    cd hubbard
+    python setup.py install
+    [ $? -ne 0 ] && exit 1
+    cd ../
+    rm -rf hubbard
 }
 
 # Function for installation on Linux
