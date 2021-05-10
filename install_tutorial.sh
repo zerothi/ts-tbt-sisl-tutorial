@@ -124,23 +124,6 @@ case $1 in
 esac
 
 
-function dwn_file {
-    local rname=$1
-    local outname=$1
-    if [ $# -eq 2 ]; then
-	outname=$2
-    fi
-    if [ ! -e $outname ]; then
-	download_file $url/$(basename $rname) $outname
-	if [ $? -eq 0 ]; then
-	    chmod u+x $outname
-	else
-	    rm -f $outname
-	fi
-    fi
-}
-
-
 function conda_install {
     local exe=$1 ; shift
 
@@ -268,7 +251,7 @@ fi
 if [ -e sisl-TBT-TS.tar.gz ]; then
     rm sisl-TBT-TS.tar.gz
 fi
-dwn_file sisl-TBT-TS.tar.gz
+download_file $url/sisl-TBT-TS.tar.gz sisl-TBT-TS.tar.gz
 
 echo ""
 echo "In folder"
