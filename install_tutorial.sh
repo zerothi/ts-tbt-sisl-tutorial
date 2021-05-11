@@ -164,20 +164,22 @@ function conda_install {
     pip install z2pack
 
     # inelastica
-    git clone https://github.com/tfrederiksen/inelastica.git
-    cd inelastica
+    download_file https://github.com/tfrederiksen/inelastica/archive/refs/heads/master.zip inelastica.zip
+    unzip -o inelastica.zip
+    cd inelastica-master
     python setup.py install
     [ $? -ne 0 ] && exit 1
     cd ../
-    rm -rf inelastica
+    rm -rf inelastica-master inelastica.zip
 
     # hubbard
-    git clone https://github.com/dipc-cc/hubbard.git
-    cd hubbard
+    download_file https://github.com/dipc-cc/hubbard/archive/refs/tags/v0.1.0.tar.gz hubbard-0.1.0.tar.gz
+    tar xfz hubbard-0.1.0.tar.gz
+    cd hubbard-0.1.0
     python setup.py install
     [ $? -ne 0 ] && exit 1
     cd ../
-    rm -rf hubbard
+    rm -rf hubbard-0.1.0 hubbard-0.1.0.tar.gz
 }
 
 # Function for installation on Linux
@@ -215,9 +217,11 @@ function download_warning {
 
 function install_test_sisl {
     echo ""
-    echo " Will try and run sisl"
-    echo "    import sisl ; print(sisl.__version__, sisl.__file__)"
-    python -c "import sisl ; print(sisl.__version__, sisl.__file__)"
+    echo " Will try and run sisl, Inelastica and hubbard"
+    echo "    import sisl ; print(sisl.__file__, sisl.__version__)"
+    echo "    import Inelastica ; print(Inelastica.__file__)"
+    echo "    import hubbard ; print(hubbard.__file__)"
+    python -c "import sisl ; print(sisl.__file__, sisl.__version__) ; import Inelastica ; print(Inelastica.__file__) ; import hubbard ; print(hubbard.__file__)"
     if [ $? -ne 0 ]; then
 	echo "Failed running sisl, please mail the organizer with the error message (unless some of the installations failed)"
     fi
@@ -251,7 +255,14 @@ fi
 if [ -e sisl-TBT-TS.tar.gz ]; then
     rm sisl-TBT-TS.tar.gz
 fi
-download_file $url/sisl-TBT-TS.tar.gz sisl-TBT-TS.tar.gz
+mkdir -p tarball
+download_file $url/sisl-TBT-TS.tar.gz tarball/sisl-TBT-TS.tar.gz
+{
+    echo "Please be careful about extracting sisl-TBT-TS.tar.gz"
+    echo "If you extract this on top of tutorials you have already"
+    echo "completed, you will overwrite any progress made."
+    echo "Please untar in a fresh directory and move the files you need."
+} > tarball/README
 
 echo ""
 echo "In folder"
