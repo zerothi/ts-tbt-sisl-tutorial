@@ -257,6 +257,7 @@ if [ -e sisl-TBT-TS.tar.gz ]; then
 fi
 mkdir -p tarball
 download_file $url/sisl-TBT-TS.tar.gz tarball/sisl-TBT-TS.tar.gz
+download_file $url/Tutorials-2021.tar.gz tarball/Tutorials-2021.tar.gz
 {
     echo "Please be careful about extracting sisl-TBT-TS.tar.gz"
     echo "If you extract this on top of tutorials you have already"
