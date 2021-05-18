@@ -10,7 +10,11 @@ if command -v wget &> /dev/null ; then
 	local out=$2
 	shift 2
 	wget -O $out $url
-	[ $? -ne 0 ] && echo "Failed to download: $url" && exit 1
+	local retval=$?
+	if [ $retval -ne 0 ]; then
+	    echo "Failed to download: $url to $out"
+	fi
+	return $retval
     }
 elif command -v curl &> /dev/null ; then
     function download_file {
@@ -18,7 +22,11 @@ elif command -v curl &> /dev/null ; then
 	local out=$2
 	shift 2
 	curl -o $out -LO $url
-	[ $? -ne 0 ] && echo "Failed to download: $url" && exit 1
+	local retval=$?
+	if [ $retval -ne 0 ]; then
+	    echo "Failed to download: $url to $out"
+	fi
+	return $retval
     }
 else
     echo "Cannot find either wget or curl command, please install one of them on your machine"
@@ -127,7 +135,10 @@ esac
 function conda_install {
     local exe=$1 ; shift
 
-    [ ! -e $exe ] && download_file https://repo.anaconda.com/miniconda/$exe $exe
+    if [ ! -e $exe ]; then
+	download_file https://repo.anaconda.com/miniconda/$exe $exe
+	[ $? -ne 0 ] && exit 1
+    fi
 
     if [ -e $indir/miniconda3/etc/profile.d/conda.sh ]; then
 	# it should already be installed
@@ -137,19 +148,19 @@ function conda_install {
 	source $indir/miniconda3/etc/profile.d/conda.sh
     fi
 
-    conda install -c conda-forge -y siesta=4.1.5 sisl=0.11.0 matplotlib jupyter pyamg
-
+    local packages=
+    packages="siesta=4.1.5 sisl=0.11.0"
+    packages="$packages matplotlib jupyter pyamg"
+    # The plotly sub-package requires plotly, pandas and scikit-image
+    packages="$packages plotly pandas xarray scikit-image"
     # The inelastica package requires also the compilers and static libraries
-    conda install -c conda-forge -y c-compiler fortran-compiler libblas liblapack
+    packages="$packages c-compiler fortran-compiler libblas liblapack"
+
+    # install everything
+    conda install -c conda-forge -y $packages
 
     # remove unused tarballs (no need for them to be around)
     conda clean -t -y
-
-    echo ""
-    echo "Before you can run exercises etc. you should execute the following:"
-    echo ""
-    echo " source $indir/setup.sh"
-    echo ""
     {
 	echo "#!/bin/bash"
 	echo "source $indir/miniconda3/etc/profile.d/conda.sh"
@@ -162,9 +173,12 @@ function conda_install {
 
     # z2pack
     pip install z2pack
+    pip install pathos
 
     # inelastica
     download_file https://github.com/tfrederiksen/inelastica/archive/refs/heads/master.zip inelastica.zip
+    [ $? -ne 0 ] && exit 1
+
     unzip -o inelastica.zip
     cd inelastica-master
     python setup.py install
@@ -174,12 +188,19 @@ function conda_install {
 
     # hubbard
     download_file https://github.com/dipc-cc/hubbard/archive/refs/tags/v0.1.0.tar.gz hubbard-0.1.0.tar.gz
+    [ $? -ne 0 ] && exit 1
     tar xfz hubbard-0.1.0.tar.gz
     cd hubbard-0.1.0
     python setup.py install
     [ $? -ne 0 ] && exit 1
     cd ../
     rm -rf hubbard-0.1.0 hubbard-0.1.0.tar.gz
+
+    echo ""
+    echo "Before you can run exercises etc. you should execute the following:"
+    echo ""
+    echo " source $indir/setup.sh"
+    echo ""
 }
 
 # Function for installation on Linux
@@ -218,10 +239,15 @@ function download_warning {
 function install_test_sisl {
     echo ""
     echo " Will try and run sisl, Inelastica and hubbard"
+    local cmd="import sisl ; print(sisl.__file__, sisl.__version__)"
     echo "    import sisl ; print(sisl.__file__, sisl.__version__)"
+    cmd="$cmd ; import Inelastica ; print(Inelastica.__file__)"
     echo "    import Inelastica ; print(Inelastica.__file__)"
-    echo "    import hubbard ; print(hubbard.__file__)"
-    python -c "import sisl ; print(sisl.__file__, sisl.__version__) ; import Inelastica ; print(Inelastica.__file__) ; import hubbard ; print(hubbard.__file__)"
+    cmd="$cmd ; import hubbard ; print(hubbard.__file__)"
+    echo "    import sisl.viz.plotly"
+    cmd="$cmd ; import sisl.viz.plotly"
+
+    python -c "$cmd"
     if [ $? -ne 0 ]; then
 	echo "Failed running sisl, please mail the organizer with the error message (unless some of the installations failed)"
     fi
@@ -252,12 +278,17 @@ fi
 
 
 # Download latest tutorial files
-if [ -e sisl-TBT-TS.tar.gz ]; then
-    rm sisl-TBT-TS.tar.gz
-fi
 mkdir -p tarball
-download_file $url/sisl-TBT-TS.tar.gz tarball/sisl-TBT-TS.tar.gz
-download_file $url/Tutorials-2021.tar.gz tarball/Tutorials-2021.tar.gz
+for file in sisl-TBT-TS.tar.gz \
+		Tutorials-2021.tar.gz \
+		Tutorials-2021-v2.tar.gz
+do
+    if [ -e tarball/$file ]; then
+	rm tarball/sisl-TBT-TS.tar.gz
+    fi
+    download_file $url/$file tarball/$file
+    [ $? -ne 0 ] && exit 1
+done
 {
     echo "Please be careful about extracting sisl-TBT-TS.tar.gz"
     echo "If you extract this on top of tutorials you have already"
@@ -266,8 +297,10 @@ download_file $url/Tutorials-2021.tar.gz tarball/Tutorials-2021.tar.gz
 } > tarball/README
 
 echo ""
-echo "In folder"
+echo "In folders"
 echo "   $indir"
+echo "and"
+echo "   $indir/tarball"
 echo "you will find everything needed for the tutorial."
 echo "If you are using the conda installation provided by this script"
 echo "please always start your sessions by executing:"

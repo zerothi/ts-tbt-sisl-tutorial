@@ -137,7 +137,7 @@ TS.Contours.Eq.Pole 2.5 eV
   bulk false
   check-kgrid False
 %endblock 
-
+TS.Hartree.Fix -A
 
 # For TBtrans we would like
 # the spectral density of states
