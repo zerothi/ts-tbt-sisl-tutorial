@@ -152,7 +152,7 @@ function conda_install {
     packages="siesta=4.1.5 sisl=0.11.0"
     packages="$packages matplotlib jupyter pyamg"
     # The plotly sub-package requires plotly, pandas and scikit-image
-    packages="$packages plotly pandas xarray scikit-image"
+    packages="$packages plotly pandas xarray scikit-image py3dmol"
     # The inelastica package requires also the compilers and static libraries
     packages="$packages c-compiler fortran-compiler libblas liblapack"
 
