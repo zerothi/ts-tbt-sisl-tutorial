@@ -33,5 +33,6 @@ add_file */*/C.psf
 
 # Add executables
 add_file */run.sh
+add_file A_05/C60.xyz
 
 tar cfvz sisl-TBT-TS.tar.gz $_files
