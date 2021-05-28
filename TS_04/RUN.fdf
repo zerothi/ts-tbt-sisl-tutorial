@@ -6,7 +6,7 @@ TBT.DOS.A.All
 
 # This helps the block-tri-diagonal partitioning.
 # Please try and run transiesta like this:
-#    transiesta -fdf TS.Analyze RUN.fdf > analyze.out
+#    siesta -fdf TS.Analyze RUN.fdf > analyze.out
 # and look at the bottom of the output.
 # The above command will try (nearly) *all* different pivoting
 # schemes, and then you can select the best performing one.

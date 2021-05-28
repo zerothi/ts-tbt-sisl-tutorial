@@ -1,7 +1,6 @@
-
 \input ../common.tex
 
-\graphicspath{{fig/}}
+\graphicspath{{fig/}{../fig/}}
 \usepackage[export]{adjustbox}
 
 \institute[Nick Papior; DTU Compute]{\begin{tikzpicture}
@@ -17,6 +16,35 @@
 \begin{document}
 
 \begin{frame}
+  \frametitle{Practical information}
+  
+  \small
+  \begin{itemize}
+
+    \item Lectures \emph{will} be recorded (by joining any session you agree to this)
+
+    \item Start at 9, ends at 17, Monday to Thursday
+
+    \item Hands-on will be guided through discord, specific chat fora for each tutorial
+
+    \item Poster session Wednesday
+
+    \item Please ask questions during the workshop, you are here to learn!
+    
+    \item If you know the answer to a fellow participants question, please answer!
+
+ \end{itemize}
+
+ \vskip 3em
+ \begin{center}
+   \large
+   Siesta, TranSiesta, TBtrans and sisl are \emph{not} static codes! They evolve due to
+   comments and contributions from users, so please contribute!
+ \end{center}
+ 
+\end{frame}
+
+\begin{frame}
   \titlepage
 \end{frame}
 
@@ -25,7 +53,8 @@
   \tableofcontents
 \end{frame}
 
-\input introduction.tex
+% TODO commented out for 2021
+%\input introduction.tex
 \input green.tex
 \input se.tex
 \input negf.tex

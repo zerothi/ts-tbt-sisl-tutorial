@@ -3,6 +3,36 @@
 url=www.student.dtu.dk/~nicpa/sisl/workshop/21
 indir=$HOME/TBT-TS-sisl-workshop
 
+
+if command -v wget &> /dev/null ; then
+    function download_file {
+	local url=$1
+	local out=$2
+	shift 2
+	wget -O $out $url
+	local retval=$?
+	if [ $retval -ne 0 ]; then
+	    echo "Failed to download: $url to $out"
+	fi
+	return $retval
+    }
+elif command -v curl &> /dev/null ; then
+    function download_file {
+	local url=$1
+	local out=$2
+	shift 2
+	curl -o $out -LO $url
+	local retval=$?
+	if [ $retval -ne 0 ]; then
+	    echo "Failed to download: $url to $out"
+	fi
+	return $retval
+    }
+else
+    echo "Cannot find either wget or curl command, please install one of them on your machine"
+    exit 1
+fi
+
 function _help {
     echo "This script may be used to install the dependencies for the"
     echo "tutorial such as Python, numpy, scipy matplotlib, jupyter, sisl and z2pack."
@@ -75,7 +105,7 @@ case $1 in
 	# Try and update
 	base=$(basename $0)
 	cp $cwd/$0 $cwd/old_$base
-	wget -O $cwd/new_$base $url/install_tutorial.sh
+	download_file $url/install_tutorial.sh $cwd/new_$base
 	if [ $? -eq 0 ]; then
 	    mv $cwd/new_$base $cwd/$base
 	    chmod u+x $cwd/$base
@@ -102,27 +132,13 @@ case $1 in
 esac
 
 
-function dwn_file {
-    local rname=$1
-    local outname=$1
-    if [ $# -eq 2 ]; then
-	outname=$2
-    fi
-    if [ ! -e $outname ]; then
-	wget -O $outname $url/$(basename $rname)
-	if [ $? -eq 0 ]; then
-	    chmod u+x $outname
-	else
-	    rm -f $outname
-	fi
-    fi
-}
-
-
 function conda_install {
     local exe=$1 ; shift
 
-    [ ! -e $exe ] && wget -O $exe https://repo.anaconda.com/miniconda/$exe
+    if [ ! -e $exe ]; then
+	download_file https://repo.anaconda.com/miniconda/$exe $exe
+	[ $? -ne 0 ] && exit 1
+    fi
 
     if [ -e $indir/miniconda3/etc/profile.d/conda.sh ]; then
 	# it should already be installed
@@ -132,16 +148,19 @@ function conda_install {
 	source $indir/miniconda3/etc/profile.d/conda.sh
     fi
 
-    conda install -c conda-forge -y siesta=4.1.5 sisl=0.11.0 matplotlib jupyter pyamg
+    local packages=
+    packages="siesta=4.1.5 sisl=0.11.0"
+    packages="$packages matplotlib jupyter pyamg"
+    # The plotly sub-package requires plotly, pandas and scikit-image
+    packages="$packages plotly pandas xarray scikit-image py3dmol"
+    # The inelastica package requires also the compilers and static libraries
+    packages="$packages c-compiler fortran-compiler libblas liblapack"
+
+    # install everything
+    conda install -c conda-forge -y $packages
 
     # remove unused tarballs (no need for them to be around)
     conda clean -t -y
-
-    echo ""
-    echo "Before you can run exercises etc. you should execute the following:"
-    echo ""
-    echo " source $indir/setup.sh"
-    echo ""
     {
 	echo "#!/bin/bash"
 	echo "source $indir/miniconda3/etc/profile.d/conda.sh"
@@ -150,8 +169,38 @@ function conda_install {
 
     source $indir/setup.sh
 
-    # now install packages not part of conda-forge
+    # now install the different packages
+
+    # z2pack
     pip install z2pack
+    pip install pathos
+
+    # inelastica
+    download_file https://github.com/tfrederiksen/inelastica/archive/24c9dc14d866ac409492c9eed83d6728b65116cc.zip inelastica.zip
+    [ $? -ne 0 ] && exit 1
+
+    unzip -o inelastica.zip
+    cd inelastica-24c9dc14d866ac409492c9eed83d6728b65116cc
+    python setup.py install
+    [ $? -ne 0 ] && exit 1
+    cd ../
+    rm -rf inelastica-24c9dc14d866ac409492c9eed83d6728b65116cc inelastica.zip
+
+    # hubbard
+    download_file https://github.com/dipc-cc/hubbard/archive/refs/tags/v0.1.0.tar.gz hubbard-0.1.0.tar.gz
+    [ $? -ne 0 ] && exit 1
+    tar xfz hubbard-0.1.0.tar.gz
+    cd hubbard-0.1.0
+    python setup.py install
+    [ $? -ne 0 ] && exit 1
+    cd ../
+    rm -rf hubbard-0.1.0 hubbard-0.1.0.tar.gz
+
+    echo ""
+    echo "Before you can run exercises etc. you should execute the following:"
+    echo ""
+    echo " source $indir/setup.sh"
+    echo ""
 }
 
 # Function for installation on Linux
@@ -189,9 +238,16 @@ function download_warning {
 
 function install_test_sisl {
     echo ""
-    echo " Will try and run sisl"
-    echo "    import sisl ; print(sisl.__version__, sisl.__file__)"
-    python -c "import sisl ; print(sisl.__version__, sisl.__file__)"
+    echo " Will try and run sisl, Inelastica and hubbard"
+    local cmd="import sisl ; print(sisl.__file__, sisl.__version__)"
+    echo "    import sisl ; print(sisl.__file__, sisl.__version__)"
+    cmd="$cmd ; import Inelastica ; print(Inelastica.__file__)"
+    echo "    import Inelastica ; print(Inelastica.__file__)"
+    cmd="$cmd ; import hubbard ; print(hubbard.__file__)"
+    echo "    import sisl.viz.plotly"
+    cmd="$cmd ; import sisl.viz.plotly"
+
+    python -c "$cmd"
     if [ $? -ne 0 ]; then
 	echo "Failed running sisl, please mail the organizer with the error message (unless some of the installations failed)"
     fi
@@ -222,14 +278,27 @@ fi
 
 
 # Download latest tutorial files
-if [ -e sisl-TBT-TS.tar.gz ]; then
-    rm sisl-TBT-TS.tar.gz
-fi
-dwn_file sisl-TBT-TS.tar.gz
+mkdir -p tarball
+for file in sisl-TBT-TS.tar.gz
+do
+    if [ -e tarball/$file ]; then
+	rm tarball/$file
+    fi
+    download_file $url/$file tarball/$file
+    [ $? -ne 0 ] && exit 1
+done
+{
+    echo "Please be careful about extracting sisl-TBT-TS.tar.gz"
+    echo "If you extract this on top of tutorials you have already"
+    echo "completed, you will overwrite any progress made."
+    echo "Please untar in a fresh directory and move the files you need."
+} > tarball/README
 
 echo ""
-echo "In folder"
+echo "In folders"
 echo "   $indir"
+echo "and"
+echo "   $indir/tarball"
 echo "you will find everything needed for the tutorial."
 echo "If you are using the conda installation provided by this script"
 echo "please always start your sessions by executing:"

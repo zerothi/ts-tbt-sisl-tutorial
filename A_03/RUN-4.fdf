@@ -1,0 +1,44 @@
+# The input for tbtrans does not contain any direct
+# reference to the dH for magnetic field
+# We will add the flag TBT.dH for each B field
+# directly from command line
+TBT.HS DEVICE.nc
+
+TBT.T.All true
+%block TBT.Elecs
+  Left
+  Bottom
+  Top
+  Right
+%endblock
+
+# Figure out how to save the self-energy function files
+# once, and then re-use them.
+# For reference they are named TBTGF files
+%block TBT.Elec.Left
+  HS ELEC_x.nc
+  semi-inf-direction -A1
+%endblock TBT.Elec.Left
+
+%block TBT.Elec.Bottom
+  HS ELEC_y.nc
+  semi-inf-direction -A2
+%endblock
+
+%block TBT.Elec.Top
+  HS ELEC_y.nc
+  semi-inf-direction +A2
+%endblock
+
+%block TBT.Elec.Right
+  HS ELEC_x.nc
+  semi-inf-direction +A1
+%endblock TBT.Elec.Right
+
+# Reduce the energy-grid to [0.0 : 1.0] eV
+%block TBT.Contour.line
+  part line
+     from 0 eV to 1 eV
+      delta 0.005 eV
+        method mid-rule
+%endblock TBT.Contour.line
