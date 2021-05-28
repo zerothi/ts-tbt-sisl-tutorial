@@ -279,8 +279,7 @@ fi
 
 # Download latest tutorial files
 mkdir -p tarball
-for file in sisl-TBT-TS.tar.gz \
-		Tutorials-2021.tar.gz \
+for file in sisl-TBT-TS.tar.gz
 do
     if [ -e tarball/$file ]; then
 	rm tarball/$file
