@@ -176,15 +176,15 @@ function conda_install {
     pip install pathos
 
     # inelastica
-    download_file https://github.com/tfrederiksen/inelastica/archive/refs/heads/master.zip inelastica.zip
+    download_file https://github.com/tfrederiksen/inelastica/archive/24c9dc14d866ac409492c9eed83d6728b65116cc.zip inelastica.zip
     [ $? -ne 0 ] && exit 1
 
     unzip -o inelastica.zip
-    cd inelastica-master
+    cd inelastica-24c9dc14d866ac409492c9eed83d6728b65116cc
     python setup.py install
     [ $? -ne 0 ] && exit 1
     cd ../
-    rm -rf inelastica-master inelastica.zip
+    rm -rf inelastica-24c9dc14d866ac409492c9eed83d6728b65116cc inelastica.zip
 
     # hubbard
     download_file https://github.com/dipc-cc/hubbard/archive/refs/tags/v0.1.0.tar.gz hubbard-0.1.0.tar.gz
@@ -281,10 +281,9 @@ fi
 mkdir -p tarball
 for file in sisl-TBT-TS.tar.gz \
 		Tutorials-2021.tar.gz \
-		Tutorials-2021-v2.tar.gz
 do
     if [ -e tarball/$file ]; then
-	rm tarball/sisl-TBT-TS.tar.gz
+	rm tarball/$file
     fi
     download_file $url/$file tarball/$file
     [ $? -ne 0 ] && exit 1
