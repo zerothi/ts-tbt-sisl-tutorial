@@ -5,8 +5,8 @@
 # This is extracting the bond-currents at E = 0.1 eV
 for elec in X-1 X-2 Y-1 Y-2
 do
-    echo Creating vector-currents for elec-$elec
+    echo Creating vector transmissions for elec-$elec
     sgeom siesta.TBT.nc \
-	  --vector vector_current elec-$elec 0.1 \
+	  --vector vector_transmission 0.1 elec-$elec \
 	  --out elec-${elec}_0.1.xsf
 done

@@ -24,9 +24,9 @@ sdata siesta.TBT.nc --atom "$a" --dos \
 # plane and plot them using XSF
 # This is extracting the bond-currents at E = 0.1 eV
 sdata siesta.TBT.nc \
-      --vector vector_current Left 0.1 \
+      --vector vector_transmission 0.1 Left \
       --out left_0.1.xsf
 sdata siesta.TBT.nc \
-      --vector vector_current Right 0.1 \
+      --vector vector_transmission 0.1 Right \
       --out right_0.1.xsf
 
