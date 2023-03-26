@@ -1,0 +1,75 @@
+SystemName           # default value
+SystemLabel     siesta     # default value
+XML.Write              T     # default value
+XML.AbortOnErrors              F     # default value
+XML.AbortOnWarnings              F     # default value
+timer_report_threshold          0.000000000         # default value
+UseTreeTimer              F     # default value
+alloc_report_level         0     # default value
+alloc_report_threshold          0.000000000         # default value
+xc.functional     GGA                                                                             
+xc.authors     PBE                                                                             
+MM.Cutoff          30.00000000     Bohr     # default value
+MM.UnitsEnergy     eV     # default value
+MM.UnitsDistance     Ang     # default value
+WriteIonPlotFiles              F     # default value
+Atom.Debug.KB.Generation              F     # default value
+KB.New.Reference.Orbitals              F     # default value
+user-basis              F     # default value
+user-basis-netcdf              F     # default value
+ReparametrizePseudos              F     # default value
+Restricted.Radial.Grid              T     # default value
+Rmax.Radial.Grid          0.000000000         # default value
+PAO.BasisSize     SZP                                                                             
+PAO.BasisType     split          # default value
+PAO.SoftDefault              F     # default value
+PAO.SoftInnerRadius         0.9000000000         # default value
+PAO.SoftPotential          40.00000000         # default value
+PAO.SplitNorm         0.1500000000         # default value
+PAO.SplitNormH         -1.000000000         # default value
+Number_of_species              1
+%block Chemical_species_label
+  1 6 C
+%endblock Chemical_species_label
+FilterCutoff          150.0000000             Ry
+# above item originally: FilterCutoff          150.0000000     Ry        
+KB.Rmax          6.000000000     Bohr     # default value
+PAO.EnergyShift         0.2000000000E-01 Ry     # default value
+PAO.SplitTailNorm              F     # default value
+PAO.FixSplitTable              F     # default value
+PAO.NewSplitCode              F     # default value
+PAO.Filter              T     # default value
+PAO.FilterFactor         0.4900000000         # default value
+PAO.FilterTol         0.3000000000E-02 Ry     # default value
+PAO.Filter              T     # default value
+PAO.FilterFactor         0.4900000000         # default value
+PAO.FilterTol         0.3000000000E-02 Ry     # default value
+PAO.OldStylePolorbs              T     # default value
+PAO.SplitTailNorm              F     # default value
+PAO.FixSplitTable              F     # default value
+PAO.NewSplitCode              F     # default value
+PAO.Filter              T     # default value
+PAO.FilterFactor         0.4900000000         # default value
+PAO.FilterTol         0.3000000000E-02 Ry     # default value
+Vna.Filter              T     # default value
+VNA.FilterFactor          1.000000000         # default value
+Vna.FilterCutoff          150.0000000     Ry     # default value
+VNA.FilterTol         0.3000000000E-02 Ry     # default value
+PCC.Filter              T     # default value
+PCC.FilterFactor          1.000000000         # default value
+PCC.FilterCutoff          150.0000000     Ry     # default value
+PCC.FilterTol         0.3000000000E-02 Ry     # default value
+PAO.BasisType     split          # default value
+Atom-Setup-Only              F     # default value
+UseStructFile              F     # default value
+MD.UseStructFile              F     # default value
+LatticeConstant          1.889726878           Bohr
+# above item originally: LatticeConstant          1.000000000     Ang       
+%block LatticeVectors
+  25.92000000 0.00000000 0.00000000
+  0.00000000 2.49415316 0.00000000
+  0.00000000 0.00000000 14.40000000
+AtomicCoordinatesFormat     Ang                                                                             
+NumberOfAtoms             24
+ZM.UnitsLength     Bohr           # default value
+ZM.UnitsAngle     rad            # default value
