@@ -1,0 +1,6 @@
+#!/bin/bash
+
+siesta --electrode RUN_ELEC.fdf > RUN_ELEC.out
+
+siesta RUN.fdf > RUN.out
+
