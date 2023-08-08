@@ -10,7 +10,7 @@ This is the tutorial used for sisl + TBtrans + TranSiesta workshops.
 The sources used for these tutorials can be found elsewhere:
 
 
-- [sisl][sisl@git] (>= 0.11.0)
+- [sisl][sisl@git] (>= 0.14.0)
 - [TBtrans][tbtrans] (>= 4.1.5)
 - [Siesta][tbtrans] (>= 4.1.5)
 
