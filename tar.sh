@@ -35,4 +35,7 @@ add_file */*/C.psf
 add_file */run.sh
 add_file A_05/C60.xyz
 
+# Add external
+add_file external
+
 tar cfvz sisl-TBT-TS.tar.gz $_files

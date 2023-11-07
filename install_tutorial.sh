@@ -1,134 +1,126 @@
 #!/bin/bash
 
-url=www.student.dtu.dk/~nicpa/sisl/workshop/21
+set -e
+
+url=www.student.dtu.dk/~nicpa/sisl/workshop/23
 indir=$HOME/TBT-TS-sisl-workshop
+# We install miniconda in the $indir
+# Hence we don't need an enviroment, we just have it here
+# as a place-holder.
+env_name="2023-workshop-ts-sisl"
 
 
 if command -v wget &> /dev/null ; then
-    function download_file {
-	local url=$1
-	local out=$2
-	shift 2
-	wget -O $out $url
-	local retval=$?
-	if [ $retval -ne 0 ]; then
-	    echo "Failed to download: $url to $out"
-	fi
-	return $retval
-    }
+  function download_file {
+    local url=$1
+    local out=$2
+    shift 2
+    wget -O $out $url
+    local retval=$?
+    if [ $retval -ne 0 ]; then
+        echo "Failed to download: $url to $out"
+    fi
+    return $retval
+  }
 elif command -v curl &> /dev/null ; then
-    function download_file {
-	local url=$1
-	local out=$2
-	shift 2
-	curl -o $out -LO $url
-	local retval=$?
-	if [ $retval -ne 0 ]; then
-	    echo "Failed to download: $url to $out"
-	fi
-	return $retval
-    }
+  function download_file {
+    local url=$1
+    local out=$2
+    shift 2
+    curl -o $out -LO $url
+    local retval=$?
+    if [ $retval -ne 0 ]; then
+        echo "Failed to download: $url to $out"
+    fi
+    return $retval
+  }
 else
-    echo "Cannot find either wget or curl command, please install one of them on your machine"
-    exit 1
+  echo "Cannot find either wget or curl command, please install one of them on your machine"
+  exit 1
 fi
 
 function _help {
-    echo "This script may be used to install the dependencies for the"
-    echo "tutorial such as Python, numpy, scipy matplotlib, jupyter, sisl and z2pack."
-    echo ""
-    echo "This script is a two-step script. Please read below."
-    echo ""
-    echo "Running this script in installation mode will download and install conda"
-    echo "conda provides both Siesta executables as well as the sisl and dependency packages"
-    echo "so once installed all required infrastructure is available."
-    echo "It does, however, require a disk space of approximately >4GB"
-    echo ""
-    echo "To use the conda framework, run this script in installation mode:"
-    echo ""
-    echo "  $0 install"
-    echo ""
-    echo "If you can install Siesta 4.1.5 and sisl 0.11.0 and the rest of the dependencies"
-    echo "manually then you won't be needing the above installation procedure."
-    echo "However, we cannot assist installing the packages manually."
-    echo ""
-    echo "Once the above step is fulfilled you should run the download part"
-    echo "of the script. It will download the required files for the tutorial:"
-    echo ""
-    echo "  $0 download"
-    echo ""
+  echo "This script may be used to install the dependencies for the"
+  echo "tutorial such as Python, numpy, scipy, matplotlib, jupyter and sisl and hubbard."
+  echo ""
+  echo "This script is a two-step script. Please read below."
+  echo ""
+  echo "Running this script in installation mode will download and install conda"
+  echo "conda provides both Siesta executables as well as the sisl and dependency packages"
+  echo "so once installed all required infrastructure is available."
+  echo "It does, however, require a disk space of approximately >4GB"
+  echo ""
+  echo "To use the conda framework, run this script in installation mode:"
+  echo ""
+  echo "  $0 install"
+  echo ""
+  echo "If you can install Siesta (master version) and sisl 0.14.3 and the rest of the dependencies"
+  echo "manually then you won't be needing the above installation procedure."
+  echo "However, we cannot assist installing the packages manually."
+  echo ""
+  echo "Once the above step is fulfilled you should run the download part"
+  echo "of the script. It will download the required files for the tutorial:"
+  echo ""
+  echo "  $0 download"
+  echo ""
 }
 
 if [ $# -eq 0 ]; then
-    _help
-    exit 1
+  _help
+  exit 1
 fi
 
 # First we get the current directory
 cwd=$(pwd)
 
 # Figure out if we are dealing with UNIX or MacOS
-os=linux
-case "x$OSTYPE" in
-    xlinux*)
-	os=linux
-	;;
-    xdarwin*)
-	os=macos
-	;;
-    x*)
-	# Try and determine using uname
-	case "$(uname -s)" in
-	    Linux*)
-		os=linux
-		;;
-	    Darwin*)
-		os=macos
-		;;
-	    *)
-		echo "Are you using MingGW or FreeBSD? Or a ($(uname -s))?"
-		echo "Either way this installation script does not work for your distribution..."
-		exit 1
-		;;
-	esac
-	;;
+os=$(uname -s)
+arch=$(uname -m)
+case "${os}" in
+    Linux|Darwin)
+	    ;;
+    *)
+      echo "Are you using MingGW or FreeBSD? Or a (${os})?"
+      echo "Either way this installation script does not work for your distribution..."
+      exit 1
+      ;;
 esac
 
 action=install
 case $1 in
     install)
-	# do nothing, we use the OS to determine stuff
-	action=install
-	;;
+      # do nothing, we use the OS to determine stuff
+      action=install
+      ;;
     update)
-	# Update this script
-	# Try and update
-	base=$(basename $0)
-	cp $cwd/$0 $cwd/old_$base
-	download_file $url/install_tutorial.sh $cwd/new_$base
-	if [ $? -eq 0 ]; then
-	    mv $cwd/new_$base $cwd/$base
-	    chmod u+x $cwd/$base
-	    echo ""
-	    echo "Successfully updated script..."
-	    rm $cwd/old_$base
- 	fi
-	exit 0
-	;;
+      # Update this script
+      # Try and update
+      base=$(basename $0)
+      cp $cwd/$0 $cwd/old_$base
+      download_file $url/install_tutorial.sh $cwd/new_$base
+      if [ $? -eq 0 ]; then
+          mv $cwd/new_$base $cwd/$base
+          chmod u+x $cwd/$base
+          echo ""
+          echo "Successfully updated script..."
+          rm $cwd/old_$base
+      fi
+      exit 0
+      ;;
     download)
-	action=download
-	;;
+      action=download
+      ;;
     *)
-	echo "###########################################"
-	echo "# Unknown argument: $1"
-	echo "#"
-	echo "# Should be either 'install', 'update' or 'download'"
-	echo "#"
-	echo "###########################################"
-	echo ""
-	_help
-	exit 1
-	;;
+      echo "###########################################"
+      echo "# Unknown argument: $1"
+      echo "#"
+      echo "# Should be either 'install', 'update' or 'download'"
+      echo "#"
+      echo "###########################################"
+      echo ""
+      _help
+      exit 1
+      ;;
 esac
 
 
@@ -136,65 +128,62 @@ function conda_install {
     local exe=$1 ; shift
 
     if [ ! -e $exe ]; then
-	download_file https://repo.anaconda.com/miniconda/$exe $exe
-	[ $? -ne 0 ] && exit 1
+      download_file https://repo.anaconda.com/miniconda/$exe $exe
+      [ $? -ne 0 ] && exit 1
     fi
 
-    if [ -e $indir/miniconda3/etc/profile.d/conda.sh ]; then
-	# it should already be installed
-	source $indir/miniconda3/etc/profile.d/conda.sh
-    else
-	sh ./$exe -b -s -f -p $indir/miniconda3
-	source $indir/miniconda3/etc/profile.d/conda.sh
+    if [ ! -e $indir/miniconda3/etc/profile.d/conda.sh ]; then
+      sh ./$exe -b -s -f -p $indir/miniconda3
+    fi
+    source $indir/miniconda3/etc/profile.d/conda.sh
+    conda update -y -n base conda
+
+    if [[ ${arch} == "arm64" ]]; then
+      # see https://github.com/conda-forge/miniforge/issues/165#issuecomment-860233092
+      # This should use rosetta under the hood, if not
+      # then open a terminal by emulating x86-64
+      conda conda config --env --set subdir osx-64
     fi
 
-    local packages=
-    packages="siesta=4.1.5 sisl=0.11.0"
-    packages="$packages matplotlib jupyter pyamg"
-    # The plotly sub-package requires plotly, pandas and scikit-image
-    packages="$packages plotly pandas xarray scikit-image py3dmol"
-    # The inelastica package requires also the compilers and static libraries
-    packages="$packages c-compiler fortran-compiler libblas liblapack"
+    local -a packages=
+    packages=(
+      "python<3.12"
+      "siesta=5.0.0rc1=*openmpi*"
+      "sisl=0.14.2"
+      "netCDF4"
+      "matplotlib"
+      "jupyter"
+      "pyamg"
+      "plotly"
+      "pandas"
+      "xarray"
+      "scikit-image"
+      "py3dmol"
+    )
 
     # install everything
-    conda install -c conda-forge -y $packages
+    conda install -y -c conda-forge/label/siesta_rc -c conda-forge ${packages[@]}
+    [ $? -ne 0 ] && { echo "failed" ; exit 1; }
 
     # remove unused tarballs (no need for them to be around)
     conda clean -t -y
     {
-	echo "#!/bin/bash"
-	echo "source $indir/miniconda3/etc/profile.d/conda.sh"
-	echo "conda activate"
+    echo "#!/bin/bash"
+    echo "source $indir/miniconda3/bin/activate"
     } > $indir/setup.sh
 
     source $indir/setup.sh
 
-    # now install the different packages
-
-    # z2pack
-    pip install z2pack
-    pip install pathos
-
-    # inelastica
-    download_file https://github.com/tfrederiksen/inelastica/archive/24c9dc14d866ac409492c9eed83d6728b65116cc.zip inelastica.zip
-    [ $? -ne 0 ] && exit 1
-
-    unzip -o inelastica.zip
-    cd inelastica-24c9dc14d866ac409492c9eed83d6728b65116cc
-    python setup.py install
-    [ $? -ne 0 ] && exit 1
-    cd ../
-    rm -rf inelastica-24c9dc14d866ac409492c9eed83d6728b65116cc inelastica.zip
-
     # hubbard
-    download_file https://github.com/dipc-cc/hubbard/archive/refs/tags/v0.1.0.tar.gz hubbard-0.1.0.tar.gz
+    local v=0.4.1
+    download_file https://github.com/dipc-cc/hubbard/archive/refs/tags/v$v.tar.gz hubbard-$v.tar.gz
     [ $? -ne 0 ] && exit 1
-    tar xfz hubbard-0.1.0.tar.gz
-    cd hubbard-0.1.0
-    python setup.py install
+    tar xfz hubbard-$v.tar.gz
+    cd hubbard-$v
+    python -m pip install .
     [ $? -ne 0 ] && exit 1
     cd ../
-    rm -rf hubbard-0.1.0 hubbard-0.1.0.tar.gz
+    rm -rf hubbard-$v hubbard-$v.tar.gz
 
     echo ""
     echo "Before you can run exercises etc. you should execute the following:"
@@ -205,12 +194,15 @@ function conda_install {
 
 # Function for installation on Linux
 function linux_install {
-    conda_install Miniconda3-latest-Linux-x86_64.sh
+  conda_install Miniconda3-latest-Linux-${arch}.sh
 }
 
 
 function macos_install {
-    conda_install Miniconda3-latest-MacOSX-x86_64.sh
+  if [[ ${arch} == "arm64" ]]; then
+    export CONDA_SUBDIR=osx-64
+  fi
+  conda_install Miniconda3-latest-MacOSX-${arch}.sh
 }
 
 function install_warning {
@@ -238,14 +230,12 @@ function download_warning {
 
 function install_test_sisl {
     echo ""
-    echo " Will try and run sisl, Inelastica and hubbard"
+    echo " Will try and run sisl and hubbard"
     local cmd="import sisl ; print(sisl.__file__, sisl.__version__)"
     echo "    import sisl ; print(sisl.__file__, sisl.__version__)"
-    cmd="$cmd ; import Inelastica ; print(Inelastica.__file__)"
-    echo "    import Inelastica ; print(Inelastica.__file__)"
     cmd="$cmd ; import hubbard ; print(hubbard.__file__)"
-    echo "    import sisl.viz.plotly"
-    cmd="$cmd ; import sisl.viz.plotly"
+    echo "    import sisl.viz"
+    cmd="$cmd ; import sisl.viz"
 
     python -c "$cmd"
     if [ $? -ne 0 ]; then
@@ -262,11 +252,11 @@ if [ $action == install ]; then
     download_warning
     install_warning
     case $os in
-	linux)
-	    linux_install
+      Linux)
+        linux_install
 	    ;;
-	macos)
-	    macos_install
+      Darwin)
+        macos_install
 	    ;;
     esac
     install_test_sisl
@@ -281,11 +271,11 @@ fi
 mkdir -p tarball
 for file in sisl-TBT-TS.tar.gz
 do
-    if [ -e tarball/$file ]; then
-	rm tarball/$file
-    fi
-    download_file $url/$file tarball/$file
-    [ $? -ne 0 ] && exit 1
+  if [ -e tarball/$file ]; then
+    rm tarball/$file
+  fi
+  download_file $url/$file tarball/$file
+  [ $? -ne 0 ] && exit 1
 done
 {
     echo "Please be careful about extracting sisl-TBT-TS.tar.gz"
