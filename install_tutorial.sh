@@ -127,16 +127,17 @@ esac
 function conda_install {
     local exe=$1 ; shift
 
-    if [ ! -e $exe ]; then
-      download_file https://repo.anaconda.com/miniconda/$exe $exe
-      [ $? -ne 0 ] && exit 1
-    fi
-
-    if [ ! -e $indir/miniconda3/etc/profile.d/conda.sh ]; then
+    if [ ! -e $indir/miniconda3/bin/activate ]; then
+      if [ ! -e $exe ]; then
+        download_file https://repo.anaconda.com/miniconda/$exe $exe
+        [ $? -ne 0 ] && exit 1
+      fi
       sh ./$exe -b -s -f -p $indir/miniconda3
+      source $indir/miniconda3/bin/activate
+      conda update -y -n base conda
+    else
+      source $indir/miniconda3/bin/activate
     fi
-    source $indir/miniconda3/etc/profile.d/conda.sh
-    conda update -y -n base conda
 
     if [[ ${arch} == "arm64" ]]; then
       # see https://github.com/conda-forge/miniforge/issues/165#issuecomment-860233092
@@ -149,14 +150,13 @@ function conda_install {
     packages=(
       "python<3.12"
       "siesta=5.0.0rc1=*openmpi*"
-      "sisl=0.14.2"
+      "sisl=0.14.3"
       "netCDF4"
-      "matplotlib"
       "jupyter"
       "pyamg"
+      "pathos"
+      "matplotlib"
       "plotly"
-      "pandas"
-      "xarray"
       "scikit-image"
       "py3dmol"
     )
