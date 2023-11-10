@@ -27,7 +27,7 @@ elif command -v curl &> /dev/null ; then
     local url=$1
     local out=$2
     shift 2
-    curl -o $out -LO $url
+    curl -k -o $out -LO $url
     local retval=$?
     if [ $retval -ne 0 ]; then
         echo "Failed to download: $url to $out"
@@ -170,6 +170,7 @@ function conda_install {
     {
     echo "#!/bin/bash"
     echo "source $indir/miniconda3/bin/activate"
+    echo "export OMPI_MCA_btl='vader,self'"
     } > $indir/setup.sh
 
     source $indir/setup.sh
