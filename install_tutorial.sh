@@ -278,17 +278,27 @@ do
   [ $? -ne 0 ] && exit 1
 done
 {
-    echo "Please be careful about extracting sisl-TBT-TS.tar.gz"
-    echo "If you extract this on top of tutorials you have already"
-    echo "completed, you will overwrite any progress made."
+    echo "Please be careful about extracting these tarballs."
+    echo "If you extract them on top of tutorials you have already"
+    echo "completed, you will overwrite any progress made!"
     echo "Please untar in a fresh directory and move the files you need."
 } > tarball/README
+
+mkdir -p presentations
+for file in talk_1.pdf talk_3.pdf talk_4.pdf RSSE.pdf
+do
+  if [ -e presentations/$file ]; then
+    rm presentations/$file
+  fi
+  download_file $url/$file presentations/$file
+  [ $? -ne 0 ] && exit 1
+done
 
 echo ""
 echo "In folders"
 echo "   $indir"
-echo "and"
 echo "   $indir/tarball"
+echo "   $indir/presentations"
 echo "you will find everything needed for the tutorial."
 echo "If you are using the conda installation provided by this script"
 echo "please always start your sessions by executing:"
