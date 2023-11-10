@@ -143,7 +143,7 @@ function conda_install {
       # see https://github.com/conda-forge/miniforge/issues/165#issuecomment-860233092
       # This should use rosetta under the hood, if not
       # then open a terminal by emulating x86-64
-      conda conda config --env --set subdir osx-64
+      conda config --env --set subdir osx-64
     fi
 
     local -a packages=
@@ -269,7 +269,7 @@ fi
 
 # Download latest tutorial files
 mkdir -p tarball
-for file in sisl-TBT-TS.tar.gz
+for file in sisl-TBT-TS.tar.gz hubbard-tutorials.tar.gz xabier-tutorials.tar.gz
 do
   if [ -e tarball/$file ]; then
     rm tarball/$file
