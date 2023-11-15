@@ -110,6 +110,9 @@ case $1 in
     download)
       action=download
       ;;
+    fix)
+      action=fix
+      ;;
     *)
       echo "###########################################"
       echo "# Unknown argument: $1"
@@ -122,6 +125,12 @@ case $1 in
       exit 1
       ;;
 esac
+
+function fix_sisl {
+  # TODO this only fixes the 0.14.3 version, if a later version in installed,
+  # then there is no need.
+  sed -i -s -e 's:geometry.set_boundary_condition:geometry.lattice.set_boundary_condition:' $indir/miniconda3/lib/python3.*/site-packages/sisl_toolbox/transiesta/poisson/fftpoisson_fix.py 
+}
 
 
 function conda_install {
@@ -164,6 +173,7 @@ function conda_install {
     # install everything
     conda install -y -c conda-forge/label/siesta_rc -c conda-forge ${packages[@]}
     [ $? -ne 0 ] && { echo "failed" ; exit 1; }
+    fix_sisl
 
     # remove unused tarballs (no need for them to be around)
     conda clean -t -y
@@ -248,7 +258,12 @@ function install_test_sisl {
 mkdir -p $indir
 pushd $indir
 
-if [ $action == install ]; then
+if [ $action == fix ]; then
+  fix_sisl
+
+  exit 0
+
+elif [ $action == install ]; then
     # os will be download
     download_warning
     install_warning
@@ -270,7 +285,7 @@ fi
 
 # Download latest tutorial files
 mkdir -p tarball
-for file in sisl-TBT-TS.tar.gz hubbard-tutorials.tar.gz xabier-tutorials.tar.gz
+for file in sisl-TBT-TS.tar.gz hubbard-tutorials.tar.gz xabier-tutorials.tar.gz DFT-TB.tar.gz
 do
   if [ -e tarball/$file ]; then
     rm tarball/$file
