@@ -1,6 +1,7 @@
 ![GitHub release (latest by date)](https://img.shields.io/github/v/release/zerothi/ts-tbt-sisl-tutorial?label=tutorial)
 [![Join discussion on Discord](https://img.shields.io/discord/742636379871379577.svg?label=&logo=discord&logoColor=ffffff&color=green&labelColor=red)](https://discord.gg/bvJ9Zuk)
 [![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/zerothi/ts-tbt-sisl-tutorial/2023?filepath=tutorial.ipynb)
+[![License](https://mirrors.creativecommons.org/presskit/buttons/88x31/svg/by-sa.svg)](http://creativecommons.org/licenses/by-sa/4.0/)
 
 Welcome to sisl + TBtrans + TranSiesta tutorial
 ===============================================
@@ -16,7 +17,7 @@ The sources used for these tutorials can be found elsewhere:
 
 
 If you have installed using the installation script you will have access
-to MPI parallelized executables. 
+to MPI parallelized executables.
 
 
 Binder
@@ -33,6 +34,11 @@ recommended to execute tbtrans like this:
     !OMP_NUM_THREADS=1 tbtrans RUN.fdf
 
 since the installed `tbtrans` is threaded and binder is sharing resources.
+
+License
+-------
+
+sisl © 2020 by Nick Papior is licensed under CC BY-SA 4.0. To view a copy of this license, visit http://creativecommons.org/licenses/by-sa/4.0/
 
 
 <!---
