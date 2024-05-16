@@ -13,7 +13,6 @@ function add_file {
 }
 
 # Add manuals
-add_file arch.make
 add_file siesta.pdf tbtrans.pdf
 add_file tselecs.sh
 
@@ -34,8 +33,5 @@ add_file */*/C.psf
 # Add executables
 add_file */run.sh
 add_file A_05/C60.xyz
-
-# Add external
-add_file external
 
 tar cfvz sisl-TBT-TS.tar.gz $_files

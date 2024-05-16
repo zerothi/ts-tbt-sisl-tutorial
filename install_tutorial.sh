@@ -27,7 +27,7 @@ elif command -v curl &> /dev/null ; then
     local url=$1
     local out=$2
     shift 2
-    curl -o $out -LO $url
+    curl -k -o $out -LO $url
     local retval=$?
     if [ $retval -ne 0 ]; then
         echo "Failed to download: $url to $out"
@@ -110,6 +110,9 @@ case $1 in
     download)
       action=download
       ;;
+    fix)
+      action=fix
+      ;;
     *)
       echo "###########################################"
       echo "# Unknown argument: $1"
@@ -123,40 +126,46 @@ case $1 in
       ;;
 esac
 
+function fix_sisl {
+  # TODO this only fixes the 0.14.3 version, if a later version in installed,
+  # then there is no need.
+  sed -i -s -e 's:geometry.set_boundary_condition:geometry.lattice.set_boundary_condition:' $indir/miniconda3/lib/python3.*/site-packages/sisl_toolbox/transiesta/poisson/fftpoisson_fix.py 
+}
+
 
 function conda_install {
     local exe=$1 ; shift
 
-    if [ ! -e $exe ]; then
-      download_file https://repo.anaconda.com/miniconda/$exe $exe
-      [ $? -ne 0 ] && exit 1
-    fi
-
-    if [ ! -e $indir/miniconda3/etc/profile.d/conda.sh ]; then
+    if [ ! -e $indir/miniconda3/bin/activate ]; then
+      if [ ! -e $exe ]; then
+        download_file https://repo.anaconda.com/miniconda/$exe $exe
+        [ $? -ne 0 ] && exit 1
+      fi
       sh ./$exe -b -s -f -p $indir/miniconda3
+      source $indir/miniconda3/bin/activate
+      conda update -y -n base conda
+    else
+      source $indir/miniconda3/bin/activate
     fi
-    source $indir/miniconda3/etc/profile.d/conda.sh
-    conda update -y -n base conda
 
     if [[ ${arch} == "arm64" ]]; then
       # see https://github.com/conda-forge/miniforge/issues/165#issuecomment-860233092
       # This should use rosetta under the hood, if not
       # then open a terminal by emulating x86-64
-      conda conda config --env --set subdir osx-64
+      conda config --env --set subdir osx-64
     fi
 
     local -a packages=
     packages=(
       "python<3.12"
       "siesta=5.0.0rc1=*openmpi*"
-      "sisl=0.14.2"
+      "sisl=0.14.3"
       "netCDF4"
-      "matplotlib"
       "jupyter"
       "pyamg"
+      "pathos"
+      "matplotlib"
       "plotly"
-      "pandas"
-      "xarray"
       "scikit-image"
       "py3dmol"
     )
@@ -164,12 +173,14 @@ function conda_install {
     # install everything
     conda install -y -c conda-forge/label/siesta_rc -c conda-forge ${packages[@]}
     [ $? -ne 0 ] && { echo "failed" ; exit 1; }
+    fix_sisl
 
     # remove unused tarballs (no need for them to be around)
     conda clean -t -y
     {
     echo "#!/bin/bash"
     echo "source $indir/miniconda3/bin/activate"
+    echo "export OMPI_MCA_btl='vader,self'"
     } > $indir/setup.sh
 
     source $indir/setup.sh
@@ -247,7 +258,12 @@ function install_test_sisl {
 mkdir -p $indir
 pushd $indir
 
-if [ $action == install ]; then
+if [ $action == fix ]; then
+  fix_sisl
+
+  exit 0
+
+elif [ $action == install ]; then
     # os will be download
     download_warning
     install_warning
@@ -269,7 +285,7 @@ fi
 
 # Download latest tutorial files
 mkdir -p tarball
-for file in sisl-TBT-TS.tar.gz
+for file in sisl-TBT-TS.tar.gz hubbard-tutorials.tar.gz xabier-tutorials.tar.gz DFT-TB.tar.gz
 do
   if [ -e tarball/$file ]; then
     rm tarball/$file
@@ -278,17 +294,27 @@ do
   [ $? -ne 0 ] && exit 1
 done
 {
-    echo "Please be careful about extracting sisl-TBT-TS.tar.gz"
-    echo "If you extract this on top of tutorials you have already"
-    echo "completed, you will overwrite any progress made."
+    echo "Please be careful about extracting these tarballs."
+    echo "If you extract them on top of tutorials you have already"
+    echo "completed, you will overwrite any progress made!"
     echo "Please untar in a fresh directory and move the files you need."
 } > tarball/README
+
+mkdir -p presentations
+for file in talk_1.pdf talk_3.pdf talk_4.pdf RSSE.pdf
+do
+  if [ -e presentations/$file ]; then
+    rm presentations/$file
+  fi
+  download_file $url/$file presentations/$file
+  [ $? -ne 0 ] && exit 1
+done
 
 echo ""
 echo "In folders"
 echo "   $indir"
-echo "and"
 echo "   $indir/tarball"
+echo "   $indir/presentations"
 echo "you will find everything needed for the tutorial."
 echo "If you are using the conda installation provided by this script"
 echo "please always start your sessions by executing:"
