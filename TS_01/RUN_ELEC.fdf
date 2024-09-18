@@ -9,7 +9,6 @@ SystemLabel ELEC
 %endblock kgrid.MonkhorstPack
 
 PAO.BasisSize         SZP
-PAO.EnergyShift       0.01 Ry
 XC.functional     GGA
 XC.authors        PBE
 MeshCutoff        250.000000 Ry
@@ -30,4 +29,3 @@ DM.UseSaveDM           .true.
 MD.NumCGSteps 0
 
 SaveHS                          T
-
