@@ -1,6 +1,6 @@
 SolutionMethod transiesta
 
-# We will use 3 k-points in the 
+# We will use 3 k-points in the
 # graphene plane along the transport
 # direction, and 8 k-points in the transverse
 # graphene direction.
@@ -18,7 +18,7 @@ SolutionMethod transiesta
 # transiesta k-points as transiesta
 # cannot decide for us!
 # This is an EXTREMELY important point when performing
-# calculations with semi-infinite directions that are 
+# calculations with semi-infinite directions that are
 # not aligned.
 %block TS.kgrid.MonkhorstPack
  1 0 0 0.
@@ -80,7 +80,13 @@ TS.Contours.Eq.Pole 2.5 eV
    from -40. eV - V/2 to -10 kT - V/2
      points 25
       method g-legendre
-%endblock 
+%endblock
+%block TS.Contour.T-chain
+  part tail
+   from prev to inf
+     points 10
+      method g-fermi
+%endblock
 
 %block TS.Contours.nEq
   neq
@@ -93,7 +99,7 @@ TS.Contours.Eq.Pole 2.5 eV
 %endblock TS.Contour.nEq.neq
 
 # Now we define the 3 electrodes
-# Two in the graphene plane and 
+# Two in the graphene plane and
 # one that acts as the STM tip (chain)
 %block TS.Elecs
   graphene-2
@@ -109,7 +115,7 @@ TS.Contours.Eq.Pole 2.5 eV
 # This is important to terminate electrodes
 # that "end" in vacuum.
 # Note that a vacuum terminated bulk part will
-# not have an electronic structure close to the 
+# not have an electronic structure close to the
 # bulk
 %block TS.Atoms.Buffer
   atom [-4 -- -1]
@@ -128,7 +134,7 @@ TS.Contours.Eq.Pole 2.5 eV
   semi-inf-direction +a1
   electrode-position end 80
   bloch-A2 5
-%endblock 
+%endblock
 %block TS.Elec.chain
   HS ELEC_CHAIN.TSHS
   chemical-potential chain
@@ -136,7 +142,7 @@ TS.Contours.Eq.Pole 2.5 eV
   electrode-position end -5
   bulk false
   check-kgrid False
-%endblock 
+%endblock
 TS.Hartree.Fix -A
 
 # For TBtrans we would like
@@ -181,4 +187,3 @@ MD.NumCGSteps 0
 SaveHS                          T
 
 %include DEVICE.fdf
-
