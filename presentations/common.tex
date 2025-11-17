@@ -1,13 +1,27 @@
 \def\classopts{11pt}
 \input ../beamertemplate.tex
 
+% Define variable for various aspects of what to show
+\newif\ifshowintromotivation
+\showintromotivationtrue
+\newif\ifshowintrotbtnterminal
+\showintrotbtnterminaltrue
+
+\newif\ifshownegftransmission
+\shownegftransmissiontrue
+
+\newif\ifshowbondcurrent
+\showbondcurrenttrue
+\newif\ifshowdensitymatrixweighing
+\showdensitymatrixweighingtrue
+
 \definecolor{good}{cmyk}{0.50, 0.00, 0.70, 0.20}
 \definecolor{bad}{cmyk}{0.00, 0.50, 1.00, 0.50}
 \definecolor{ok}{cmyk}{0.50, 0.10, 1.00, 0.50}
 \definecolor{check}{cmyk}{0.90, 0.20, 0.20, 0.40}
 
 \mode<handout>{%
-    \nofiles % do not overwrite 
+    \nofiles % do not overwrite
     \usetheme{workshopdtu}
 }
 \mode<presentation>
@@ -65,6 +79,23 @@
 \immediate\openout\nonfoundfile=\jobname.nonfoundfiles
 
 
+\makeatletter
+\newcommand\@inputpath{.}
+\newcommand\inputpath[2][]{%
+  % Include a file
+  \edef\@tmp{#1}
+  \ifx&#1&%
+    \input{\@inputpath/#2}%
+  \else%
+    \begingroup
+    \def\@inputpath{#1}
+    \input{\@inputpath/#2}%
+    \endgroup%
+  \fi%
+}
+
+
+\makeatother
 
 \makeatletter
 \newcommand\incg[2][]{%
@@ -254,4 +285,3 @@
     \path[#1] (1,1,1) -- (0,1,1);
     \path[#1] (1,1,1) -- (1,0,1);
 }
-

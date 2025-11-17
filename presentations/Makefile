@@ -11,6 +11,12 @@ talk: talk.pdf
 talk.pdf:
 	pdflatex -shell-escape talk.tex
 
+.PHONY: 3
+3:
+	pdflatex -shell-escape talk.tex
+	pdflatex -shell-escape talk.tex
+	pdflatex -shell-escape talk.tex
+
 extra:
 	bibtex talk
 	makeindex talk

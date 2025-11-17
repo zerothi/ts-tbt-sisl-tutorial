@@ -6,6 +6,7 @@
 \end{framenologo}
 
 
+\ifshowintromotivation
 \begin{framenologo}
   \frametitle{Motivation}
   \framesubtitle{Current era --- Silicon}
@@ -22,10 +23,10 @@
 
         \vskip 1em
         \item IBM latest technology at \SI{2}{nm}
-        
+
         \item Countable number of atoms! $\le30$
         \vskip 2em
-        \item<2-> Problems 
+        \item<2-> Problems
 
         \begin{itemize}
           \item Features reaching single atoms
@@ -51,7 +52,7 @@
         \node[n] (H) at (2,3)
         {\incg[width=3cm]{human-hair}};
         \node[n] at (H.east) {\SIrange{50}{100}{\micro\metre}};
-        
+
         \node[n] (B) at (2,1)
         {\incg[width=3cm]{red_blood_cell}};
         \node[n] at (B.east) {\SI{7.5}{\micro\metre}};
@@ -61,24 +62,28 @@
 
         \node[n] at (1,-4)
         {\incg[width=7cm]{transistors-were-people}};
-        
+
       \end{tikzpicture}
-      
+
     \end{column}
   \end{columns}
 
   \doicite{Intel Homepage}
 
 \end{framenologo}
+\fi
 
 \subsection{Transport properties of atomistic systems}
 
 \begin{frame}[fragile]
   \frametitle{Calculating transport properties of atomistic systems}
-  
+
+  % This uncover is just to increment it for the if statement
+    \uncover<+->{%
   \begin{center}
     Steady-state transport properties?
-  \end{center}
+  \end{center}}
+
 
   \begin{columns}
     \begin{column}{.5\linewidth}
@@ -90,17 +95,19 @@
     \end{column}
   \end{columns}
 
+  \ifshowintrotbtnterminal
   \begin{center}
-    \uncover<2->{%
+    \uncover<+->{%
         \incg[height=5cm]{tbt-nterminal}
     }
   \end{center}
-  
-  \uncover<3->{%
+  \fi
+
+  \uncover<+->{%
       \begin{tikzpicture}[remember picture,overlay]
         \node[rotate=30,inner sep=20cm,anchor=mid,
         fill=white,opacity=.7,text width=20cm,align=center,
-        text opacity=1] at (current page.center) 
+        text opacity=1] at (current page.center)
         {\huge We need a scalable computational model!\\
             And \dots how to model non-equilibrium?};
       \end{tikzpicture}
@@ -113,11 +120,11 @@
 
 \begin{framenologo}
   \frametitle{Calculating transport properties of atomistic systems}
-  
+
   \begin{center}
     Steady-state transport properties?
   \end{center}
-  
+
   \begin{columns}
     \begin{column}{.5\linewidth}
       \incg[clip,trim=0pt 0pt 0pt
@@ -127,7 +134,7 @@
       \incg[width=.8\linewidth]{10-1021-nl202065-4}
     \end{column}
   \end{columns}
-  
+
   \begin{columns}
     \begin{column}{.6\linewidth}
       \begin{block}{Simulation tool requirements}
@@ -152,7 +159,7 @@
 
   \doicite{{Williams \etal: \doi{10.1126/science.1144657}, Prins \etal: \doi{10.1021/nl202065x}},%
       WebOfScience (NEGF)}
-  
+
 \end{framenologo}
 
 %%% Local Variables:

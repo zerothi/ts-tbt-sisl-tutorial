@@ -1,4 +1,5 @@
 
+\ifshowdensitymatrixweighing
 \subsection{The true density matrix}
 
 \begin{frame}[fragile]
@@ -57,14 +58,14 @@
     \pgfmathparse{asin(\betaA)}%
     \edef\betaA{\pgfmathresult}%
     \begin{tikzpicture}[scale=.75]
-      
+
       % The axes
       \begin{scope}[draw=gray!80!black,thick,->]
         \draw (-2*\radius+\lineS-.5,0) -- (\radius+1.5,0) node[text=black,below] {$E$};
         \draw (0,0) -- (0,\radius+.5) node[text=black,left] {$\Im$};
       \end{scope}
       \node[below] (mu-1) at (0,0) {$\mu_1$};
-      
+
       % The specific coordinates on the path
       \coordinate (EB) at (-2*\radius+\lineS,\eta);
       \coordinate (C-mid) at ({-\radius+\lineS-sin(\alphaA)*\radius},{cos(\alphaA)*\radius});
@@ -73,14 +74,14 @@
       \coordinate (L-end-end) at (\radius+1,{\poleSep*(\poles+.5)});
       \coordinate (real-L-end) at (\radius,\eta);
       \coordinate (real-L-end-end) at (\radius+1,\eta);
-      
+
       \begin{scope}[thick]
-        
+
         % The path (we draw it backwards)
-        \draw[->-=.3,very thick] (L-end) -- node[above right] 
+        \draw[->-=.3,very thick] (L-end) -- node[above right]
         {$\mathcal L$} (C-end);
         \draw[->-=.333,->-=.666,very thick] (C-end) to[out=90+\betaA,in=\alphaA] (C-mid)
-        node[above] 
+        node[above]
         {$\mathcal C$}
         to[out=180+\alphaA,in=90] (EB);
         \draw[->-=.25,->-=.75] (EB) -- (real-L-end) node[above left] {$\mathcal R$};
@@ -90,13 +91,13 @@
         \draw[densely dotted] (L-end) -- (L-end-end);
 
       \end{scope}
-      
+
       % Draw the poles
       \foreach \pole in {1,...,14} {
           \ifnum\pole>\poles
           \draw (0,\pole*\poleSep) circle (2pt);
           \else
-          \fill (0,\pole*\poleSep) circle (2pt);        
+          \fill (0,\pole*\poleSep) circle (2pt);
           \fi
       }
       \node[left,anchor=east] at (0,{\poleSep*(\poles/2+.5)}) {$z_\nu$};
@@ -114,7 +115,7 @@
           \ifnum\pole>\poles
           \draw[bad] (\muB,\pole*\poleSep) circle (2pt);
           \else
-          \fill[bad] (\muB,\pole*\poleSep) circle (2pt);        
+          \fill[bad] (\muB,\pole*\poleSep) circle (2pt);
           \fi
       }
 
@@ -124,29 +125,29 @@
           \ifnum\pole>\poles
           \draw[ok] (\muC,\pole*\poleSep) circle (2pt);
           \else
-          \fill[ok] (\muC,\pole*\poleSep) circle (2pt);        
+          \fill[ok] (\muC,\pole*\poleSep) circle (2pt);
           \fi
       }
 
       \draw[<->]%decorate,decoration=brace]
       ($(mu-2.south)+(0,0)$) --
-      node[below left=6pt] {$\ncor^1_2,\color{bad}\ncor^2_1$} 
+      node[below left=6pt] {$\ncor^1_2,\color{bad}\ncor^2_1$}
       ($(mu-1.south)+(0,0)$);
 
       \draw[<->]%decorate,decoration=brace]
       ($(mu-3.south)+(0,-.4)$) --
-      node[below=3pt] {$\color{bad}\ncor^2_3\color{black},\color{ok}\ncor^3_2$} 
+      node[below=3pt] {$\color{bad}\ncor^2_3\color{black},\color{ok}\ncor^3_2$}
       ($(mu-2.south)+(0,-.4)$);
       \draw[<->]
       ($(mu-3.south)+(0,-1.3)$) --
-      node[below=4pt] {$\ncor^1_3,\color{ok}\ncor^3_1$} 
+      node[below=4pt] {$\ncor^1_3,\color{ok}\ncor^3_1$}
       ($(mu-1.south)+(0,-1.3)$);
 
       \node at ($(mu-3.south east) + (1.5, -0.5)$) {3 electrodes!};
 
     \end{tikzpicture}
   \end{center}
-    
+
 \end{frame}
 
 
@@ -181,7 +182,7 @@
           \addplot table {../data/EQ_fermi.dat};
           \addplot table {../data/EQ_pole.dat};
           \draw[<->] (axis cs:.3,0.568494) -- node[sloped,anchor=south] {$2\pi k_BT$} (axis cs:.3,0.406067);
-          \draw[densely dashed,green!50!black,very thick] 
+          \draw[densely dashed,green!50!black,very thick]
           (axis cs:-1,0.03) -- (axis cs:1,0.03);
           \node[anchor=south] at (axis cs:0.25,1) {Gauss-Fermi};
           \node[rotate=90,anchor=south] at (axis cs:0.25,.5) {Poles};
@@ -224,7 +225,7 @@
       \column{.1\textwidth}
 
       \column{.3\textwidth}
-      
+
       Equivalent, but different!
 
       \column{.6\textwidth}
@@ -293,22 +294,23 @@
         \DM^{\varsigma'}-\DM;
         \dots\big].
       \end{align*}
-      
+
     \end{itemize}
-    
+
   \end{block}
 
   \uncover<4->{%
       \begin{tikzpicture}[remember picture,overlay]
         \node[rotate=30,inner sep=20cm,anchor=mid,
         fill=white,opacity=.7,text width=20cm,align=center,
-        text opacity=1] at (current page.center) 
+        text opacity=1] at (current page.center)
         {\huge This is why we need \emph{both} a chemical \emph{and} an electrode block};
       \end{tikzpicture}
   }
 
 \end{frame}
 
+\fi
 
 
 %%% Local Variables:

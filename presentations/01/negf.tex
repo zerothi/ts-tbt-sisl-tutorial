@@ -12,7 +12,7 @@
   \framesubtitle{Variables}
 
   \begin{block}<+->{Important variables in Green function techniques}
-    
+
     \begin{tabular}[c]{>{$}l<{$}|l}
       \idxE & electrode index
       \\
@@ -36,7 +36,7 @@
     \end{tabular}
 
   \end{block}
-  
+
   \begin{block}<+->{Basic equations for Green function techniques}
     \vskip-2ex
 \input{../equations.tex}
@@ -50,7 +50,7 @@
 \begin{frame}[label=DOS]
   \frametitle{Non-equilibrium Green function}
   \framesubtitle{Density of states}
-  
+
   \begin{itemize}
     \item Density of states over all orbitals
     \begin{align*}
@@ -84,7 +84,7 @@
     \item<3->%
     $\SE$ broadens the DOS similarly to a large $\eta$ value, for states
     coupling to the electrodes
-    
+
   \end{itemize}
 
   \only<2>{\hfill \hyperlink{integration<3>}{\beamergotobutton{Go to Rules of
@@ -92,6 +92,8 @@
 
 \end{frame}
 
+
+\ifshownegftransmission
 
 \subsection{Transmission}
 
@@ -101,9 +103,9 @@
 
   \begin{block}<+->{Transmission}
     \begin{itemize}
-      \item Transmission between any two electrodes $\T_{\idxE\mto\idxE'}$ 
+      \item Transmission between any two electrodes $\T_{\idxE\mto\idxE'}$
 
-      \item Total transmission out of any electrode $\T_\idxE$ 
+      \item Total transmission out of any electrode $\T_\idxE$
 
       \item Reflection into electrode $\RE_\idxE$, note $\mathbf 1$ is the \emph{bulk}
       transmission (open channels)
@@ -131,8 +133,11 @@
       \T_{\idxE\mto\idxE',\kk} = \T_{\idxE'\mto\idxE,\kk} = \T_{\idxE\mto\idxE',-\kk}
     \end{equation*}
   \end{block}
-  
+
 \end{frame}
+
+\fi
+\ifshowbondcurrent
 
 \begin{frame}
   \frametitle{Non-equilibrium Green function}
@@ -154,9 +159,9 @@
         prefactor $e/h$), although they are named \emph{currents}.}.
 
     The bond-currents obey Kirchoff's laws.
-    
+
   \end{block}
-  
+
   \begin{block}<+->{Symmetries}
     \emph{NOTE}, even when time-reversal symmetry is present
     \begin{align*}
@@ -166,9 +171,9 @@
     \end{align*}
     hence when calculating bond-currents for periodic structures it is imperative to
     average the \emph{entire} Brillouin zone. This may be understood from \emph{momentum}
-    considerations. 
+    considerations.
   \end{block}
-  
+
 \end{frame}
 
 
@@ -187,10 +192,10 @@
   \end{center}
 
   \begin{columns}
-    
+
     \column{.5\linewidth}
     \incg[width=.99\linewidth]{trs}
-    
+
     \begin{itemize}
       \item Sampled $k_x\in \big[0;\frac12\big]$
     \end{itemize}
@@ -206,9 +211,9 @@
 
 \end{frame}
 
+\fi
 
-
-
+\ifshownegftransmission
 \begin{frame}
   \frametitle{Non-equilibrium Green function}
   \footnotesize
@@ -256,7 +261,7 @@
   \end{block}
 
   \begin{block}{Orbital current}
-      
+
     \begin{equation*}
       \JJ_{\idxE,\nu\mu} = \frac e h \Im\big[
       \Spec_{\idxE,\nu\mu}(\HH_{\mu\nu} - \E\SO_{\mu\nu})
@@ -273,9 +278,10 @@
     Related to the band-structure, a fine $k$-grid is necessary to correctly reproduce the
     band-structure.
   \end{center}
-  
+
 \end{frame}
 
+\fi
 
 
 %%% Local Variables:
