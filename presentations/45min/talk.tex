@@ -1,0 +1,87 @@
+\input ../common.tex
+
+\graphicspath{{fig/}{../fig/}{../01/fig/}}
+\usepackage[export]{adjustbox}
+
+\institute[Nick Papior; DTU Compute]{\begin{tikzpicture}
+      \node[shape=rectangle split,rectangle split parts=2,anchor=base] at (0,0)
+      {SIESTA School};
+    \end{tikzpicture}}
+
+\date{15 November 2024}
+\title{Intro: Non-equilibrium Green function theory}
+\author{Nick Papior}
+
+
+\begin{document}
+
+\begin{frame}
+  \titlepage
+\end{frame}
+
+\begin{frame}
+  \frametitle{Outline}
+  \tableofcontents
+\end{frame}
+
+\showbondcurrentfalse
+\showdensitymatrixweighingfalse
+\showintromotivationfalse
+\showintrotbtnterminalfalse
+\shownegftransmissionfalse
+
+\inputpath[../01]{introduction.tex}
+\inputpath[../01]{se.tex}
+\inputpath[../01]{green.tex}
+
+\begin{frame}
+
+  \vfill
+
+  \centering
+  \begin{minipage}{.7\linewidth}
+
+  \begin{block}{Important}
+
+    Understanding self-energies is like, really, really important.
+
+  \end{block}
+
+  \end{minipage}
+
+  \vfill
+\end{frame}
+
+\inputpath[../01]{se.tex}
+\inputpath[../01]{negf.tex}
+%\inputpath[../03]{contour.tex}
+
+\inputpath[../03]{steps.tex}
+%\inputpath[../03]{summary.tex}
+
+
+\section{Tutorial}
+\begin{frame}
+  \frametitle{Tutorial}
+
+  \begin{itemize}
+    \item Tutorial focuses on \emph{interpreting physical} things, such as potential drop, projected
+      density of states
+
+    \item More tutorials are available here:
+
+      \url{https://github.com/zerothi/ts-tbt-sisl-tutorial}
+
+    \item Doing this tutorial can be hard on Marenostrum (requires copying data back to
+      your PC).
+
+      Please use Google colab or
+      your own computer.
+
+    \item On the Discord channel in Day 5, you will find the link to the tutorial.
+
+  \end{itemize}
+
+\end{frame}
+
+\end{document}

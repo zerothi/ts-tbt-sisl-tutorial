@@ -1,0 +1,120 @@
+\input ../common.tex
+
+\graphicspath{{fig/}{../fig/}{../01/fig/}}
+\usepackage[export]{adjustbox}
+
+\institute[Nick Papior; DTU Compute]{\begin{tikzpicture}
+      \node[shape=rectangle split,rectangle split parts=2,anchor=base] at (0,0)
+      {SIESTA School};
+    \end{tikzpicture}}
+
+\date{21 November 2025}
+\title{TranSiesta an intro to non-equilibrium Green function}
+\author{Nick Papior}
+
+
+\begin{document}
+
+\begin{frame}
+  \titlepage
+\end{frame}
+
+\begin{frame}
+  \frametitle{Outline}
+  \tableofcontents
+\end{frame}
+
+\showbondcurrentfalse
+\showdensitymatrixweighingfalse
+\showintromotivationfalse
+\showintrotbtnterminalfalse
+\shownegftransmissionfalse
+
+\inputpath[../01]{introduction.tex}
+
+
+\inputpath[../01]{green.tex}
+\inputpath[../01]{se.tex}
+
+\begin{frame}
+
+  \vfill
+
+  \centering
+  \begin{minipage}{.7\linewidth}
+
+  \begin{block}{Important}
+
+    Understanding self-energies is like, really, really important.
+
+  \end{block}
+
+  \end{minipage}
+
+  \vfill
+\end{frame}
+
+%\inputpath[../01]{negf.tex}
+%\inputpath[../03]{contour.tex}
+
+\inputpath[../03]{steps.tex}
+%\inputpath[../03]{summary.tex}
+
+\section{TranSiesta / TBtrans}
+\begin{frame}
+  \frametitle{TranSiesta / TBtrans}
+
+  \begin{itemize}
+
+    \item
+      TranSiesta is a versatile and complex beast! There are \emph{many} pitfalls, mainly
+      because of the \emph{self energy}.
+
+      TranSiesta calculates the non-equilibrium \emph{density} and \emph{Hamiltonian}
+      matrices.
+
+    \item Start by converging parameters in plain Siesta calculations; then converge
+      TranSiesta parameters, layers of electrodes (screening off the defect), energy
+      points, etc.
+
+    \item TBtrans (transmission function calculator) requires much finer $\mathbf k$ point
+      sampling (recall slide \ref{integration} and \ref{green.bz})
+
+      TBtrans uses a \emph{Hamiltonian} matrix (e.g. a non-equilibrium) and can calculate
+      density of states, transmissions, etc.
+
+    \item One can do $N_\mathfrak{e} \ge 1$ electrodes!
+      \begin{center}
+        \incg[height=8em,clip,trim=10cm 0 0 0]{ts-poisson-initial}
+      \end{center}
+
+    \item Completely removing periodic images possible:
+
+      \begin{center}
+
+        \incg[width=4cm]{rsse_self-energy}\hskip3em
+        \incg[width=4cm]{rsse_replace}
+
+      \end{center}
+
+
+  \end{itemize}
+  \doicite{Papior \etal: \doi{10.1103/PhysRevB.100.195417}}
+
+\end{frame}
+
+\section{Tutorials}
+\begin{frame}
+  \frametitle{Tutorials}
+
+  \begin{center}
+
+    There are additional tutorials covering NEGF using \texttt{sisl} on this web-page:
+
+    \url{https://github.com/zerothi/ts-tbt-sisl-tutorial}
+
+  \end{center}
+
+\end{frame}
+
+\end{document}

@@ -119,6 +119,39 @@
 
 
 \begin{framenologo}
+  \frametitle{What do we want?}
+  \framesubtitle{Applying a bias to a system}
+
+ \begin{center}
+
+   \def\x{6}
+  \begin{tikzpicture}[>=latex,font=\scriptsize]
+
+    \draw[fill=red!50!white] (0, 0) -- ++(0, 7)
+    -- ++(-1, 0) |- cycle;
+    \draw[fill=blue!50!white] (\x, 0) -- ++(0, 4)
+    -- ++(+1, 0) |- cycle;
+    \node[font=\Large] at (-.5, 7.2) {$\mu_L$};
+    \node[font=\Large] at (\x+.5, 7.2) {$\mu_R$};
+
+    \node at (\x/2,2) {\incg[rotate=-90,width=\x cm]{bdt_tip_layer}};
+    \node[anchor=east] (L) at (0.05,1.52) {\incg[rotate=-90,width=2.1cm]{elec}};
+    \node[anchor=west] (R) at (\x,1.82) {\incg[rotate=-90,width=2.2cm]{elec}};
+    \node[anchor=east] at (L.west) {$-\infty=\SE_\leftarrow$};
+    \node[anchor=west] at (R.east) {$\infty=\SE_\rightarrow$};
+
+    \draw[anchor=west] (0, 7) -- node[sloped,above] {Voltage drop} (\x,4);
+
+
+  \end{tikzpicture}
+
+   In a periodic simulation box!
+ \end{center}
+
+\end{framenologo}
+
+
+\begin{framenologo}
   \frametitle{Calculating transport properties of atomistic systems}
 
   \begin{center}
