@@ -2,12 +2,17 @@
 
 set -e
 
-url=www.student.dtu.dk/~nicpa/sisl/workshop/23
+url=www.student.dtu.dk/~nicpa/sisl/workshop/26
 indir=$HOME/TBT-TS-sisl-workshop
-# We install miniconda in the $indir
-# Hence we don't need an enviroment, we just have it here
+miniforge_dir=$indir/miniforge3/
+
+siesta_version="5.4.2"
+sisl_version="0.20.*"
+hubbard_version="0.4.2"
+# We install miniforge in the $indir
+# Hence we don't need an environment, we just have it here
 # as a place-holder.
-env_name="2023-workshop-ts-sisl"
+env_name="2026-workshop-ts-sisl"
 
 
 if command -v wget &> /dev/null ; then
@@ -41,7 +46,7 @@ fi
 
 function _help {
   echo "This script may be used to install the dependencies for the"
-  echo "tutorial such as Python, numpy, scipy, matplotlib, jupyter and sisl and hubbard."
+  echo "tutorial such as Python, numpy, scipy, matplotlib, jupyter, sisl and hubbard."
   echo ""
   echo "This script is a two-step script. Please read below."
   echo ""
@@ -54,7 +59,7 @@ function _help {
   echo ""
   echo "  $0 install"
   echo ""
-  echo "If you can install Siesta (master version) and sisl 0.14.3 and the rest of the dependencies"
+  echo "If you can install Siesta and sisl and the rest of the dependencies"
   echo "manually then you won't be needing the above installation procedure."
   echo "However, we cannot assist installing the packages manually."
   echo ""
@@ -78,7 +83,7 @@ os=$(uname -s)
 arch=$(uname -m)
 case "${os}" in
     Linux|Darwin)
-	    ;;
+      ;;
     *)
       echo "Are you using MingGW or FreeBSD? Or a (${os})?"
       echo "Either way this installation script does not work for your distribution..."
@@ -127,74 +132,78 @@ case $1 in
 esac
 
 function fix_sisl {
+  echo "Nothing now" > /dev/null
   # TODO this only fixes the 0.14.3 version, if a later version in installed,
   # then there is no need.
-  sed -i -s -e 's:geometry.set_boundary_condition:geometry.lattice.set_boundary_condition:' $indir/miniconda3/lib/python3.*/site-packages/sisl_toolbox/transiesta/poisson/fftpoisson_fix.py 
 }
 
 
 function conda_install {
     local exe=$1 ; shift
 
-    if [ ! -e $indir/miniconda3/bin/activate ]; then
+    if [ ! -e $indir/miniforge3/bin/activate ]; then
       if [ ! -e $exe ]; then
-        download_file https://repo.anaconda.com/miniconda/$exe $exe
+        download_file https://github.com/conda-forge/miniforge/releases/latest/download/$exe $exe
         [ $? -ne 0 ] && exit 1
       fi
-      sh ./$exe -b -s -f -p $indir/miniconda3
-      source $indir/miniconda3/bin/activate
-      conda update -y -n base conda
+      sh ./$exe -b -s -f -p $miniforge_dir
+      source $miniforge_dir/bin/activate
+      mamba update -y -n base conda
     else
-      source $indir/miniconda3/bin/activate
+      source $miniforge_dir/bin/activate
     fi
 
-    if [[ ${arch} == "arm64" ]]; then
-      # see https://github.com/conda-forge/miniforge/issues/165#issuecomment-860233092
-      # This should use rosetta under the hood, if not
-      # then open a terminal by emulating x86-64
-      conda config --env --set subdir osx-64
-    fi
+    #if [[ ${arch} == "arm64" ]]; then
+    #  # see https://github.com/conda-forge/miniforge/issues/165#issuecomment-860233092
+    #  # This should use rosetta under the hood, if not
+    #  # then open a terminal by emulating x86-64
+    #  mamba config --env --set subdir osx-64
+    #fi
 
-    local -a packages=
+    local -a packages
     packages=(
-      "python<3.12"
-      "siesta=5.0.0rc1=*openmpi*"
-      "sisl=0.14.3"
+      "python"
+      "pip"
+      "ipykernel"
+      "siesta=$siesta_version=*openmpi*"
+      "sisl=$sisl_version"
       "netCDF4"
       "jupyter"
+      "jupyterlab"
       "pyamg"
       "pathos"
       "matplotlib"
       "plotly"
       "scikit-image"
-      "py3dmol"
     )
+    # Post-install nodify for sisl.viz
+    python -m pip install "nodify"
 
     # install everything
-    conda install -y -c conda-forge/label/siesta_rc -c conda-forge ${packages[@]}
+    mamba install -y -c conda-forge ${packages[@]}
     [ $? -ne 0 ] && { echo "failed" ; exit 1; }
     fix_sisl
 
     # remove unused tarballs (no need for them to be around)
-    conda clean -t -y
+    mamba clean -t -y
     {
     echo "#!/bin/bash"
-    echo "source $indir/miniconda3/bin/activate"
+    echo "source $miniforge_dir/bin/activate"
     echo "export OMPI_MCA_btl='vader,self'"
     } > $indir/setup.sh
 
     source $indir/setup.sh
 
+
     # hubbard
-    local v=0.4.1
-    download_file https://github.com/dipc-cc/hubbard/archive/refs/tags/v$v.tar.gz hubbard-$v.tar.gz
+    download_file https://github.com/dipc-cc/hubbard/archive/refs/tags/v$hubbard_version.tar.gz hubbard-$hubbard_version.tar.gz
     [ $? -ne 0 ] && exit 1
-    tar xfz hubbard-$v.tar.gz
-    cd hubbard-$v
+    tar xfz hubbard-$hubbard_version.tar.gz
+    cd hubbard-$hubbard_version
     python -m pip install .
     [ $? -ne 0 ] && exit 1
     cd ../
-    rm -rf hubbard-$v hubbard-$v.tar.gz
+    rm -rf hubbard-$hubbard_version hubbard-$hubbard_version.tar.gz
 
     echo ""
     echo "Before you can run exercises etc. you should execute the following:"
@@ -205,15 +214,15 @@ function conda_install {
 
 # Function for installation on Linux
 function linux_install {
-  conda_install Miniconda3-latest-Linux-${arch}.sh
+  conda_install Miniforge3-Linux-${arch}.sh
 }
 
 
 function macos_install {
-  if [[ ${arch} == "arm64" ]]; then
-    export CONDA_SUBDIR=osx-64
-  fi
-  conda_install Miniconda3-latest-MacOSX-${arch}.sh
+  #if [[ ${arch} == "arm64" ]]; then
+  #  export CONDA_SUBDIR=osx-64
+  #fi
+  conda_install Miniforge3-MacOSX-${arch}.sh
 }
 
 function install_warning {
@@ -250,7 +259,7 @@ function install_test_sisl {
 
     python -c "$cmd"
     if [ $? -ne 0 ]; then
-	echo "Failed running sisl, please mail the organizer with the error message (unless some of the installations failed)"
+      echo "Failed running sisl, please mail the organizer with the error message (unless some of the installations failed)"
     fi
 }
 
@@ -270,10 +279,10 @@ elif [ $action == install ]; then
     case $os in
       Linux)
         linux_install
-	    ;;
+      ;;
       Darwin)
         macos_install
-	    ;;
+      ;;
     esac
     install_test_sisl
 
@@ -324,4 +333,4 @@ echo ""
 echo "which will correctly setup the environment for you."
 echo "Run (after you have restarted your shell):"
 echo "  which tbtrans"
-echo "and check it returns $indir/miniconda3/bin/tbtrans"
+echo "and check it returns $miniforge_dir/bin/tbtrans"
