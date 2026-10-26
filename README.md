@@ -11,13 +11,16 @@ This is the tutorial used for sisl + TBtrans + TranSiesta workshops.
 The sources used for these tutorials can be found elsewhere:
 
 
-- [sisl][sisl@git] (>= 0.14.3)
-- [TBtrans][tbtrans] (>= 4.1.5)
-- [Siesta][tbtrans] (>= 4.1.5)
+- [sisl][sisl@git] (>= 0.20.0)
+- [TBtrans][tbtrans] (>= 5.4.2)
+- [Siesta][tbtrans] (>= 5.4.2)
 
 
 If you have installed using the installation script you will have access
 to MPI parallelized executables.
+
+Open up the `tutorial.ipynb` with you favorite notebook editor and cycle through the
+tutorials.
 
 
 Binder
@@ -38,7 +41,7 @@ since the installed `tbtrans` is threaded and binder is sharing resources.
 License
 -------
 
-sisl © 2020 by Nick Papior is licensed under CC BY-SA 4.0. To view a copy of this license, visit http://creativecommons.org/licenses/by-sa/4.0/
+sisl © 2026 by Nick Papior is licensed under CC BY-SA 4.0. To view a copy of this license, visit http://creativecommons.org/licenses/by-sa/4.0/
 
 
 <!---

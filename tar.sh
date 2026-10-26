@@ -18,7 +18,7 @@ add_file tselecs.sh
 
 # Add IPython books
 add_file tutorial.ipynb
-add_file */run.ipynb
+add_file */*.ipynb
 
 # Add RUN.fdf
 add_file */RUN.fdf
