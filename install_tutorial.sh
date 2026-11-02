@@ -164,6 +164,9 @@ function conda_install {
     packages=(
       "python"
       "pip"
+      "setuptools"
+      "setuptools-scm"
+      "wheel"
       "ipykernel"
       "siesta=$siesta_version=*openmpi*"
       "sisl=$sisl_version"
@@ -201,10 +204,10 @@ function conda_install {
     [ $? -ne 0 ] && exit 1
     tar xfz hubbard-$hubbard_version.tar.gz
     cd hubbard-$hubbard_version
-    python -m pip install .
+    SETUPTOOLS_SCM_PRETEND_VERSION_FOR_HUBBARD=$hubbard_version python -m pip install -vvv --no-build-isolation .
     [ $? -ne 0 ] && exit 1
     cd ../
-    rm -rf hubbard-$hubbard_version hubbard-$hubbard_version.tar.gz
+    #rm -rf hubbard-$hubbard_version hubbard-$hubbard_version.tar.gz
 
     echo ""
     echo "Before you can run exercises etc. you should execute the following:"
