@@ -173,6 +173,7 @@ function conda_install {
       "pyamg"
       "pathos"
       "matplotlib"
+      "metatrain" # for Pol
       "plotly"
       "scikit-image"
     )
