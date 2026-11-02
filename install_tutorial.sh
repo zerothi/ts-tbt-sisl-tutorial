@@ -295,7 +295,7 @@ fi
 
 # Download latest tutorial files
 mkdir -p tarball
-for file in sisl-TBT-TS.tar.gz hubbard-tutorials.tar.gz xabier-tutorials.tar.gz DFT-TB.tar.gz
+for file in sisl-TBT-TS.tar.gz
 do
   if [ -e tarball/$file ]; then
     rm tarball/$file
