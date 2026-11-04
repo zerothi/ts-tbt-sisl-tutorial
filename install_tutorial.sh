@@ -4,7 +4,7 @@ set -e
 
 url=www.student.dtu.dk/~nicpa/sisl/workshop/26
 indir=$HOME/TBT-TS-sisl-workshop
-miniforge_dir=$indir/miniforge3/
+miniforge_dir=$indir/miniforge3
 
 siesta_version="5.4.2"
 sisl_version="0.20.*"
@@ -141,6 +141,7 @@ function fix_sisl {
 function conda_install {
     local exe=$1 ; shift
 
+    unset PYTHONPATH
     if [ ! -e $indir/miniforge3/bin/activate ]; then
       if [ ! -e $exe ]; then
         download_file https://github.com/conda-forge/miniforge/releases/latest/download/$exe $exe
@@ -168,6 +169,7 @@ function conda_install {
       "setuptools-scm"
       "wheel"
       "ipykernel"
+      "nbformat"
       "siesta=$siesta_version=*openmpi*"
       "sisl=$sisl_version"
       "netCDF4"
@@ -180,14 +182,18 @@ function conda_install {
       "plotly"
       "scikit-image"
     )
-    # Post-install nodify for sisl.viz
-    python -m pip install "nodify"
 
     # install everything
+    echo Install conda packages
     mamba install -y -c conda-forge ${packages[@]}
-    [ $? -ne 0 ] && { echo "failed" ; exit 1; }
+    [ $? -ne 0 ] && { echo "failed mamba install" ; exit 1; }
+    echo Install pip packages
+    # Post-install nodify for sisl.viz
+    python -m pip install nodify "graph2mat[mace]" xitorch
+    [ $? -ne 0 ] && { echo "failed pip install" ; exit 1; }
     fix_sisl
 
+    echo Clean cache
     # remove unused tarballs (no need for them to be around)
     mamba clean -t -y
     {
@@ -198,6 +204,7 @@ function conda_install {
 
     source $indir/setup.sh
 
+    echo Install hubbard
 
     # hubbard
     download_file https://github.com/dipc-cc/hubbard/archive/refs/tags/v$hubbard_version.tar.gz hubbard-$hubbard_version.tar.gz
@@ -207,13 +214,7 @@ function conda_install {
     SETUPTOOLS_SCM_PRETEND_VERSION_FOR_HUBBARD=$hubbard_version python -m pip install -vvv --no-build-isolation .
     [ $? -ne 0 ] && exit 1
     cd ../
-    #rm -rf hubbard-$hubbard_version hubbard-$hubbard_version.tar.gz
-
-    echo ""
-    echo "Before you can run exercises etc. you should execute the following:"
-    echo ""
-    echo " source $indir/setup.sh"
-    echo ""
+    rm -rf hubbard-$hubbard_version hubbard-$hubbard_version.tar.gz
 }
 
 # Function for installation on Linux
@@ -257,7 +258,7 @@ function install_test_sisl {
     echo " Will try and run sisl and hubbard"
     local cmd="import sisl ; print(sisl.__file__, sisl.__version__)"
     echo "    import sisl ; print(sisl.__file__, sisl.__version__)"
-    cmd="$cmd ; import hubbard ; print(hubbard.__file__)"
+    cmd="$cmd ; import hubbard ; print(hubbard.__file__, hubbard.__version__)"
     echo "    import sisl.viz"
     cmd="$cmd ; import sisl.viz"
 
@@ -289,6 +290,12 @@ elif [ $action == install ]; then
       ;;
     esac
     install_test_sisl
+
+    echo ""
+    echo "Before you can run exercises etc. you should execute the following:"
+    echo ""
+    echo " source $indir/setup.sh"
+    echo ""
 
     exit 0
 else
@@ -325,16 +332,26 @@ done
 
 echo ""
 echo "In folders"
+echo ""
 echo "   $indir"
 echo "   $indir/tarball"
 echo "   $indir/presentations"
-echo "you will find everything needed for the tutorial."
+echo ""
+echo "you will find everything needed for the workshop."
+echo "Only once, you should extract the tutorials:"
+echo ""
+echo "   cd $indir"
+echo "   tar xfz tarball/sisl-TBT-TS.tar.gz"
+echo ""
+echo ""
 echo "If you are using the conda installation provided by this script"
 echo "please always start your sessions by executing:"
 echo ""
 echo "  source $indir/setup.sh"
 echo ""
 echo "which will correctly setup the environment for you."
-echo "Run (after you have restarted your shell):"
+echo "Run:"
+echo ""
 echo "  which tbtrans"
+echo ""
 echo "and check it returns $miniforge_dir/bin/tbtrans"
