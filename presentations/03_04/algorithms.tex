@@ -11,7 +11,7 @@
 \begin{framenologo}
   \frametitle{Algorithms for calculation of the Green function}
   \framesubtitle{Equations again --- and problems herein}
-  
+
   \begin{block}{NEGF equations}
     \vskip -2ex
     \begin{align*}
@@ -36,7 +36,7 @@
   \begin{block}<2->{Solvable problems}
     \begin{itemize}
       \item Only a subset of the Green function is needed (Hamiltonian sparsity pattern)
-      \item Different algorithms for \emph{selective} inversion exists, (BTD, MUMPS,
+      \item Different algorithms for \emph{selective} inversion exist, (BTD, MUMPS,
       PEXSI, \dots)
     \end{itemize}
   \end{block}
@@ -56,9 +56,9 @@
     the sparsity pattern
 
     \begin{columns}[c]
-      
+
       \column{.5\textwidth}
-      
+
       \begin{equation*}
         \mathbf G^{-1}=
         \begin{pmatrix}
@@ -101,16 +101,16 @@
           =
           -\widetilde{\mathbf X}_{m} \G_{m,n}\quad\text{ for }m\ge n,
         \end{aligned}\qquad
-      \right\}\quad\G = 
+      \right\}\quad\G =
       \begin{aligned}
         \incg{G_recursion}
       \end{aligned}
     \end{align*}
-    
-    \item Note that this is a \emph{general} algorithm, it does not require Hermiticity 
-    
+
+    \item Note that this is a \emph{general} algorithm, it does not require Hermiticity
+
   \end{itemize}
-  
+
   \vskip 2em
 
   \doicite{Papior \etal: \doi{10.1016/j.cpc.2016.09.022}}
@@ -145,7 +145,7 @@
           & \vdots  & 0  & \mathbf B_{p-1} & \mathbf A_p\\
         \end{pmatrix}\quad\text{\huge \only<1>{?}}
       \end{equation*}
-      
+
     \end{column}
     \begin{column}<2->{.55\linewidth}
       \begin{itemize}
@@ -199,7 +199,7 @@
   \end{tabular}
 
   \begin{tikzpicture}[remember picture,overlay]
-    \node[opacity=.8,anchor=north east] at (current page.north east) 
+    \node[opacity=.8,anchor=north east] at (current page.north east)
     {\incg[width=5cm]{dev2}};
 
     \node[opacity=.8,scale=.5,anchor=south west,outer sep=2*\framesep] at ($(current page.south west)+(0,.3)$)
@@ -224,7 +224,7 @@
 
 \begin{frame}
   \frametitle{Pivoting for optimal BTD}
-  \framesubtitle{Analyzing the sparsity pattern}
+  \framesubtitle{Analysing the sparsity pattern}
 
   \begin{center}
     \texttt{siesta -fdf TS.Analyze RUN.fdf}
@@ -234,14 +234,14 @@
   \end{center}
 
   \begin{itemize}[<+->]
-    \item Analysing (nearly) all build-in pivoting schemes
+    \item Analysing (nearly) all built-in pivoting schemes
 
     \item Extremely fast
 
     \item Atomic and/or orbital pivoting allowed (similar pivoting table)
 
     \item Can be run on a single core machine for, practically any size of system(!)
-    
+
     \item Before starting big calculations, always do this analyse step! It takes
     \emph{no} time and can save you many hours of computational time.
 

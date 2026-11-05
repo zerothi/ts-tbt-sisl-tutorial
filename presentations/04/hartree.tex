@@ -13,15 +13,20 @@
 
   Boundary conditions are fulfilled via:
   \begin{itemize}[<+->]
-    \item<.-> Electrodes behave bulk
+    \item<.-> The electrodes, \emph{and} the device region next to them, must behave as
+    bulk
 
-    \item Extended electrode regions helps the above
+    \item Including extra electrode layers in the device region helps with this
+    (screening)
 
-    \item Corrections to the Hartree potential are necessary (TranSiesta solves Poisson
-    equation via Fourier transforms, i.e. periodic)
+    \item Corrections to the Hartree potential are necessary: TranSiesta solves the
+    Poisson equation via Fourier transforms, i.e. the solution is periodic and knows
+    nothing about the applied bias
 
-    \item Always remember that the self-energy \emph{forces} the boundary conditions,
-    i.e. a long range decay-potential may be forced too short
+    \item The self-energy \emph{forces} the bulk potential at the electrode boundaries:
+    if screening is incomplete inside the device, a long-range potential decay is cut off
+    too abruptly\\
+    $\Rightarrow$ add more electrode layers or buffer atoms
 
   \end{itemize}
 
@@ -46,8 +51,8 @@
       \end{scope}
 
       % Draw arrows
-      \node[anchor=center] at (-1.5,.5,.5) {$-\infty=\SE_\leftarrow$};
-      \node[anchor=center] at (2.5,.5,.5) {$+\infty=\SE_\rightarrow$};
+      \node[anchor=center,align=center] at (-1.5,.5,.5) {$\SE_\leftarrow$\\(semi-infinite)};
+      \node[anchor=center,align=center] at (2.5,.5,.5) {$\SE_\rightarrow$\\(semi-infinite)};
 
       \draw[<-] (0.5,0,0.) -- ++(0,-1,0) node[below] {Simulation cell};
       % \draw[->] (.5,.5,.5) -- (1.5,.5,.5);
@@ -66,44 +71,70 @@
 
   \begin{block}<+->{Hartree potential}
 
-    NEGF calculations are \emph{very} different from periodic calculations because of the
-    semi-infinite leads.
+    NEGF calculations are \emph{very} different from periodic calculations: the
+    semi-infinite electrodes fix the potential at the boundaries of the device.
 
   \end{block}
 
-  \begin{block}<+->{Boundary conditions}
+  \begin{block}<+->{How TranSiesta imposes the bias, in 3 steps}
 
-    The electrode Hartree potential is the boundary condition.
+    \begin{enumerate}[<+->]
+      \item Solve the Poisson equation via FFT\\
+      $\Rightarrow$ $V_H$ is periodic and contains \emph{no} bias
 
-    In TranSiesta this is accomplished by fixing the electrostatic potential at one of the
-    electrode planes.
+      \item Add a bias correction $\delta V(\rr)$: the solution of the Laplace equation,
+      $\nabla^2\delta V=0$ (no charges), with the boundary condition that the electron
+      potential energy in electrode $\idxE$ is shifted by its chemical potential,
+      $\delta V = \mu_\idxE$\\
+      (flag: \texttt{TS.Poisson})
 
-    \begin{itemize}
-      \item For $N_\idxE=2$ and aligned semi-infinite directions the potential profile can
-      easily be approximated by a linear ramp $V(x) = ax+b$.
+      \item Fix the gauge: $V_H$ is only defined up to a constant, so its average on a
+      cell plane is fixed (flag: \texttt{TS.Hartree.Fix}, e.g.\ \texttt{-A})\\
+      $\Rightarrow$ this sets the \emph{reference}, it does \emph{not} apply the bias
 
-      \item For un-aligned semi-infinite directions (or $N_\idxE\neq2$) the potential
-      profile cannot easily be approximated.
+    \end{enumerate}
 
-      \begin{itemize}[<+->]
-        \item By default, TranSiesta implements a \emph{box} solution (bad guess) which
-        only defines the boundary conditions on the electrode atoms. I.e. sets the Hartree
-        potential equal to the chemical potential in the cell region of the electrode.
+  \end{block}
 
-        \item A much better approach is to provide an \emph{external} potential profile
-        guess, i.e. solve the boundary conditions using external Poisson
-        solvers\footnote{\uncover<4->{This may seem like a more daunting task than it
-                is. The guess is the Poisson solution \emph{without} charges, only the
-                boundary conditions.}}
+\end{frame}
 
-        \item \texttt{sisl} has a tool to ease this. \texttt{stoolbox ts-fft} may be used to
-        create a better boundary condition as direct input for TranSiesta.
 
-      \end{itemize}
+\begin{frame}
+  \frametitle{Electrostatic potential}
+  \framesubtitle{Choosing the bias correction $\delta V$}
+
+  \begin{block}<+->{$N_\idxE=2$ with aligned semi-infinite directions}
+
+    $\delta V$ is a linear ramp between the two electrodes (\texttt{TS.Poisson ramp})
+    \begin{equation*}
+      \delta V(x) = \mu_L + (\mu_R-\mu_L)\frac{x-x_L}{x_R-x_L},
+    \end{equation*}
+    with $x_{L/R}$ the positions where the left/right electrodes end.
+
+  \end{block}
+
+  \begin{block}<+->{Un-aligned semi-infinite directions, or $N_\idxE\neq2$}
+
+    There is no simple analytic form for $\delta V$.
+
+    \begin{itemize}[<+->]
+      \item Default: a \emph{box} solution (\texttt{TS.Poisson elec-box}), which only sets
+      $\delta V=\mu_\idxE$ inside the electrode regions and nothing in between (bad
+      guess)
+
+      \item Much better: provide an \emph{external} solution of the Laplace
+      equation\footnote{\uncover<.->{This may seem like a more daunting task than it is.
+            The guess is the Poisson solution \emph{without} charges, only the boundary
+            conditions.}} with proper boundary conditions\\
+      (\texttt{TS.Poisson V.TSV.nc})
+
+      \item \texttt{sisl\_toolbox} creates this file: \texttt{stoolbox ts-fft} on the
+      command line, or \texttt{solve\_poisson} in Python (as in TS 4)
+
     \end{itemize}
-    
+
   \end{block}
-  
+
 \end{frame}
 
 
@@ -114,9 +145,16 @@
   \framesubtitle{Multi-electrode electrostatic potential}
 
   \begin{itemize}
-    \item 6-electrode system
-    \item Default \emph{box} solution for the Poisson equation
-    \item External Poisson solution with electrode regions correct chemical potential
+    \item b) 6-electrode system
+    \item a) Charge error $|\Delta q|$ per SCF iteration for:
+    \begin{itemize}
+      \item Eq.: equilibrium calculation (reference)
+      \item Non-eq.\ box: default \emph{box} guess for $\delta V$
+      \item Non-eq.\ MG: \emph{external} guess for $\delta V$, solved with a multigrid (MG)
+      Laplace solver
+    \end{itemize}
+    \item<2-> Take-away: a physically correct $\delta V$ gives a better starting point for
+    the SCF, i.e.\ a smaller initial $|\Delta q|$
   \end{itemize}
 
   \begin{center}
@@ -128,8 +166,7 @@
     This is where TranSiesta could benefit the most from external help!
 
     A proper, Poisson solver with arbitrary boundary conditions.
-    
-  \end{block}
-  
-\end{frame}
 
+  \end{block}
+
+\end{frame}
