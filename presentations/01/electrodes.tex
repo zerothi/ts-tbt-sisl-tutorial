@@ -12,7 +12,7 @@
     \emph{away} from the device region)
 
   \end{itemize}
-  
+
 \end{frame}
 
 \begin{frame}[label=electrode]
@@ -24,7 +24,8 @@
   \only<3>{Assert that the electrode settings reflect the input\footnote{\emph{HINT}: Do \emph{NOT} specify
           \texttt{used-atoms} if you use \emph{ALL} atoms!}}%
   \only<4>{When reducing the used atoms, it becomes slightly more difficult}%
-  \only<5>{Automatically detects semi-infinite lattice vectors}%
+  \only<5>{\texttt{semi-inf-dir} refers to the \emph{electrode} lattice vector ($\mathbf a_2$);
+    the matching device lattice vector ($\mathbf A_1$) is found automatically}%
   \only<6>{Buffer atoms removed from TBtrans/TranSiesta SCF cycle}%
 
   \begin{tikzpicture}[thick,left/.style={densely dotted,color=bad},
@@ -41,7 +42,7 @@
           \node[fdf] {\%endblock}; \\
       };
     \end{scope}
-    
+
     \uncover<2->{
         \begin{scope}[xshift=4.5cm,yshift=1.5cm]
           \matrix {
@@ -96,7 +97,7 @@
         \end{scope}
 
         \draw[->] (right) -- ++(1,0) to[out=0,in=180] (r);
-        
+
     }
 
     \uncover<3->{
@@ -228,9 +229,9 @@
 
       \draw[<->,s <>,left] (left ELEC) to[out=180,in=180] (left DEV);
       \draw[<->,s <>,right] (right ELEC) to[out=180,in=180] (right DEV);
-      
+
   }
-      
+
   \end{tikzpicture}
 
   \only<6>{\hfill \hyperlink{algorithm<1>}{\beamergotobutton{Go to NEGF Algorithm in TBtrans}}}
@@ -255,7 +256,7 @@
 
   \begin{block}{Bloch's theorem}
 
-    Extend a principle system into a bigger, but otherwise equivalent system?
+    Extend a principal cell into a bigger, but otherwise equivalent system?
 
     \begin{center}
       \def\mysize{6pt}
@@ -268,7 +269,7 @@
         \draw[densely dashed] (1,-.5) rectangle ++(1,1);
         \node[right] at (2,0) {$\hdots$};
         \coordinate (small) at (3,0);
-        
+
         \fill (.5,0) circle (\mysize);
         \foreach \x in {-.5,1.5} {
             \draw (\x,0) circle (\mysize);
@@ -289,12 +290,12 @@
           \foreach \x in {-2.5,-1.5,-.5,3.5,4.5,5.5} {
               \draw (\x,0) circle (\mysize);
           }
-          
+
         \end{scope}
 
         \draw[->] (small) -- ++(3,0) to[out=0,in=0] node[midway, right] {?} (big);
 
-      \end{tikzpicture}      
+      \end{tikzpicture}
 
     \end{center}
 
@@ -364,18 +365,22 @@
   \begin{itemize}
     \item Atomic ordering is important, see sisl \texttt{Geometry.tile} for details
     \item $k$-point sampling is important, \emph{has} to sample equivalently
+    \begin{itemize}
+      \item<3-> electrode $k$-grid $=$ device $k$-grid $\times$ \texttt{bloch} (here
+      $9 = 3\times3$)
+    \end{itemize}
   \end{itemize}
-  
+
   \begin{center}
     \def\mysize{6pt}
     \begin{tikzpicture}[scale=.6, fixed node]
-      
+
       \uncover<3->{
       \draw[densely dashed] (-1,-.5) rectangle ++(1,2);
       \draw (0,-.5) rectangle ++(1,2);
       \node[below] at (.5,-.5) {$R_1$};
       \draw[densely dashed] (1,-.5) rectangle ++(1,2);
-      
+
       \fill (.5,0) circle (\mysize) node[above right] {1};
       \fill (.5,1) circle (\mysize) node[above right] {2};
       \foreach \x in {-.5,1.5} {
@@ -393,7 +398,7 @@
             };
           \end{scope}
       }
-      
+
       \begin{scope}[xshift=8cm]
 
         \draw[densely dashed] (0,-.5) rectangle ++(-3,2);
@@ -401,7 +406,7 @@
         \node[below] at (1,-.5) {$R_3$};
         \draw[densely dashed] (3,-.5) rectangle ++(3,2);
         \draw[->] (6.5, 0) -- node[right] {transport} ++(0,1);
-        
+
         \node[above] at (1.5,1.5) {\color{blue!60!black}\emph{device region electrode}};
         \only<1-2>{
             \fill (.5,0) circle (\mysize);
@@ -437,7 +442,7 @@
         }
 
       \end{scope}
-      
+
     \end{tikzpicture}
 
     \vskip 1em
@@ -487,7 +492,7 @@
               \draw[->,densely dashed] (\x cm + 1.5cm,3cm-4pt) to[mt] (1.5,4pt);
           }
 
-          % dk + 
+          % dk +
           \foreach \x in {0,2,...,4} {
               \draw[->,densely dotted] (\x cm + .5cm,3cm-4pt) to[mt] (.5,4pt);
           }
@@ -511,7 +516,7 @@
             }
 
             % Draw connecting lines
-            \foreach \y in {3,2} 
+            \foreach \y in {3,2}
             \draw[gray] (2,\y) to[out=-15,in=165] (0,\y cm - 1cm);
 
             \node[above,ks] at (0,3) {$\Gamma$};
@@ -537,7 +542,7 @@
             % draw band-crossings
             \draw[->,densely dashed] (1.5cm,3cm-4pt) to[mt] (1.5,2pt);
             \draw[->,densely dotted] (.5cm,3cm+-4pt) to[mt] (.5,2pt);
-            
+
           \end{scope}
         \end{tikzpicture}
     }

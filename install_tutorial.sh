@@ -163,6 +163,7 @@ function conda_install {
 
     local -a packages
     packages=(
+      "git"
       "python"
       "pip"
       "setuptools"
@@ -313,6 +314,9 @@ do
   download_file $url/$file tarball/$file
   [ $? -ne 0 ] && exit 1
 done
+if [ ! -d NielsAlan ]; then
+  git clone https://github.com/alananaya230798/Transiesta_School_2026.git NielsAlan
+fi
 {
     echo "Please be careful about extracting these tarballs."
     echo "If you extract them on top of tutorials you have already"

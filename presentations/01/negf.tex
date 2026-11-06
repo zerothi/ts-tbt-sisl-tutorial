@@ -24,7 +24,7 @@
       \\
       \SE_\kk(\E)& Self-energy (not necessarily an electrode!)
       \\
-      \Scat_{\idxE,\kk}(\E) & Scattering matrix from $\idxE$
+      \Scat_{\idxE,\kk}(\E) & Broadening (coupling) matrix of $\idxE$
       \\
       \G_\kk(\E) & Green function
       \\
@@ -107,8 +107,8 @@
 
       \item Total transmission out of any electrode $\T_\idxE$
 
-      \item Reflection into electrode $\RE_\idxE$, note $\mathbf 1$ is the \emph{bulk}
-      transmission (open channels)
+      \item Reflection into electrode $\RE_\idxE$, note $N_\idxE(\E)$ is the \emph{bulk}
+      transmission of $\idxE$ (number of open channels)
 
     \end{itemize}
     \vskip -2ex
@@ -118,8 +118,8 @@
       \\
       \T_{\idxE}(\E) &\equiv\sum_{\idxE'\neq\idxE}\T_{\idxE\mto\idxE'} (\E)
       \\
-      \RE_\idxE(\E) &=\mathbf 1 -\T_\idxE (\E)
-      = \mathbf 1 -\Big\{
+      \RE_\idxE(\E) &=N_\idxE(\E) -\T_\idxE (\E)
+      = N_\idxE(\E) -\Big\{
       \im \Tr\big[(\G(\E)-\G^\dagger(\E))\Scat_\idxE(\E)\big]
       -\Tr[\Scat_\idxE(\E) \G(\E)\Scat_\idxE(\E)\G^\dagger(\E)]
       \Big\}
@@ -158,7 +158,7 @@
     bond-transmissions\footnote{TBtrans calculates bond-\emph{transmissions} (without the
         prefactor $e/h$), although they are named \emph{currents}.}.
 
-    The bond-currents obey Kirchoff's laws.
+    The bond-currents obey Kirchhoff's laws.
 
   \end{block}
 
@@ -249,13 +249,13 @@
       \\
       \T_{\idxE}(\E) &\equiv\sum_{\idxE'\neq\idxE}\T_{\idxE\mto\idxE'} (\E)
       \\
-      \RE_\idxE(\E) & %=\mathbf 1 -\T_\idxE (\E)
-      = \mathbf 1 -\Big\{
+      \RE_\idxE(\E) & %=N_\idxE(\E) -\T_\idxE (\E)
+      = N_\idxE(\E) -\Big\{
       \im \Tr\big[(\G(\E)-\G^\dagger(\E))\Scat_\idxE(\E)\big]
       -\Tr[\Scat_\idxE(\E) \G(\E)\Scat_\idxE(\E)\G^\dagger(\E)]
       \Big\}
       \\
-      I_{\idxE\mto\idxE'} &= \frac{e^2}{h}\iint\cd\E\dd\kk\, \T_{\idxE\mto\idxE'}(\E)[n_{F,\idxE}(\E) - n_{F,\idxE'}(\E)].
+      I_{\idxE\mto\idxE'} &= \frac{e}{h}\iint\cd\E\dd\kk\, \T_{\idxE\mto\idxE'}(\E)[n_{F,\idxE}(\E) - n_{F,\idxE'}(\E)].
     \end{align*}
 
   \end{block}
