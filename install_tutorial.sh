@@ -189,6 +189,7 @@ function conda_install {
     mamba install -y -c conda-forge ${packages[@]}
     [ $? -ne 0 ] && { echo "failed mamba install" ; exit 1; }
     echo Install pip packages
+
     # Post-install nodify for sisl.viz
     python -m pip install nodify "graph2mat[mace]" xitorch
     [ $? -ne 0 ] && { echo "failed pip install" ; exit 1; }
