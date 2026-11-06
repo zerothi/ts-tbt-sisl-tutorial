@@ -50,7 +50,7 @@
       \left[\G_\kk  - \G^\dagger_\kk \right]\eikr n_F(\E)
     \end{align*}
   \end{block}
-  
+
 \end{frame}
 
 
@@ -95,7 +95,7 @@
     \end{itemize}
 
   \end{block}
-  
+
 \end{frame}
 
 
@@ -121,14 +121,14 @@
     \pgfmathparse{asin(\betaA)}%
     \edef\betaA{\pgfmathresult}%
     \begin{tikzpicture}[scale=.75]
-      
+
       % The axes
       \begin{scope}[draw=gray!80!black,thick,->]
         \draw (-2*\radius+\lineS-.5,0) -- (\radius+1.5,0) node[text=black,below] {$E$};
         \draw (0,0) -- (0,\radius+.5) node[text=black,left] {$\Im$};
       \end{scope}
       \node[below] at (0,0) {$\mu$};
-      
+
       % The specific coordinates on the path
       \coordinate (EB) at (-2*\radius+\lineS,\eta);
       \coordinate (C-mid) at ({-\radius+\lineS-sin(\alphaA)*\radius},{cos(\alphaA)*\radius});
@@ -137,14 +137,14 @@
       \coordinate (L-end-end) at (\radius+1,{\poleSep*(\poles+.5)});
       \coordinate (real-L-end) at (\radius,\eta);
       \coordinate (real-L-end-end) at (\radius+1,\eta);
-      
+
       \begin{scope}[thick]
-        
+
         % The path (we draw it backwards)
-        \draw[->-=.3,very thick] (L-end) -- node[above right] 
+        \draw[->-=.3,very thick] (L-end) -- node[above right]
         {$\mathcal L$} (C-end);
         \draw[->-=.333,->-=.666,very thick] (C-end) to[out=90+\betaA,in=\alphaA] (C-mid)
-        node[above] 
+        node[above]
         {$\mathcal C$}
         to[out=180+\alphaA,in=90] (EB);
         \draw[->-=.25,->-=.75] (EB) -- (real-L-end) node[above left] {$\mathcal R$};
@@ -154,13 +154,13 @@
         \draw[densely dotted] (L-end) -- (L-end-end);
 
       \end{scope}
-      
+
       % Draw the poles
       \foreach \pole in {1,...,14} {
           \ifnum\pole>\poles
           \draw (0,\pole*\poleSep) circle (2pt);
           \else
-          \fill (0,\pole*\poleSep) circle (2pt);        
+          \fill (0,\pole*\poleSep) circle (2pt);
           \fi
       }
       \node[left,anchor=east] at (0,{\poleSep*(\poles/2+.5)}) {$z_\nu$};
@@ -176,7 +176,7 @@
             \def\muS{.5}%
             \node[below] at (\muS,0) {$\mu'$};
 
-            
+
       % The specific coordinates on the path
       \coordinate (EB) at (-2*\radius+\lineS+\muS,\eta);
       \coordinate (C-mid) at ({-\radius+\lineS-sin(\alphaA)*\radius+\muS},{cos(\alphaA)*\radius});
@@ -185,14 +185,14 @@
       \coordinate (L-end-end) at (\radius+1+\muS,{\poleSep*(\poles+.5)});
       \coordinate (real-L-end) at (\radius+\muS,\eta);
       \coordinate (real-L-end-end) at (\radius+1+\muS,\eta);
-      
+
       \begin{scope}[thick,color=red]
-        
+
         % The path (we draw it backwards)
-        \draw[->-=.3,very thick] (L-end) -- node[above right] 
+        \draw[->-=.3,very thick] (L-end) -- node[above right]
         {$\mathcal L$} (C-end);
         \draw[->-=.333,->-=.666,very thick] (C-end) to[out=90+\betaA,in=\alphaA] (C-mid)
-        node[above] 
+        node[above]
         {$\mathcal C$}
         to[out=180+\alphaA,in=90] (EB);
         \draw[->-=.25,->-=.75] (EB) -- (real-L-end) node[above left] {$\mathcal R$};
@@ -202,13 +202,13 @@
         \draw[densely dotted] (L-end) -- (L-end-end);
 
       \end{scope}
-      
+
       % Draw the poles
       \foreach \pole in {1,...,14} {
           \ifnum\pole>\poles
           \draw (\muS,\pole*\poleSep) circle (2pt);
           \else
-          \fill (\muS,\pole*\poleSep) circle (2pt);        
+          \fill (\muS,\pole*\poleSep) circle (2pt);
           \fi
       }
 
@@ -222,11 +222,11 @@
   \end{center}
 
   \begin{equation*}
-    \oint\cd \E = 
+    \oint\cd \E =
     \textcolor{good}{\int_{\mathcal{R}}\cd \E} +
     \int_{\mathcal{L}}\cd \E +
     \int_{\mathcal{C}}\cd \E
-    = 
+    =
     i2\pi \sum_\nu z_\nu
   \end{equation*}
 
@@ -245,7 +245,7 @@
       \item Ensure the lowest integrated energy is \emph{far} below the lowest
       eigenvalue of your system
     \end{itemize}
-    
+
     \begin{center}
       \begin{tikzpicture}[scale=.8]
         \begin{axis}[width=14cm,height=8cm,name=circ,only marks,
@@ -272,7 +272,7 @@
           \addplot table {../data/EQ_fermi.dat};
           \addplot table {../data/EQ_pole.dat};
           \draw[<->] (axis cs:.3,0.568494) -- node[sloped,anchor=south] {$2\pi k_BT$} (axis cs:.3,0.406067);
-          \draw[densely dashed,green!50!black,very thick] 
+          \draw[densely dashed,green!50!black,very thick]
           (axis cs:-1,0.03) -- (axis cs:1,0.03);
           \node[anchor=south] at (axis cs:0.25,1) {Gauss-Fermi};
           \node[rotate=90,anchor=south] at (axis cs:0.25,.5) {Poles};
@@ -287,6 +287,7 @@
 
 \pgfplotsset{my c/.style={/tikz/color=#1, /tikz/fill=#1}}
 
+\iffalse
 \begin{frame}
   \frametitle{Numeric integration}
   \framesubtitle{Algorithms}
@@ -321,7 +322,7 @@
       \end{axis}
     \end{tikzpicture}
   \end{center}
-  
+
   \doicite{Papior \etal: \doi{10.1016/j.cpc.2016.09.022}}
 
 \end{frame}
@@ -358,7 +359,7 @@
               \addplot[gen,ok,domain=-.05:0.55,samples=25] {1./(exp((x-0.5)/0.01)+1)-1./(exp((x)/0.01)+1)};
               \addplot[gen,good,domain=-.55:.55,samples=30] {1./(exp((x-0.5)/0.01)+1)-1./(exp((x+0.5)/0.01)+1)};
               \addplot[gen,bad,domain=-.55:.05,samples=25] {1./(exp((x)/0.01)+1)- 1./(exp((x+0.5)/0.01)+1)};
-              \draw[<->,very thick,bad] (axis cs:-.5, 0.6) -- (axis cs:0,0.6) node[midway,above] 
+              \draw[<->,very thick,bad] (axis cs:-.5, 0.6) -- (axis cs:0,0.6) node[midway,above]
               {$n_F(\E) - n_F(\E-0.5\,\mathrm{eV})$};
               \draw[<->,very thick,ok] (axis cs:0, 0.2) -- (axis cs:0.5,0.2) node[midway,above]
               {$n_F(\E+0.5\,\mathrm{eV}) - n_F(\E)$};
@@ -374,7 +375,7 @@
   \end{block}
 
 \end{frame}
-
+\fi
 
 % Skip the last summation of results page
 \endinput
@@ -425,7 +426,7 @@
   \begin{block}{Transmission}
     \vskip-2ex
     \begin{columns}
-      
+
       \column{.45\linewidth}
       \begin{align*}
         \T_{\idxE\mto\idxE'}(\E) &=
@@ -453,7 +454,7 @@
 
     \end{columns}
   \end{block}
-  
+
 \end{frame}
 
 %%% Local Variables:
