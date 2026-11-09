@@ -178,7 +178,9 @@ function conda_install {
       "jupyterlab"
       "pyamg"
       "pathos"
+      "h5py"
       "matplotlib"
+      "matscipy"
       "metatrain" # for Pol
       "plotly"
       "scikit-image"
@@ -191,18 +193,13 @@ function conda_install {
     echo Install pip packages
 
     # Post-install nodify for sisl.viz
-    python -m pip install nodify "graph2mat[mace]" xitorch
+    python -m pip install nodify "graph2mat[mace]" xitorch anywidget
     [ $? -ne 0 ] && { echo "failed pip install" ; exit 1; }
     fix_sisl
 
     echo Clean cache
     # remove unused tarballs (no need for them to be around)
     mamba clean -t -y
-    {
-    echo "#!/bin/bash"
-    echo "source $miniforge_dir/bin/activate"
-    echo "export OMPI_MCA_btl='vader,self'"
-    } > $indir/setup.sh
 
     source $indir/setup.sh
 
@@ -217,6 +214,12 @@ function conda_install {
     [ $? -ne 0 ] && exit 1
     cd ../
     rm -rf hubbard-$hubbard_version hubbard-$hubbard_version.tar.gz
+
+    {
+    echo "#!/bin/bash"
+    echo "source $miniforge_dir/bin/activate"
+    echo "export OMPI_MCA_btl='vader,self'"
+    } > $indir/setup.sh
 }
 
 # Function for installation on Linux

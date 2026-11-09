@@ -5,11 +5,11 @@
 
 _files=
 function add_file {
-    while [ $# -gt 0 ];
-    do
-	_files="$_files $1"
-	shift
-    done
+  while [ $# -gt 0 ];
+  do
+    _files="$_files $1"
+    shift
+  done
 }
 
 # Add manuals
@@ -33,5 +33,9 @@ add_file */*/C.psf
 # Add executables
 add_file */run.sh
 add_file A_05/C60.xyz
+
+add_file external/hubbard-tutorials.tar.gz
+add_file external/Balogh_TB_extended.ipynb
+add_file external/MachineLearning_Hamiltonians.ipynb
 
 tar cfvz sisl-TBT-TS.tar.gz $_files
