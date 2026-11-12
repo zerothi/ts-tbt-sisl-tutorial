@@ -201,7 +201,6 @@ function conda_install {
     # remove unused tarballs (no need for them to be around)
     mamba clean -t -y
 
-    source $indir/setup.sh
 
     echo Install hubbard
 
@@ -210,6 +209,7 @@ function conda_install {
     [ $? -ne 0 ] && exit 1
     tar xfz hubbard-$hubbard_version.tar.gz
     cd hubbard-$hubbard_version
+    sed -i -s -e 's/\.tostring/.tobytes/g' **/*.py
     SETUPTOOLS_SCM_PRETEND_VERSION_FOR_HUBBARD=$hubbard_version python -m pip install -vvv --no-build-isolation .
     [ $? -ne 0 ] && exit 1
     cd ../
@@ -220,6 +220,8 @@ function conda_install {
     echo "source $miniforge_dir/bin/activate"
     echo "export OMPI_MCA_btl='vader,self'"
     } > $indir/setup.sh
+
+    source $indir/setup.sh
 }
 
 # Function for installation on Linux

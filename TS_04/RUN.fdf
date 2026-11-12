@@ -61,7 +61,7 @@ TS.Contours.Eq.Pole 2.5 eV
    from -40. eV - V/2 to -10 kT - V/2
      points 25
       method g-legendre
-%endblock 
+%endblock
 %block TS.Contour.T-y
   part tail
    from prev to inf
@@ -87,25 +87,25 @@ TS.Contours.Eq.Pole 2.5 eV
 %endblock TS.Elecs
 
 %block TS.Elec.elec-x-1
-  HS ELEC_X.TSHS
+  HS ELEC_X.HSX
   chemical-potential x
   semi-inf-direction -a1
   electrode-position 1
 %endblock TS.Elec.elec-x-1
 %block TS.Elec.elec-x-2
-  HS ELEC_X.TSHS
+  HS ELEC_X.HSX
   chemical-potential x
   semi-inf-direction +a1
   electrode-position end 16
 %endblock TS.Elec.elec-x-2
 %block TS.Elec.elec-y-1
-  HS ELEC_Y.TSHS
+  HS ELEC_Y.HSX
   chemical-potential y
   semi-inf-direction -a2
   electrode-position 17
 %endblock TS.Elec.elec-y-1
 %block TS.Elec.elec-y-2
-  HS ELEC_Y.TSHS
+  HS ELEC_Y.HSX
   chemical-potential y
   semi-inf-direction +a2
   electrode-position end -1
@@ -152,4 +152,3 @@ MD.NumCGSteps 0
 SaveElectrostaticPotential true
 
 %include DEVICE.fdf
-

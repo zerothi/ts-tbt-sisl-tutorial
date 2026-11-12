@@ -18,20 +18,23 @@ add_file tselecs.sh
 
 # Add IPython books
 add_file tutorial.ipynb
-add_file */*.ipynb
+add_file [^w]*/*.ipynb
 
 # Add RUN.fdf
-add_file */RUN.fdf
-add_file */RUN_ELEC.fdf
-add_file */RUN_ELEC_*.fdf
+add_file [^w]*/RUN.fdf
+add_file [^w]*/RUN_ELEC.fdf
+add_file [^w]*/RUN_ELEC_*.fdf
 
 # Add pseudo
-add_file C.psf
-add_file */C.psf
-add_file */*/C.psf
+add_file *.psf
+add_file [^w]*/*.psf
+add_file [^w]*/*/*.psf
+add_file *.psml
+add_file [^w]*/*.psml
+add_file [^w]*/*/*.psml
 
 # Add executables
-add_file */run.sh
+add_file [^w]*/run.sh
 add_file A_05/C60.xyz
 
 add_file external/hubbard-tutorials.tar.gz

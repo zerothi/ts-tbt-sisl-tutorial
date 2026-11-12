@@ -58,12 +58,12 @@ TS.Contours.Eq.Pole 2.5 eV
 %endblock TS.Elecs
 
 %block TS.Elec.Left
-  HS ELEC.TSHS
+  HS ELEC.HSX
   semi-inf-direction -a1
   electrode-position 1
 %endblock
 %block TS.Elec.Right
-  HS ELEC.TSHS
+  HS ELEC.HSX
   semi-inf-direction +a1
   electrode-position end -1
 %endblock

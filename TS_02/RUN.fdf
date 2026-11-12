@@ -113,13 +113,13 @@ TS.Contours.Eq.Pole 2.5 eV
 %endblock TS.Elecs
 
 %block TS.Elec.Left
-  HS ../ELEC.TSHS
+  HS ../ELEC.HSX
   chemical-potential Left
   semi-inf-direction -a1
   electrode-position 1
 %endblock
 %block TS.Elec.Right
-  HS ../ELEC.TSHS
+  HS ../ELEC.HSX
   chemical-potential Right
   semi-inf-direction +a1
   electrode-position end -1
@@ -135,9 +135,9 @@ TS.Contours.Eq.Pole 2.5 eV
 # Hamiltonian files and their respective
 # applied bias
 %block TBT.HS.Files
-   ../TS_0/siesta.TSHS   0.  eV
-   ../TS_0.5/siesta.TSHS 0.5 eV
-   ../TS_1.0/siesta.TSHS 1.  eV
+   ../TS_0/siesta.HSX   0.  eV
+   ../TS_0.5/siesta.HSX 0.5 eV
+   ../TS_1.0/siesta.HSX 1.  eV
 %endblock
 
 # If one is only interested in the IV curves

@@ -122,21 +122,21 @@ TS.Contours.Eq.Pole 2.5 eV
 %endblock
 
 %block TS.Elec.graphene-1
-  HS ELEC_GRAPHENE.TSHS
+  HS ELEC_GRAPHENE.HSX
   chemical-potential graphene
   semi-inf-direction -a1
   electrode-position 1
   bloch-A2 5
 %endblock
 %block TS.Elec.graphene-2
-  HS ELEC_GRAPHENE.TSHS
+  HS ELEC_GRAPHENE.HSX
   chemical-potential graphene
   semi-inf-direction +a1
   electrode-position end 80
   bloch-A2 5
 %endblock
 %block TS.Elec.chain
-  HS ELEC_CHAIN.TSHS
+  HS ELEC_CHAIN.HSX
   chemical-potential chain
   semi-inf-direction +a3
   electrode-position end -5

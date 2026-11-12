@@ -1,0 +1,33 @@
+SystemLabel ELEC
+
+%include STRUCT_ELEC.fdf
+
+Spin polarized
+
+%block kgrid.MonkhorstPack
+ 100 0 0
+  0 1 0
+  0 0 1
+%endblock
+
+PAO.BasisSize         SZP
+
+XC.functional     GGA
+XC.authors        PBE
+MeshCutoff        500.000000 Ry
+
+ElectronicTemperature   300 K
+OccupationFunction      FD
+
+MinSCFIterations       3
+MaxSCFIterations       200
+
+# Mixing parameters:
+SCF.Mixer.Weight       0.10
+SCF.Mixer.History      12
+SCF.Mix.First          true
+DM.UseSaveDM           .true.
+
+MD.NumCGSteps 0
+
+SaveHS                          T

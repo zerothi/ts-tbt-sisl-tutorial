@@ -5,9 +5,9 @@
   Tip
 %endblock TS.Elecs
 
-# Edit these to 
+# Edit these to
 %block TS.Elec.Left
-  HS electrode_GRAPHENE.TSHS
+  HS electrode_GRAPHENE.HSX
   # fill in correct direction
   semi-inf-direction ?
   electrode-position 1
@@ -16,7 +16,7 @@
   bloch
 %endblock
 %block TS.Elec.Right
-  HS electrode_GRAPHENE.TSHS
+  HS electrode_GRAPHENE.HSX
   # fill in correct direction
   semi-inf-direction ?
   # fill in correct index
@@ -27,7 +27,7 @@
 %endblock
 
 %block TS.Elec.Tip
-  HS electrode_CHAIN.TSHS
+  HS electrode_CHAIN.HSX
   # fill in correct direction
   semi-inf-direction +a3
   # fill in correct index
