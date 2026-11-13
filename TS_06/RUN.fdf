@@ -28,6 +28,7 @@ TBT.Atoms.Device [13 -- 22]
 %block TBT.Projs.T
   from Left.CO to
     Right
+    Right.CO-2
   end
 %endblock
 
